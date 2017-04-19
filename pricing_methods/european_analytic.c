@@ -25,7 +25,7 @@ double cdf(double x) {
   return 0.5*(1.0 + sign*y);
 }
 
-int european_analytic_option_price(option o, pricing_method pm, double S, date t, result ret) {
+int european_analytic_option_price(option o, pricing_method pm, double S, date ttl, result ret) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -35,18 +35,17 @@ int european_analytic_option_price(option o, pricing_method pm, double S, date t
   double sigma = pm_get_sigma(pm), r = pm_get_r(pm), d = pm_get_d(pm), K = pm_get_k(pm);
   double d1, d2, result;
 
-  d1 = (log(S / K) + (r - d + powf(sigma, 2) / 2) * t) / (sigma * sqrt(t));
-  d2 = d1 - sigma * sqrt(t);
+  d1 = (log(S / K) + (r - d + powf(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
+  d2 = d1 - sigma * sqrt(ttl);
 
   if (type == OPTION_CALL) {
-    result = S * exp(-d * t) * cdf(d1) - K * exp(-r * t) * cdf(d2);
+    result = S * exp(-d * ttl) * cdf(d1) - K * exp(-r * ttl) * cdf(d2);
   } else {
-    result = K * exp(-r * t) * cdf(-d2) - S * exp(-d * t) * cdf(-d1);
+    result = K * exp(-r * ttl) * cdf(-d2) - S * exp(-d * ttl) * cdf(-d1);
   }
 
-  if (ret != NULL) {
-    *ret = result;
-  }
+  set_result(ret, result);
+
   return 0;
 }
 

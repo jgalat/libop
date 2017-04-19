@@ -10,7 +10,7 @@ struct option_ {
 };
 
 struct pricing_method_ {
-  int  (*option_price) (option, pricing_method, double S, date, result);
+  int  (*option_price) (option, pricing_method, double S, date ttl, result);
   /* greeks */
   //int  (*option_delta) (double S, date, result);
   /* ... */
@@ -18,10 +18,13 @@ struct pricing_method_ {
 
   /* parameters */
   double sigma, r, d, k;
+
+  /* pm needed extra data */
+  void *extra_data;
 };
 
 option new_option(option_type ot, exercise_type et, date maturity) {
-  option o = malloc(sizeof(option));
+  option o = malloc(sizeof(struct option_));
   o->option_type = ot;
   o->exercise_type = et;
   o->maturity = maturity;
@@ -44,7 +47,7 @@ void option_set_pricing_method(option o, pricing_method pm) {
 }
 
 int option_price(option o, double S, date t, result r) {
-  if (pm == NULL)
+  if (o->pm == NULL)
     return 1;
   return o->pm->option_price(o, o->pm, S, t, r);
 }
@@ -57,14 +60,15 @@ pricing_method new_pricing_method(method_identifier m, double sigma, double r, d
   }
 }
 
-pricing_method new_pricing_method_(int (*opt_price)(option, pricing_method, double, date, result),
+pricing_method new_pricing_method_(int ((*opt_price)(option, pricing_method, double, date, result)),
                                     double sigma, double r, double d, double k) {
-  pricing_method pm = malloc(sizeof(pricing_method));
+  pricing_method pm = malloc(sizeof(struct pricing_method_));
   pm->sigma = sigma;
   pm->r = r;
   pm->d = d;
   pm->k = k;
   pm->option_price = opt_price;
+  pm->extra_data = NULL;
   return pm;
 }
 

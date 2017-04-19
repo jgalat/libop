@@ -56,9 +56,4 @@ void pm_set_r(pricing_method, double);
 void pm_set_d(pricing_method, double);
 void pm_set_k(pricing_method, double);
 
-
-
-//int pm_set_option_price_f(pricing_method, int (*)(option, pricing_method, double, date, result));
-
-
 #endif /* __DATA_H_ */
