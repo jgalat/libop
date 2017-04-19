@@ -29,7 +29,7 @@ option_type option_get_ot(option);
 exercise_type option_get_et(option);
 date option_get_maturity(option);
 
-int option_set_pricing_method(option, pricing_method);
+void option_set_pricing_method(option, pricing_method);
 
 int option_price(option, double S, date t, result);
 // option greeks
@@ -43,6 +43,8 @@ int option_price(option, double S, date t, result);
 #include "pricing_methods/pricing_methods.h"
 
 pricing_method new_pricing_method(method_identifier, double sigma, double r, double d, double k);
+pricing_method new_pricing_method_(int (*opt_price)(option, pricing_method, double, date, result),
+                                    double sigma, double r, double d, double k);
 
 double pm_get_sigma(pricing_method);
 double pm_get_r(pricing_method);
@@ -54,7 +56,9 @@ void pm_set_r(pricing_method, double);
 void pm_set_d(pricing_method, double);
 void pm_set_k(pricing_method, double);
 
-int pm_set_option_price_f(pricing_method, int (*)(option, pricing_method, double, date, result));
+
+
+//int pm_set_option_price_f(pricing_method, int (*)(option, pricing_method, double, date, result));
 
 
 #endif /* __DATA_H_ */

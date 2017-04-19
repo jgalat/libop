@@ -39,14 +39,14 @@ date option_get_maturity(option o) {
   return o->maturity;
 }
 
-int option_set_pricing_method(option o, pricing_method pm) {
+void option_set_pricing_method(option o, pricing_method pm) {
   o->pm = pm;
-  return 0;
 }
 
 int option_price(option o, double S, date t, result r) {
-  o->pm->option_price(o, o->pm, S, t, r);
-  return 0;
+  if (pm == NULL)
+    return 1;
+  return o->pm->option_price(o, o->pm, S, t, r);
 }
 
 
@@ -55,6 +55,17 @@ pricing_method new_pricing_method(method_identifier m, double sigma, double r, d
     default:
       return new_european_analytic_pm(sigma, r, d, k);
   }
+}
+
+pricing_method new_pricing_method_(int (*opt_price)(option, pricing_method, double, date, result),
+                                    double sigma, double r, double d, double k) {
+  pricing_method pm = malloc(sizeof(pricing_method));
+  pm->sigma = sigma;
+  pm->r = r;
+  pm->d = d;
+  pm->k = k;
+  pm->option_price = opt_price;
+  return pm;
 }
 
 double pm_get_sigma(pricing_method pm) {
@@ -81,9 +92,4 @@ void pm_set_d(pricing_method pm, double val) {
 }
 void pm_set_k(pricing_method pm, double val) {
   pm->k = val;
-}
-
-int pm_set_option_price_f(pricing_method pm, int  (*op)(option, pricing_method, double, date, result)) {
-  pm->option_price = op;
-  return 0;
 }

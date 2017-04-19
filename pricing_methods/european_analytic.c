@@ -51,11 +51,5 @@ int european_analytic_option_price(option o, pricing_method pm, double S, date t
 }
 
 pricing_method new_european_analytic_pm(double sigma, double r, double d, double k) {
-  pricing_method pm = malloc(sizeof(pricing_method));
-  pm_set_sigma(pm, sigma);
-  pm_set_r(pm, r);
-  pm_set_d(pm, d);
-  pm_set_k(pm, k);
-  pm_set_option_price_f(pm, european_analytic_option_price);
-  return pm;
+  return new_pricing_method_(european_analytic_option_price, /* ... ,*/ sigma, r, d, k);
 }
