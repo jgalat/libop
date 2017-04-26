@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <math.h>
 
 #include "european_analytic.h"
@@ -25,14 +24,18 @@ double cdf(double x) {
   return 0.5*(1.0 + sign*y);
 }
 
-int european_analytic_option_price(option o, pricing_method pm, double S, date ttl, result ret) {
+int european_analytic_option_price(option_data od, pricing_data pd, double S, date ttl, result ret) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  option_type type = option_get_ot(o);
+  option_type type = od_get_option_type(od);
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double sigma = pm_get_sigma(pm), r = pm_get_r(pm), d = pm_get_d(pm), K = pm_get_k(pm);
+  double  sigma = pd_get_volatility(pd),
+          r = pd_get_risk_free_rate(pd),
+          d = pd_get_dividend(pd),
+          K = od_get_strike(od);
+
   double d1, d2, result;
 
   d1 = (log(S / K) + (r - d + powf(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
@@ -45,10 +48,9 @@ int european_analytic_option_price(option o, pricing_method pm, double S, date t
   }
 
   set_result(ret, result);
-
   return 0;
 }
 
-pricing_method new_european_analytic_pm(double sigma, double r, double d, double k) {
-  return new_pricing_method_(european_analytic_option_price, /* ... ,*/ sigma, r, d, k);
+pricing_method new_european_analytic(pricing_data pd) {
+  return new_pricing_method_(european_analytic_option_price, pd);
 }

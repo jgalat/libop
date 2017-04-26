@@ -4,7 +4,7 @@
 #include "european_analytic.h"
 
 typedef enum {
-  EUROPEAN_ANALYTIC
-} method_identifier;
+  EU_ANALYTIC
+} method_id;
 
 #endif /* __PRICING_METHODS_H_ */

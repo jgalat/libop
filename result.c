@@ -8,6 +8,6 @@ result new_result() {
 }
 
 void set_result(result r, double val) {
-  if(r != NULL)
+  if (r != NULL)
     *r = val;
 }
