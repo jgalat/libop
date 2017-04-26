@@ -3,7 +3,8 @@
 
 result new_result() {
   result r = malloc(sizeof(double));
-  *r = 0;
+  if (r)
+    *r = 0;
   return r;
 }
 
