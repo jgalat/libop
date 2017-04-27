@@ -8,7 +8,7 @@ struct pricing_method_ {
   void              *pm_data;
 };
 
-pricing_method new_pricing_method(method_id id, volatility v, risk_free r, dividend d) {
+pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r, dividend d) {
   pricing_data pd = new_pricing_data(v, r, d);
   if (!pd) {
     return NULL;

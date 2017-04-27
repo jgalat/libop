@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]) {
 
   double S = 21.0, strike = 20.0;
   volatility sigma = 0.4;
-  risk_free r = 0.09;
+  risk_free_rate r = 0.09;
   dividend d = 0.1;
 
   option eu_call_option = new_option(OPTION_CALL, EU_EXERCISE, YEAR, strike);
