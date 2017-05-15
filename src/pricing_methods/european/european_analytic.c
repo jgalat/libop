@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "european_analytic.h"
+#include <pricing_methods/european/european_analytic.h>
 
 double cdf(double x) {
   // constants

@@ -1,7 +1,7 @@
 #ifndef __PRICING_DATA_H__
 #define __PRICING_DATA_H__
 
-#include "parameter.h"
+#include <parameter.h>
 
 struct pricing_data_;
 typedef struct pricing_data_ * pricing_data;

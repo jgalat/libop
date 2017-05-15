@@ -1,7 +1,7 @@
 #ifndef __OPTION_DATA_H__
 #define __OPTION_DATA_H__
 
-#include "date.h"
+#include <date.h>
 
 struct option_data_;
 typedef struct option_data_ * option_data;

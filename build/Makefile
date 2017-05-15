@@ -8,6 +8,8 @@ TARGET := libop.a
 #Directories
 SRCDIR   := ../src
 PMDIR		 := $(SRCDIR)/pricing_methods
+PMEUR  	 := $(PMDIR)/european
+PMAM     := $(PMDIR)/american
 BUILDDIR := $(SRCDIR)/obj
 
 
@@ -21,7 +23,7 @@ INC       := -I$(SRCDIR)
 COMMONSRC := $(SRCDIR)/option_data.c $(SRCDIR)/pricing_data.c $(SRCDIR)/result.c \
 	$(SRCDIR)/pricing_method.c $(SRCDIR)/option.c
 
-PMSRC := $(PMDIR)/european_analytic.c
+PMSRC := $(PMEUR)/european_analytic.c
 
 #Objects
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
@@ -35,7 +37,7 @@ $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(BUILDDIR)/%.o : $(PMDIR)/%.c
+$(BUILDDIR)/%.o : $(PMEUR)/%.c
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 

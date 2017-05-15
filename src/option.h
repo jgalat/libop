@@ -1,8 +1,8 @@
 #ifndef __OPTION_H__
 #define __OPTION_H__
 
-#include "common.h"
-#include "pricing_method.h"
+#include <common.h>
+#include <pricing_method.h>
 
 struct option_;
 typedef struct option_ * option;
