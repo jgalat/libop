@@ -1,9 +1,9 @@
-#ifndef __RESULT_H_
-#define __RESULT_H_
+#ifndef __RESULT_H__
+#define __RESULT_H__
 
 typedef double * result;
 
 result new_result();
 void set_result(result, double);
 
-#endif /* __RESULT_H_ */
+#endif /* __RESULT_H__ */

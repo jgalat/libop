@@ -1,5 +1,5 @@
-#ifndef __PRICING_METHOD_H_
-#define __PRICING_METHOD_H_
+#ifndef __PRICING_METHOD_H__
+#define __PRICING_METHOD_H__
 
 #include "common.h"
 
@@ -13,4 +13,4 @@ pricing_method new_pricing_method_(price_function, pricing_data);
 
 int pm_option_price(pricing_method, option_data, double, date, result);
 
-#endif
+#endif /* __PRICING_METHOD_H__ */

@@ -1,5 +1,5 @@
-#ifndef __COMMON_H_
-#define __COMMON_H_
+#ifndef __COMMON_H__
+#define __COMMON_H__
 
 #include "date.h"
 #include "result.h"
@@ -9,4 +9,4 @@
 
 typedef int (*price_function) (option_data, pricing_data, double S, date, result);
 
-#endif /* __COMMON_H_ */
+#endif /* __COMMON_H__ */

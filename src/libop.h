@@ -1,8 +1,8 @@
-#ifndef __LIB_H_
-#define __LIB_H_
+#ifndef __LIB_H__
+#define __LIB_H__
 
 #include "common.h"
 #include "option.h"
 #include "pricing_method.h"
 
-#endif /* __LIB_H_ */
+#endif /* __LIB_H__ */
