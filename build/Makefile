@@ -1,15 +1,17 @@
 #compiler and linker
-CC := gcc
-
+CC 	:= gcc
+MAKE := make
 RMS := rm -rf
 
 TARGET := libop.a
+
 
 #Directories
 SRCDIR   := ../src
 PMDIR		 := $(SRCDIR)/pricing_methods
 PMEUR  	 := $(PMDIR)/european
 PMAM     := $(PMDIR)/american
+QSSDIR   := $(PMAM)/finite_difference/qss-solver/libs
 BUILDDIR := $(SRCDIR)/obj
 
 
@@ -33,6 +35,9 @@ DEPS = $(COMMONOBJ:.o=.d) $(PMOBJ:.o=.d)
 
 default: $(TARGET)
 
+qss-engine:
+	cd $(QSSDIR) && $(MAKE)
+
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
@@ -41,7 +46,7 @@ $(BUILDDIR)/%.o : $(PMEUR)/%.c
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(TARGET): $(COMMONOBJ) $(PMOBJ)
+$(TARGET): qss-engine $(COMMONOBJ) $(PMOBJ)
 	@ar rvs $(@) $(COMMONOBJ) $(PMOBJ)
 
 $(COMMONOBJ): | $(BUILDDIR)
@@ -54,4 +59,5 @@ $(BUILDDIR):
 -include $(DEPS)
 
 clean:
+	cd $(QSSDIR) && $(MAKE) clean
 	$(RMS) $(BUILDDIR) $(TARGET)
