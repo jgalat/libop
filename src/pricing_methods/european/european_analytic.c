@@ -2,7 +2,7 @@
 
 #include "european_analytic.h"
 
-double cdf(double x) {
+static double cdf(double x) {
   // constants
   double a1 =  0.254829592;
   double a2 = -0.284496736;

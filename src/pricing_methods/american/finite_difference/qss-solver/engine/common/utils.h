@@ -107,8 +107,9 @@
 /**
  *
  */
+#ifndef __cplusplus
 typedef char bool;
-
+#endif /* __cplusplus */
 /**
  *
  */

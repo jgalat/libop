@@ -23,10 +23,10 @@
 
 
 #ifdef __linux__
-#include <signal.h> 
-#include <stdlib.h> 
-void 
-segfault_hdlr(int dummy) 
+#include <signal.h>
+#include <stdlib.h>
+void
+segfault_hdlr(int dummy)
 {
   printf("Segmentation fault detected\n");
   exit(-1);
@@ -34,7 +34,7 @@ segfault_hdlr(int dummy)
 #endif
 
 int
-main()
+main__()
 {
 
 #ifdef __linux__
