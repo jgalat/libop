@@ -3,15 +3,15 @@
 
 #include "black_scholes_model.h"
 
-void
-MOD_settings (SD_simulationSettings settings) {
-  return;
-}
-
-void
-CLC_initializeDataStructs (CLC_simulator simulator) {
-  return;
-}
+// void
+// MOD_settings (SD_simulationSettings settings) {
+//   return;
+// }
+//
+// void
+// CLC_initializeDataStructs (CLC_simulator simulator) {
+//   return;
+// }
 
 BlackScholesModel::BlackScholesModel() {}
 

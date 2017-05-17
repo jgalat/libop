@@ -82,7 +82,7 @@ struct SIM_simulator_
  * @return
  */
 SIM_simulator
-SIM_Simulator (SD_simulationSettings settings);
+SIM_Simulator (SD_simulationSettings settings, void *ids);
 
 /**
  *

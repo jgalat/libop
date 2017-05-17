@@ -32,6 +32,7 @@ CLC_Simulator ()
   p->settings = NULL;
   p->simulationLog = NULL;
   p->stats = NULL;
+  p->initializeDataStructs = NULL;
   return (p);
 }
 
@@ -53,7 +54,7 @@ CLC_simulate (SIM_simulator simulate)
 {
   Random ();
   CLC_simulator simulator = (CLC_simulator) simulate->state->sim;
-  CLC_initializeDataStructs (simulator);
+  ((CLC_initializeDataStructs) simulator->initializeDataStructs) (simulator);
   INT_integrator integrator = INT_Integrator (simulate);
   SD_output output = simulator->output;
   simulator->simulationLog = SD_SimulationLog (output->name);
@@ -80,12 +81,13 @@ CLC_simulatorEnd (SIM_simulator simulate)
 }
 
 void
-CLC_initSimulator (SIM_simulator simulator)
+CLC_initSimulator (SIM_simulator simulator, void *ids)
 {
   simulator->state->sim = (void*) CLC_Simulator ();
   ((CLC_simulator) simulator->state->sim)->settings =
       simulator->state->settings;
   ((CLC_simulator) simulator->state->sim)->stats = SD_Statistics();
+  ((CLC_simulator) simulator->state->sim)->initializeDataStructs = ids;
   simulator->ops->simulate = CLC_simulate;
   simulator->ops->freeSimulator = CLC_simulatorEnd;
 }

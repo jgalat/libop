@@ -26,7 +26,7 @@
  *
  * @param simulator
  */
-void
-CLC_initializeDataStructs (CLC_simulator simulator);
+
+typedef void (*CLC_initializeDataStructs) (CLC_simulator);
 
 #endif  /* CLASSIC_MODEL_H_ */

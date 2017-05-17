@@ -22,7 +22,6 @@
 
 #include "data.h"
 
-void
-MOD_settings (SD_simulationSettings settings);
+typedef void (*MOD_settings) (SD_simulationSettings);
 
 #endif /* MODEL_H_ */

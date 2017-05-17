@@ -34,7 +34,7 @@ segfault_hdlr(int dummy)
 #endif
 
 int
-main__()
+engine(MOD_settings MOD_settings, void *ids)
 {
 
 #ifdef __linux__
@@ -42,7 +42,7 @@ main__()
 #endif
   SD_simulationSettings settings = SD_SimulationSettings();
   MOD_settings(settings);
-  SIM_simulator simulator = SIM_Simulator (settings);
+  SIM_simulator simulator = SIM_Simulator (settings, ids);
   SIM_simulate (simulator);
   SIM_freeSimulator (simulator);
   return (0);

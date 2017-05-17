@@ -27,7 +27,7 @@
 #include "utils.h"
 
 SIM_simulator
-SIM_Simulator (SD_simulationSettings settings)
+SIM_Simulator (SD_simulationSettings settings, void *ids)
 {
   SIM_simulator p = (SIM_simulator) checkedMalloc (sizeof(*p));
   p->ops = SIM_SimulatorOps ();
@@ -35,7 +35,7 @@ SIM_Simulator (SD_simulationSettings settings)
   p->state->settings = settings;
   if (settings->method == SD_DASSL || settings->method == SD_DOPRI)
     {
-      CLC_initSimulator (p);
+      CLC_initSimulator (p, ids);
     }
   else
     {
