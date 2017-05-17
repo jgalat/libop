@@ -1,14 +1,26 @@
 #ifndef __BLACK_SCHOLES_H__
 #define __BLACK_SCHOLES_H__
 
+#include <qss-solver/engine/common/data.h>
 #include <qss-solver/engine/classic/classic_data.h>
+#include <qss-solver/engine/classic/classic_simulator.h>
 
 #ifdef __cplusplus
 class BlackScholesModel {
   public:
     BlackScholesModel();
     ~BlackScholesModel();
+
+    void initializeDataStructs(CLC_simulator);
+    void settings(SD_simulationSettings);
+    void definition(double *x, double *d, double *alg, double t, double *dx);
+    void zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc);
+    void handlerPos(int i, double *x, double *d, double *alg, double t);
+
   private:
+    SD_Solver solver;
+    double ft, dqmin, dqrel;
+
     CLC_data modelData;
 
     int N;

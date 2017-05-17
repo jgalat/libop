@@ -13,7 +13,16 @@ CLC_initializeDataStructs (CLC_simulator simulator) {
   return;
 }
 
-
 BlackScholesModel::BlackScholesModel() {}
 
 BlackScholesModel::~BlackScholesModel() {}
+
+void BlackScholesModel::initializeDataStructs(CLC_simulator simulator) {}
+
+void settings(SD_simulationSettings settings) {}
+
+void definition(double *x, double *d, double *alg, double t, double *dx) {}
+
+void zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {}
+
+void handlerPos(int i, double *x, double *d, double *alg, double t) {}
