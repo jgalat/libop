@@ -11,14 +11,15 @@ class BlackScholesModel {
     BlackScholesModel();
     ~BlackScholesModel();
 
+  private:
     void initializeDataStructs(CLC_simulator);
     void settings(SD_simulationSettings);
     void definition(double *x, double *d, double *alg, double t, double *dx);
     void zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc);
     void handlerPos(int i, double *x, double *d, double *alg, double t);
     void handlerNeg(int i, double *x, double *d, double *alg, double t);
+    void output(int i, double *x, double *d, double *alg, double t, double *out);
 
-  private:
     SD_Solver solver;
     double ft, dqmin, dqrel;
 

@@ -17,4 +17,8 @@ void BlackScholesModel::handlerPos(int i, double *x, double *d, double *alg, dou
 
 void BlackScholesModel::handlerNeg(int i, double *x, double *d, double *alg, double t) {}
 
-void BlackScholesModel::initializeDataStructs(CLC_simulator simulator) {}
+void BlackScholesModel::output(int i, double *x, double *d, double *alg, double t, double *out) {}
+
+void BlackScholesModel::initializeDataStructs(CLC_simulator simulator) {
+
+}
