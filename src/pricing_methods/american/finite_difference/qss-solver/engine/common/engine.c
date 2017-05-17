@@ -20,6 +20,7 @@
 #include "data.h"
 #include "model.h"
 #include "simulator.h"
+#include "engine.h"
 
 
 #ifdef __linux__
