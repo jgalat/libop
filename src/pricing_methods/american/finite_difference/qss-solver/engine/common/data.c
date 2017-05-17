@@ -277,7 +277,7 @@ SD_freeOutputVariable (SD_outputVariable variable)
 }
 
 SD_output
-SD_Output (string name, int outputs, int discretes, int states, double *period,
+SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	   int nPeriod, double it, SD_CommInterval commInterval,
 	   SD_StoreData store, SD_eq value)
 {

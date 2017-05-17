@@ -42,7 +42,7 @@ CLC_freeEvent (CLC_event events)
 
 CLC_data
 CLC_Data (int states, int discretes, int events, int inputs, int algebraics,
-	  string name)
+	  char *name)
 {
   char fileName[256];
   strcpy (fileName, name);

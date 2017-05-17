@@ -151,7 +151,7 @@ struct CLC_data_
  * @return
  */
 CLC_data
-CLC_Data (int states, int discretes, int events, int inputs, int algebraics, string name);
+CLC_Data (int states, int discretes, int events, int inputs, int algebraics, char *name);
 /**
  *
  * @param data
