@@ -19,10 +19,10 @@ BlackScholesModel::~BlackScholesModel() {}
 
 void BlackScholesModel::initializeDataStructs(CLC_simulator simulator) {}
 
-void settings(SD_simulationSettings settings) {}
+void BlackScholesModel::settings(SD_simulationSettings settings) {}
 
-void definition(double *x, double *d, double *alg, double t, double *dx) {}
+void BlackScholesModel::definition(double *x, double *d, double *alg, double t, double *dx) {}
 
-void zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {}
+void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {}
 
-void handlerPos(int i, double *x, double *d, double *alg, double t) {}
+void BlackScholesModel::handlerPos(int i, double *x, double *d, double *alg, double t) {}
