@@ -188,7 +188,7 @@ typedef void
 (*ZeroCrossing) (int n, double x, double *y, double *g, void *integrator_data);
 
 
-#ifdef __cplusplus
+//#ifdef __cplusplus
 class Dopri5 {
   public:
     Dopri5(void*);
@@ -287,54 +287,54 @@ class Dopri5 {
     void *integrator_data;
 
 };
-#endif /* cplusplus */
+//#endif /* cplusplus */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-  struct dopri5;
-
-  struct dopri5 *new_dopri5(void *integrator_data);
-
-  void dopri5_delete(struct dopri5 *dopri5);
-
-  int dopri5_run(struct dopri5 *dopri5,
-      unsigned n, /* dimension of the system <= UINT_MAX-1*/
-    	FcnEqDiff fcn, /* function computing the value of f(x,y) */
-    	double x, /* initial x-value */
-    	double *y, /* initial values for y */
-    	double xend, /* final x-value (xend-x may be positive or negative) */
-    	double *rtoler, /* relative error tolerance */
-    	double *atoler, /* absolute error tolerance */
-    	int itoler, /* switch for rtoler and atoler */
-    	SolTrait solout, /* function providing the numerical solution during integration */
-    	int iout, /* switch for calling solout */
-    	FILE *fileout, /* messages stream */
-    	double uround, /* rounding unit */
-    	double safe, /* safety factor */
-    	double fac1, /* parameters for step size selection */
-    	double fac2, double beta, /* for stabilized step size control */
-    	double hmax, /* maximal step size */
-    	double h, /* initial step size */
-    	long nmax, /* maximal number of allowed steps */
-    	int meth, /* switch for the choice of the coefficients */
-    	long nstiff, /* test for stiffness */
-    	unsigned nrdens, /* number of components for which dense outpout is required */
-    	unsigned* icont, /* indexes of components for which dense output is required, >= nrdens */
-    	unsigned licont, /* declared length of icon */
-    	ZeroCrossing g, /* function to evaluate the roots */
-    	int nzc, /* number of roots functions */
-    	int *jroot, /* array of size nzc to store the sign of the roots found */
-    	double *troot /* time of the root(s) found */
-    );
-
-    double
-    dopri5_contd5 (struct dopri5 *dopri5,
-      unsigned ii, /* index of desired component */
-      double x /* approximation at x */
-      );
-
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
+//
+//   struct dopri5;
+//
+//   struct dopri5 *new_dopri5(void *integrator_data);
+//
+//   void dopri5_delete(struct dopri5 *dopri5);
+//
+//   int dopri5_run(struct dopri5 *dopri5,
+//       unsigned n, /* dimension of the system <= UINT_MAX-1*/
+//     	FcnEqDiff fcn, /* function computing the value of f(x,y) */
+//     	double x, /* initial x-value */
+//     	double *y, /* initial values for y */
+//     	double xend, /* final x-value (xend-x may be positive or negative) */
+//     	double *rtoler, /* relative error tolerance */
+//     	double *atoler, /* absolute error tolerance */
+//     	int itoler, /* switch for rtoler and atoler */
+//     	SolTrait solout, /* function providing the numerical solution during integration */
+//     	int iout, /* switch for calling solout */
+//     	FILE *fileout, /* messages stream */
+//     	double uround, /* rounding unit */
+//     	double safe, /* safety factor */
+//     	double fac1, /* parameters for step size selection */
+//     	double fac2, double beta, /* for stabilized step size control */
+//     	double hmax, /* maximal step size */
+//     	double h, /* initial step size */
+//     	long nmax, /* maximal number of allowed steps */
+//     	int meth, /* switch for the choice of the coefficients */
+//     	long nstiff, /* test for stiffness */
+//     	unsigned nrdens, /* number of components for which dense outpout is required */
+//     	unsigned* icont, /* indexes of components for which dense output is required, >= nrdens */
+//     	unsigned licont, /* declared length of icon */
+//     	ZeroCrossing g, /* function to evaluate the roots */
+//     	int nzc, /* number of roots functions */
+//     	int *jroot, /* array of size nzc to store the sign of the roots found */
+//     	double *troot /* time of the root(s) found */
+//     );
+//
+//     double
+//     dopri5_contd5 (struct dopri5 *dopri5,
+//       unsigned ii, /* index of desired component */
+//       double x /* approximation at x */
+//       );
+//
+// #ifdef __cplusplus
+// }
+// #endif

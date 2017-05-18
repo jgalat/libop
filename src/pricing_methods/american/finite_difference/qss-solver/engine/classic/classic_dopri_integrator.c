@@ -51,7 +51,7 @@ struct simData_DOPRI
   double *temp_x;
   double final_time;
   int size;
-  struct dopri5 *d;
+  Dopri5 *d;
 };
 
 //struct simData_DOPRI simDataDopri;
@@ -110,7 +110,8 @@ DOPRI_solout (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
         clcData->totalSteps++;
         int i;
         for (i=0;i< simDataDopri->size; i++)
-          simDataDopri->temp_x[i] = dopri5_contd5(simDataDopri->d, i, simDataDopri->last_step+simDataDopri->step_size);
+          simDataDopri->temp_x[i] = simDataDopri->d->contd5(i,
+            simDataDopri->last_step+simDataDopri->step_size);
         CLC_save_step (simOutput, simDataDopri->solution,
 		       simDataDopri->solution_time, simDataDopri->last_step+simDataDopri->step_size,
 		       simDataDopri->totalOutputSteps[0], simDataDopri->temp_x, clcData->d,
@@ -186,11 +187,11 @@ DOPRI_integrate (SIM_simulator simulate)
   CLC_integratorData integrator_data = CLC_IntegratorData(clcModel, clcData, simOutput,
                             (void*) &simDataDopri, is_sampled);
 
-  struct dopri5 *d = new_dopri5((void*) integrator_data);
+  Dopri5 *d = new Dopri5((void*) integrator_data);
 
   simDataDopri.d = d;
 
-  res = dopri5_run(d, size, DOPRI_model, t, x, _ft , &rel_tol, &abs_tol, 0,
+  res = d->run(size, DOPRI_model, t, x, _ft , &rel_tol, &abs_tol, 0,
 		    DOPRI_solout, 2,
 		    stdout,
 		    1e-30, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2000000000, 0, -1,

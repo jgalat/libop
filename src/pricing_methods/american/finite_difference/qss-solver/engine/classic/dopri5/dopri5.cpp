@@ -836,28 +836,28 @@ Dopri5::contd5 (unsigned ii, double x)
 } /* contd5 */
 
 
-// C
-
-struct dopri5 *new_dopri5(void *integrator_data) {
-  struct dopri5 *d = reinterpret_cast<dopri5*>(new Dopri5(integrator_data));
-  return d;
-}
-
-void dopri5_delete(struct dopri5 *d) {
-  delete reinterpret_cast<Dopri5*>(d);
-}
-
-int dopri5_run(struct dopri5 *d, unsigned n, FcnEqDiff fcn, double x,
-    double *y, double xend, double *rtoler, double *atoler, int itoler,
-    SolTrait solout, int iout, FILE *fileout, double uround, double safe, double fac1,
-    double fac2, double beta, double hmax, double h, long nmax, int meth,
-    long nstiff, unsigned nrdens, unsigned* icont, unsigned licont, ZeroCrossing g,
-    int nzc, int *jroot, double *troot) {
-      return (reinterpret_cast<Dopri5*>(d))->run(n, fcn, x, y, xend, rtoler, atoler, itoler,
-        solout, iout, fileout, uround, safe, fac1, fac2, beta, hmax, h, nmax,
-      meth, nstiff, nrdens, icont, licont, g, nzc, jroot, troot);
-  }
-
-double dopri5_contd5 (struct dopri5 *d, unsigned ii, double x) {
-  return (reinterpret_cast<Dopri5*>(d))->contd5(ii, x);
-}
+// // C
+//
+// struct dopri5 *new_dopri5(void *integrator_data) {
+//   struct dopri5 *d = reinterpret_cast<dopri5*>(new Dopri5(integrator_data));
+//   return d;
+// }
+//
+// void dopri5_delete(struct dopri5 *d) {
+//   delete reinterpret_cast<Dopri5*>(d);
+// }
+//
+// int dopri5_run(struct dopri5 *d, unsigned n, FcnEqDiff fcn, double x,
+//     double *y, double xend, double *rtoler, double *atoler, int itoler,
+//     SolTrait solout, int iout, FILE *fileout, double uround, double safe, double fac1,
+//     double fac2, double beta, double hmax, double h, long nmax, int meth,
+//     long nstiff, unsigned nrdens, unsigned* icont, unsigned licont, ZeroCrossing g,
+//     int nzc, int *jroot, double *troot) {
+//       return (reinterpret_cast<Dopri5*>(d))->run(n, fcn, x, y, xend, rtoler, atoler, itoler,
+//         solout, iout, fileout, uround, safe, fac1, fac2, beta, hmax, h, nmax,
+//       meth, nstiff, nrdens, icont, licont, g, nzc, jroot, troot);
+//   }
+//
+// double dopri5_contd5 (struct dopri5 *d, unsigned ii, double x) {
+//   return (reinterpret_cast<Dopri5*>(d))->contd5(ii, x);
+// }
