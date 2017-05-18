@@ -185,7 +185,7 @@ typedef void
 (*SolTrait) (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
        int *jroot, void *integrator_data);
 typedef void
-(*ZeroCrossing) (int n, double x, const double *y, double *g, void *integrator_data);
+(*ZeroCrossing) (int n, double x, double *y, double *g, void *integrator_data);
 
 
 #ifdef __cplusplus

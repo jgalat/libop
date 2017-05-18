@@ -444,9 +444,15 @@ SD_Statistics ()
     p->memory = 0;
     p->reinits = 0;
     p->modelEvaluations = 0;
-    p->iTime = checkedMalloc (sizeof(*(p->iTime)));
-    p->sTime = checkedMalloc (sizeof(*(p->sTime)));
-    p->sdTime = checkedMalloc (sizeof(*(p->sdTime)));
+#ifdef _WIN32
+    p->iTime = (timeval *) checkedMalloc (sizeof(*(p->iTime)));
+    p->sTime = (timeval *) checkedMalloc (sizeof(*(p->sTime)));
+    p->sdTime = (timeval *) checkedMalloc (sizeof(*(p->sdTime)));
+#else
+    p->iTime = (timespec *) checkedMalloc (sizeof(*(p->iTime)));
+    p->sTime = (timespec *) checkedMalloc (sizeof(*(p->sTime)));
+    p->sdTime = (timespec *) checkedMalloc (sizeof(*(p->sdTime)));
+#endif
     p->initTime = 0;
     p->simulationTime = 0;
     p->saveTime = 0;

@@ -57,7 +57,7 @@ struct simData_DOPRI
 //struct simData_DOPRI simDataDopri;
 
 void
-DOPRI_events (int n, double x, const double *y, double *g,
+DOPRI_events (int n, double x, double *y, double *g,
   void *integrator_data)
 {
   CLC_integratorData id = (CLC_integratorData) integrator_data;
@@ -88,7 +88,7 @@ DOPRI_solout (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
   CLC_data clcData = id->clcData;
   SD_output simOutput = id->simOutput;
   struct simData_DOPRI *simDataDopri = (struct simData_DOPRI*) id->simData;
-  const double _ft = clcData->ft;
+  //const double _ft = clcData->ft;
 #ifdef SYNC_RT
   /* Sync */
   waitUntil(x);
@@ -211,7 +211,7 @@ DOPRI_integrate (SIM_simulator simulate)
 
   if (is_sampled)
 	{
-	  if (totalOutputSteps < num_steps)
+	  if (totalOutputSteps < (unsigned) num_steps)
 	    {
 	      CLC_save_step (simOutput, solution, solution_time, _ft,
 			     totalOutputSteps, x, clcData->d, clcData->alg);

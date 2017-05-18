@@ -402,7 +402,7 @@ freeVMatrix(vMatrix m, int rows);
 /**
  *
  */
-#define MIN(a,b,c,d) 	((a)<=(c)?(b):(d))
+//#define MIN(a,b,c,d) 	((a)<=(c)?(b):(d))
 
 /**
  *

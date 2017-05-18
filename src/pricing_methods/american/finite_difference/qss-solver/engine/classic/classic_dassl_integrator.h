@@ -34,9 +34,9 @@
  * @param iPar
  */
 typedef void
-(*dae_system) (const double *t, const double *x, const double *dx,
-	       const double *CJ, double *res, int iRes, const double *rPar,
-	       const int *iPar);
+(*dae_system) (double *t, double *x, double *dx,
+	       double *CJ, double *res, int iRes, double *rPar,
+	       int *iPar);
 /**
  *
  * @param n
@@ -49,9 +49,9 @@ typedef void
  * @param iPar
  */
 typedef void
-(*zero_crossing) (const int *n, const double *t, const double *x,
-		  const double *dx, const int *nrt, double *res,
-		  const double *rPar, const int *iPar);
+(*zero_crossing) (int *n, double *t, double *x,
+		  double *dx, int *nrt, double *res,
+		  double *rPar, int *iPar);
 /**
  *
  */
@@ -84,25 +84,25 @@ typedef void
  */
 void
 ddaskr_ (dae_system s,                 // 1
-    const int *noOfEquations, // 2
+    int *noOfEquations, // 2
     double *currentTime,      // 3
     double *x,                // 4
     double *dx,               // 5
-    const double *finalTime,  // 6
+    double *finalTime,  // 6
     int info[20],             // 7
     double *relativeTolerance,             // 8
     double *absoluteTolerance,             // 9
     int *outputStatusFlag,    // 10
-    double *dWorkArray,       // 11 
-    const int *lengthOfDWork, // 12
+    double *dWorkArray,       // 11
+    int *lengthOfDWork, // 12
     int *iWorkArray,          // 13
-    const int *lengthOfIWork, // 14
-    const double *rParArray,  // 15
-    const int *iParArray,     // 16
+    int *lengthOfIWork, // 14
+    double *rParArray,  // 15
+    int *iParArray,     // 16
     nullfunc jac,             // 17
     nullfunc p,               // 18
     zero_crossing r,              // 19
-    const int *numConstrains, // 20
+    int *numConstrains, // 20
     int *numOfOutputs         // 21
     );
 /**

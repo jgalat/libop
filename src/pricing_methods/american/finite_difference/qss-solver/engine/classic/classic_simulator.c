@@ -25,7 +25,7 @@
 CLC_simulator
 CLC_Simulator ()
 {
-  CLC_simulator p = checkedMalloc (sizeof(*p));
+  CLC_simulator p = (CLC_simulator) checkedMalloc (sizeof(*p));
   p->data = NULL;
   p->model = NULL;
   p->output = NULL;

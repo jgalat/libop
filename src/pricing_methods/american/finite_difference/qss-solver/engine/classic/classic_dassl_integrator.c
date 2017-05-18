@@ -65,8 +65,8 @@
 
 #define HIST 1e-12
 void
-DASSL_events (const int *n, const double *t, const double *x, const double *dx,
-	      const int *nrt, double *res, const double *rPar, const int *iPar)
+DASSL_events (int *n, double *t, double *x, double *dx,
+	      int *nrt, double *res, double *rPar, int *iPar)
 {
   int i;
   double out;
@@ -86,15 +86,15 @@ DASSL_events (const int *n, const double *t, const double *x, const double *dx,
     }
 }
 void
-DASSL_model (const double *t, const double *x, const double *dx,
-	     const double *CJ, double *res, int *iRes, const double *rPar,
-	     const int *iPar)
+DASSL_model (double *t, double *x, double *dx,
+	     double *CJ, double *res, int iRes, double *rPar,
+	     int *iPar)
 {
   int i;
   CLC_integratorData id = (CLC_integratorData) rPar;
   CLC_model clcModel = id->clcModel;
   CLC_data clcData = id->clcData;
-  
+
   clcModel->f (x, clcData->d, clcData->alg, t[0], res);
   for (i = 0; i < clcData->states; i++)
     res[i] -= dx[i];
@@ -124,9 +124,9 @@ DASSL_integrate (SIM_simulator simulate)
     }
   const int num_steps = (
       is_sampled ? ceil (_ft / step_size) + 2 : MAX_OUTPUT_POINTS);
-  double **solution = checkedMalloc (sizeof(double*) * simOutput->outputs);
-  double *solution_time = checkedMalloc (sizeof(double) * num_steps);
-  double **outvar = checkedMalloc (sizeof(double*) * simOutput->outputs);
+  double **solution = (double **) checkedMalloc (sizeof(double*) * simOutput->outputs);
+  double *solution_time = (double *) checkedMalloc (sizeof(double) * num_steps);
+  double **outvar = (double **) checkedMalloc (sizeof(double*) * simOutput->outputs);
 
   int info[20], lrw, liw, *iwork;
   double *x, *dx, rel_tol = dQRel, abs_tol = dQMin;
@@ -135,12 +135,12 @@ DASSL_integrate (SIM_simulator simulate)
   int size = clcData->states;
   int event_detected = 0;
 
-  x = checkedMalloc (sizeof(double) * clcData->states);
-  dx = checkedMalloc (sizeof(double) * clcData->states);
-  root_output = checkedMalloc (sizeof(int) * clcData->events);
+  x = (double *) checkedMalloc (sizeof(double) * clcData->states);
+  dx = (double *) checkedMalloc (sizeof(double) * clcData->states);
+  root_output = (int *) checkedMalloc (sizeof(int) * clcData->events);
   lrw = 5000 + 15000 * clcData->states
       + /*clcData->states * clcData->states +*/8 * clcData->events;
-  rwork = checkedMalloc (sizeof(double) * lrw);
+  rwork = (double *) checkedMalloc (sizeof(double) * lrw);
   CLC_compute_outputs (simOutput, solution, num_steps);
   for (i = 0; i < clcData->states; i++)
     x[i] = _x[i];
@@ -152,8 +152,8 @@ DASSL_integrate (SIM_simulator simulate)
       info[2] = 1;
     }
   liw = 60040;
-  iwork = checkedMalloc (sizeof(int) * liw);
-  int percentage = 0;
+  iwork = (int *) checkedMalloc (sizeof(int) * liw);
+  //int percentage = 0;
   // Save first step
   CLC_save_step (simOutput, solution, solution_time, t,
 		 clcData->totalOutputSteps, x, clcData->d, clcData->alg);

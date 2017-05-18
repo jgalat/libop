@@ -3,7 +3,7 @@ OS ?= unix
 DEBUG ?= False
 
 #Compiler and Linker
-CC          := gcc
+CC          := g++
 CPPC        := g++
 FC 			:= gfortran
 
