@@ -4,6 +4,6 @@
 #include "model.h"
 
 int
-engine(MOD_settings, void*);
+engine(MOD_settings, InitializeDataStructs);
 
 #endif /* ENGINE_H_ */

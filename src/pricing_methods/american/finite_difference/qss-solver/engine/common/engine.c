@@ -35,7 +35,7 @@ segfault_hdlr(int dummy)
 #endif
 
 int
-engine(MOD_settings MOD_settings, void *ids)
+engine(MOD_settings MOD_settings, InitializeDataStructs ids)
 {
 
 #ifdef __linux__

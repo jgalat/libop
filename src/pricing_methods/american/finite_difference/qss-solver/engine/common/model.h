@@ -20,8 +20,13 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
+#include <functional>
+
 #include "data.h"
 
-typedef void (*MOD_settings) (SD_simulationSettings);
+typedef std::function<void (SD_simulationSettings)> MOD_settings;
+
+typedef std::function<void (void*)> InitializeDataStructs;
+
 
 #endif /* MODEL_H_ */

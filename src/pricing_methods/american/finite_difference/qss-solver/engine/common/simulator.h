@@ -21,6 +21,7 @@
 #define SIMULATOR_H_
 
 #include "data.h"
+#include "model.h"
 
 /**
  *
@@ -82,7 +83,7 @@ struct SIM_simulator_
  * @return
  */
 SIM_simulator
-SIM_Simulator (SD_simulationSettings settings, void *ids);
+SIM_Simulator (SD_simulationSettings settings, InitializeDataStructs ids);
 
 /**
  *

@@ -24,10 +24,11 @@
 #include "../classic/classic_simulator.h"
 //#include "../qss/qss_simulator.h"
 //#include "commands.h"
+#include "model.h"
 #include "utils.h"
 
 SIM_simulator
-SIM_Simulator (SD_simulationSettings settings, void *ids)
+SIM_Simulator (SD_simulationSettings settings, InitializeDataStructs ids)
 {
   SIM_simulator p = (SIM_simulator) checkedMalloc (sizeof(*p));
   p->ops = SIM_SimulatorOps ();

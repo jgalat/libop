@@ -23,6 +23,7 @@
 #include "../common/data.h"
 #include "../common/simulator.h"
 #include "classic_data.h"
+#include "../common/model.h"
 
 typedef struct CLC_simulator_ *CLC_simulator;
 
@@ -30,7 +31,7 @@ struct CLC_simulator_
 {
   CLC_data data;
   CLC_model model;
-  void *initializeDataStructs;
+  InitializeDataStructs initializeDataStructs;
   SD_output output;
   SD_simulationSettings settings;
   SD_simulationLog simulationLog;
@@ -44,7 +45,7 @@ void
 CLC_freeSimulator (CLC_simulator simulator);
 
 void
-CLC_initSimulator (SIM_simulator simulator, void *ids);
+CLC_initSimulator (SIM_simulator simulator, InitializeDataStructs ids);
 
 
 #endif /* CLASSIC_SIMULATOR_H_ */

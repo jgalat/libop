@@ -34,7 +34,7 @@ DEPEXT      := d
 OBJEXT      := o
 
 #Flags, Libraries and Includes
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2 -std=gnu++11
 ifeq ($(DEBUG),True)
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -g -DDEBUG
 endif
