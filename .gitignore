@@ -38,3 +38,4 @@ src/obj/
 example
 src/pricing_methods/american/finite_difference/qss-solver/engine/obj/
 test*
+*.log

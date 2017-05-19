@@ -4,7 +4,6 @@ DEBUG ?= False
 
 #Compiler and Linker
 CC          := g++
-CPPC        := g++
 FC 			:= gfortran
 
 #The Target Binary Program
@@ -80,8 +79,8 @@ $(BUILDDIR)/%.o : $(CLASSICDIR)/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
 $(BUILDDIR)/%.o : $(DOPRIDIR)/%.cpp
-	$(CPPC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
-	$(CPPC) $(INC) -c $< -o $@ $(CFLAGS)
+	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
 $(BUILDDIR)/%.o : $(DASSLDIR)/%.f
 	$(FC) $(INC) -c $< -o $@ $(CFLAGS)

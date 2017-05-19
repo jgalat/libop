@@ -8,8 +8,8 @@ TARGET := example
 SRCDIR := src
 BUILDDIR := build
 
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
-LDFLAGS   := -lop -lm
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O0 -g
+LDFLAGS   := -lop -lm -lstdc++ -lgfortran
 LIB				:= -L$(BUILDDIR)
 INC				:= -I$(SRCDIR)
 
@@ -26,4 +26,4 @@ $(TARGET): libop
 
 clean:
 	cd $(BUILDDIR) && $(MAKE) clean
-	$(RMS) $(TARGET)
+	$(RMS) $(TARGET) *.a

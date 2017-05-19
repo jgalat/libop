@@ -1,5 +1,6 @@
 #compiler and linker
 CC 	:= gcc
+CPPC := g++
 MAKE := make
 RMS := rm -rf
 
@@ -12,12 +13,14 @@ PMDIR		 := $(SRCDIR)/pricing_methods
 PMEUR  	 := $(PMDIR)/european
 PMAM     := $(PMDIR)/american
 QSSDIR   := $(PMAM)/finite_difference/qss-solver
+QSSLIBSDIR := $(QSSDIR)/libs
 BUILDDIR := $(SRCDIR)/obj
 
 
 #Flags, Libraries and Includes
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
-LDFLAGS  	:= -lm
+CPPFLAGS  := -std=gnu++11
+LDFLAGS  	:=
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
 .SUFFIXES: .c
 
@@ -28,42 +31,45 @@ COMMONSRC := $(SRCDIR)/option_data.c $(SRCDIR)/pricing_data.c $(SRCDIR)/result.c
 PMSRC := $(PMEUR)/european_analytic.c \
 	$(PMAM)/finite_difference/american_finite_difference.c
 
+CPPSRC := $(QSSDIR)/black_scholes_model.cpp
+
 #Objects
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
 PMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(PMSRC:.c=.o)))
+QSSLIBS = $(QSSLIBSDIR)/libqss.a $(QSSLIBSDIR)/libtimestep.a
+QSSOBJ = $(QSSDIR)/engine/obj/release/*.o
+EXTRAOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(CPPSRC:.cpp=.o))) $(QSSOBJ)
 
-#DEPS = $(COMMONOBJ:.o=.d) $(PMOBJ:.o=.d)
 
 default: $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	#$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
 $(BUILDDIR)/%.o: $(PMEUR)/%.c
-	#$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(BUILDDIR)/black_scholes_model.o:
-	@cd $(QSSDIR) && $(MAKE)
-	@mv $(QSSDIR)/black_scholes_model.o $@
+$(QSSOBJ):
+	@cd $(QSSLIBSDIR) && $(MAKE)
 
-$(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c $(BUILDDIR)/black_scholes_model.o 
-	#$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+$(BUILDDIR)/%.o: $(QSSDIR)/%.cpp
+	$(CPPC) $(INC) -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+
+$(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(TARGET): $(COMMONOBJ) $(PMOBJ)
-	@ar rvs $(@) $(COMMONOBJ) $(PMOBJ)
+$(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
+	@ar rvs $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
 
 $(COMMONOBJ): | $(BUILDDIR)
 
 $(PMOBJ): | $(BUILDDIR)
 
+$(EXTRAOBJ): | $(BUILDDIR)
+
 $(BUILDDIR):
 	@mkdir -p $(BUILDDIR)
 
-#-include $(DEPS)
-
 clean:
-	cd $(QSSDIR) && $(MAKE) clean
-	$(RMS) $(BUILDDIR) $(TARGET)
+	cd $(QSSLIBSDIR) && $(MAKE) clean
+	$(RMS) $(BUILDDIR) $(TARGET) *.a
