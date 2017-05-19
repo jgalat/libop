@@ -25,8 +25,8 @@
 #define CLOCK_REALTIME 0
 #define CLOCK_MONOTONIC 0
 #endif
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_poly.h>
+// #include <gsl/gsl_errno.h>
+// #include <gsl/gsl_poly.h>
 
 #include <common/utils.h>
 
@@ -153,205 +153,205 @@ sign (double x)
 }
 
 
-double
-minPosRoot (double *coeff, int order)
-{
-  double mpr = -1;
-  switch (order)
-    {
-    case 0:
-      mpr = INF;
-      break;
-    case 1:
-      if (coeff[1] == 0)
-	{
-	  mpr = INF;
-	}
-      else
-	{
-	  mpr = -coeff[0] / coeff[1];
-	}
-      ;
-      if (mpr < 0)
-	{
-	  mpr = INF;
-	}
-      break;
-    case 2:
-      if (coeff[2] == 0 || (1000 * fabs (coeff[2])) < fabs (coeff[1]))
-	{
-	  if (coeff[1] == 0)
-	    {
-	      mpr = INF;
-	    }
-	  else
-	    {
-	      mpr = -coeff[0] / coeff[1];
-	    };
-	  if (mpr < 0)
-	    {
-	      mpr = INF;
-	    }
-	}
-      else
-	{
-	  double disc;
-	  disc = coeff[1] * coeff[1] - 4 * coeff[2] * coeff[0];
-	  if (disc < 0)
-	    {
-	      //no real roots
-	      mpr = INF;
-	    }
-	  else
-	    {
-	      double sd, r1;
-	      sd = sqrt (disc);
-	      r1 = (-coeff[1] + sd) / 2 / coeff[2];
-	      if (r1 > 0)
-		{
-		  mpr = r1;
-		}
-	      else
-		{
-		  mpr = INF;
-		};
-	      r1 = (-coeff[1] - sd) / 2 / coeff[2];
-	      if ((r1 > 0) && (r1 < mpr))
-		{
-		  mpr = r1;
-		}
-	    };
-	}
-      ;
-      break;
-    case 3:
-      if ((coeff[3] == 0) || (1000 * fabs (coeff[3]) < fabs (coeff[2])))
-	{
-	  mpr = minPosRoot (coeff, 2);
-	}
-      else if (coeff[0] == 0)
-	{
-	  if (coeff[1] == 0)
-	    {
-	      mpr = -coeff[2] / coeff[3];
-	    }
-	  else
-	    {
-	      coeff[0] = coeff[1];
-	      coeff[1] = coeff[2];
-	      coeff[2] = coeff[3];
-	      mpr = minPosRoot (coeff, 2);
-	    }
-	}
-      else
-	{
-	  double q, r, disc;
-	  q = (3 * coeff[3] * coeff[1] - coeff[2] * coeff[2]) / 9 / coeff[3]
-	      / coeff[3];
-	  r = (9 * coeff[3] * coeff[2] * coeff[1]
-	      - 27 * coeff[3] * coeff[3] * coeff[0]
-	      - 2 * coeff[2] * coeff[2] * coeff[2]) / 54 / coeff[3] / coeff[3]
-	      / coeff[3];
-	  disc = q * q * q + r * r;
-	  mpr = INF;
-	  if (disc >= 0)
-	    {
-	      //only one real root
-	      double sd, s, t, r1;
-	      sd = sqrt (disc);
-	      if (r + sd > 0)
-		{
-		  s = pow (r + sd, 1.0 / 3);
-		}
-	      else
-		{
-		  s = -pow (fabs (r + sd), 1.0 / 3);
-		};
-	      if (r - sd > 0)
-		{
-		  t = pow (r - sd, 1.0 / 3);
-		}
-	      else
-		{
-		  t = -pow (fabs (r - sd), 1.0 / 3);
-		};
-	      r1 = s + t - coeff[2] / 3 / coeff[3];
-	      if (r1 > 0)
-		{
-		  mpr = r1;
-		}
-	    }
-	  else
-	    {
-	      //three real roots
-	      double rho, th, rho13, costh3, sinth3, spt, smti32, r1;
-	      rho = sqrt (-q * q * q);
-	      th = acos (r / rho);
-	      rho13 = pow (rho, 1.0 / 3);
-	      costh3 = cos (th / 3);
-	      sinth3 = sin (th / 3);
-	      spt = rho13 * 2 * costh3;
-	      smti32 = -rho13 * sinth3 * sqrt (3);
-	      r1 = spt - coeff[2] / 3 / coeff[3];
-	      if (r1 > 0)
-		{
-		  mpr = r1;
-		}
-	      r1 = -spt / 2 - coeff[2] / 3 / coeff[3] + smti32;
-	      if ((r1 > 0) && (r1 < mpr))
-		{
-		  mpr = r1;
-		}
-	      r1 = r1 - 2 * smti32;
-	      if ((r1 > 0) && (r1 < mpr))
-		{
-		  mpr = r1;
-		}
-	    };
-	}
-      ;
-      break;
-    case 4:
-      {
-	if ((coeff[4] == 0) || (1000 * fabs (coeff[4]) < fabs (coeff[3])))
-	  {
-	    mpr = minPosRoot (coeff, 3);
-	  }
-	else
-	  {
-	    double a[5];
-	    double z[8];
-	    int i;
-	    a[0] = coeff[0];
-	    a[1] = coeff[1];
-	    a[2] = coeff[2];
-	    a[3] = coeff[3];
-	    a[4] = coeff[4];
-	    gsl_set_error_handler_off ();
-	    gsl_poly_complex_workspace * w = gsl_poly_complex_workspace_alloc (
-		5);
-	    mpr = INF;
-	    if (gsl_poly_complex_solve (a, 5, w, z) == GSL_SUCCESS)
-	      {
-		for (i = 0; i < 4; i++)
-		  {
-		    if (z[2 * i + 1] == 0 && z[2 * i] > 0)
-		      {
-			if (z[2 * i] < mpr)
-			  {
-			    mpr = z[2 * i];
-			  }
-		      }
-		  }
-	      }
-	    gsl_poly_complex_workspace_free (w);
-	    gsl_set_error_handler (NULL);
-	  }
-      }
-      break;
-    }
-  return (mpr);
-}
+// double
+// minPosRoot (double *coeff, int order)
+// {
+//   double mpr = -1;
+//   switch (order)
+//     {
+//     case 0:
+//       mpr = INF;
+//       break;
+//     case 1:
+//       if (coeff[1] == 0)
+// 	{
+// 	  mpr = INF;
+// 	}
+//       else
+// 	{
+// 	  mpr = -coeff[0] / coeff[1];
+// 	}
+//       ;
+//       if (mpr < 0)
+// 	{
+// 	  mpr = INF;
+// 	}
+//       break;
+//     case 2:
+//       if (coeff[2] == 0 || (1000 * fabs (coeff[2])) < fabs (coeff[1]))
+// 	{
+// 	  if (coeff[1] == 0)
+// 	    {
+// 	      mpr = INF;
+// 	    }
+// 	  else
+// 	    {
+// 	      mpr = -coeff[0] / coeff[1];
+// 	    };
+// 	  if (mpr < 0)
+// 	    {
+// 	      mpr = INF;
+// 	    }
+// 	}
+//       else
+// 	{
+// 	  double disc;
+// 	  disc = coeff[1] * coeff[1] - 4 * coeff[2] * coeff[0];
+// 	  if (disc < 0)
+// 	    {
+// 	      //no real roots
+// 	      mpr = INF;
+// 	    }
+// 	  else
+// 	    {
+// 	      double sd, r1;
+// 	      sd = sqrt (disc);
+// 	      r1 = (-coeff[1] + sd) / 2 / coeff[2];
+// 	      if (r1 > 0)
+// 		{
+// 		  mpr = r1;
+// 		}
+// 	      else
+// 		{
+// 		  mpr = INF;
+// 		};
+// 	      r1 = (-coeff[1] - sd) / 2 / coeff[2];
+// 	      if ((r1 > 0) && (r1 < mpr))
+// 		{
+// 		  mpr = r1;
+// 		}
+// 	    };
+// 	}
+//       ;
+//       break;
+//     case 3:
+//       if ((coeff[3] == 0) || (1000 * fabs (coeff[3]) < fabs (coeff[2])))
+// 	{
+// 	  mpr = minPosRoot (coeff, 2);
+// 	}
+//       else if (coeff[0] == 0)
+// 	{
+// 	  if (coeff[1] == 0)
+// 	    {
+// 	      mpr = -coeff[2] / coeff[3];
+// 	    }
+// 	  else
+// 	    {
+// 	      coeff[0] = coeff[1];
+// 	      coeff[1] = coeff[2];
+// 	      coeff[2] = coeff[3];
+// 	      mpr = minPosRoot (coeff, 2);
+// 	    }
+// 	}
+//       else
+// 	{
+// 	  double q, r, disc;
+// 	  q = (3 * coeff[3] * coeff[1] - coeff[2] * coeff[2]) / 9 / coeff[3]
+// 	      / coeff[3];
+// 	  r = (9 * coeff[3] * coeff[2] * coeff[1]
+// 	      - 27 * coeff[3] * coeff[3] * coeff[0]
+// 	      - 2 * coeff[2] * coeff[2] * coeff[2]) / 54 / coeff[3] / coeff[3]
+// 	      / coeff[3];
+// 	  disc = q * q * q + r * r;
+// 	  mpr = INF;
+// 	  if (disc >= 0)
+// 	    {
+// 	      //only one real root
+// 	      double sd, s, t, r1;
+// 	      sd = sqrt (disc);
+// 	      if (r + sd > 0)
+// 		{
+// 		  s = pow (r + sd, 1.0 / 3);
+// 		}
+// 	      else
+// 		{
+// 		  s = -pow (fabs (r + sd), 1.0 / 3);
+// 		};
+// 	      if (r - sd > 0)
+// 		{
+// 		  t = pow (r - sd, 1.0 / 3);
+// 		}
+// 	      else
+// 		{
+// 		  t = -pow (fabs (r - sd), 1.0 / 3);
+// 		};
+// 	      r1 = s + t - coeff[2] / 3 / coeff[3];
+// 	      if (r1 > 0)
+// 		{
+// 		  mpr = r1;
+// 		}
+// 	    }
+// 	  else
+// 	    {
+// 	      //three real roots
+// 	      double rho, th, rho13, costh3, sinth3, spt, smti32, r1;
+// 	      rho = sqrt (-q * q * q);
+// 	      th = acos (r / rho);
+// 	      rho13 = pow (rho, 1.0 / 3);
+// 	      costh3 = cos (th / 3);
+// 	      sinth3 = sin (th / 3);
+// 	      spt = rho13 * 2 * costh3;
+// 	      smti32 = -rho13 * sinth3 * sqrt (3);
+// 	      r1 = spt - coeff[2] / 3 / coeff[3];
+// 	      if (r1 > 0)
+// 		{
+// 		  mpr = r1;
+// 		}
+// 	      r1 = -spt / 2 - coeff[2] / 3 / coeff[3] + smti32;
+// 	      if ((r1 > 0) && (r1 < mpr))
+// 		{
+// 		  mpr = r1;
+// 		}
+// 	      r1 = r1 - 2 * smti32;
+// 	      if ((r1 > 0) && (r1 < mpr))
+// 		{
+// 		  mpr = r1;
+// 		}
+// 	    };
+// 	}
+//       ;
+//       break;
+//     case 4:
+//       {
+// 	if ((coeff[4] == 0) || (1000 * fabs (coeff[4]) < fabs (coeff[3])))
+// 	  {
+// 	    mpr = minPosRoot (coeff, 3);
+// 	  }
+// 	else
+// 	  {
+// 	    double a[5];
+// 	    double z[8];
+// 	    int i;
+// 	    a[0] = coeff[0];
+// 	    a[1] = coeff[1];
+// 	    a[2] = coeff[2];
+// 	    a[3] = coeff[3];
+// 	    a[4] = coeff[4];
+// 	    gsl_set_error_handler_off ();
+// 	    gsl_poly_complex_workspace * w = gsl_poly_complex_workspace_alloc (
+// 		5);
+// 	    mpr = INF;
+// 	    if (gsl_poly_complex_solve (a, 5, w, z) == GSL_SUCCESS)
+// 	      {
+// 		for (i = 0; i < 4; i++)
+// 		  {
+// 		    if (z[2 * i + 1] == 0 && z[2 * i] > 0)
+// 		      {
+// 			if (z[2 * i] < mpr)
+// 			  {
+// 			    mpr = z[2 * i];
+// 			  }
+// 		      }
+// 		  }
+// 	      }
+// 	    gsl_poly_complex_workspace_free (w);
+// 	    gsl_set_error_handler (NULL);
+// 	  }
+//       }
+//       break;
+//     }
+//   return (mpr);
+// }
 
 void
 integrateState (int i, double dt, double *p, int order)

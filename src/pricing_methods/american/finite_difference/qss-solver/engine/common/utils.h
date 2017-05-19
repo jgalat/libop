@@ -128,8 +128,8 @@ checkedMalloc (unsigned long long len);
  * @param order
  * @return
  */
-double
-minPosRoot (double *coeff, int order) __attribute__((hot));
+// double
+// minPosRoot (double *coeff, int order) __attribute__((hot));
 
 /*! \brief Advances the time of \f$ p(t) = a_0 + a_1 t + ... + a_{n} t^{n} \f$
  *
