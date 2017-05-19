@@ -56,11 +56,11 @@ struct SET_settings_
  * @param fname
  * @return
  */
-SET_settings
-SET_Settings (char *fname);
+// SET_settings
+// SET_Settings (char *fname);
 
 SET_settings
-SET_Settings_ (SD_Solver solver, double ft, double dqmin, double dqrel);
+SET_Settings (SD_Solver solver, double ft, double dqmin, double dqrel);
 /**
  *
  * @param settings

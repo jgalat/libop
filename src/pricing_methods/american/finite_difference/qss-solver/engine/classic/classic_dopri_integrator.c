@@ -51,7 +51,7 @@ struct simData_DOPRI
   double *temp_x;
   double final_time;
   int size;
-  Dopri5 *d;
+  Dopri5 *dopri5;
 };
 
 //struct simData_DOPRI simDataDopri;
@@ -110,7 +110,7 @@ DOPRI_solout (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
         clcData->totalSteps++;
         int i;
         for (i=0;i< simDataDopri->size; i++)
-          simDataDopri->temp_x[i] = simDataDopri->d->contd5(i,
+          simDataDopri->temp_x[i] = simDataDopri->dopri5->contd5(i,
             simDataDopri->last_step+simDataDopri->step_size);
         CLC_save_step (simOutput, simDataDopri->solution,
 		       simDataDopri->solution_time, simDataDopri->last_step+simDataDopri->step_size,
@@ -187,11 +187,11 @@ DOPRI_integrate (SIM_simulator simulate)
   CLC_integratorData integrator_data = CLC_IntegratorData(clcModel, clcData, simOutput,
                             (void*) &simDataDopri, is_sampled);
 
-  Dopri5 *d = new Dopri5((void*) integrator_data);
+  Dopri5 *dopri5 = new Dopri5((void*) integrator_data);
 
-  simDataDopri.d = d;
+  simDataDopri.dopri5 = dopri5;
 
-  res = d->run(size, DOPRI_model, t, x, _ft , &rel_tol, &abs_tol, 0,
+  res = dopri5->run(size, DOPRI_model, t, x, _ft , &rel_tol, &abs_tol, 0,
 		    DOPRI_solout, 2,
 		    stdout,
 		    1e-30, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2000000000, 0, -1,
@@ -221,38 +221,38 @@ DOPRI_integrate (SIM_simulator simulate)
 	}
   getTime (simulator->stats->sTime);
   subTime (simulator->stats->sTime, simulator->stats->iTime);
-  // if (simulator->settings->debug == 0 || simulator->settings->debug > 1)
-  //   {
-  //     SD_print (simulator->simulationLog, "Simulation time (DOPRI):");
-  //     SD_print (simulator->simulationLog, "----------------");
-  //     SD_print (simulator->simulationLog, "Miliseconds: %g",
-	// 	getTimeValue (simulator->stats->sTime));
-  //     SD_print (simulator->simulationLog, "Scalar function evaluations: %d",
-	// 	clcData->scalarEvaluations);
-  //     SD_print (simulator->simulationLog, "Individual Zero Crossings : %d",
-	// 	clcData->zeroCrossings);
-  //     SD_print (simulator->simulationLog, "Function evaluations: %llu",
-	// 	clcData->funEvaluations);
-  //     //printLog("Function evaluations (reported by DASSL): %d",totalStepsDASSL);
-  //     //printLog("Zero crossing evaluations : %d", totalCrossingEvaluations );
-  //     SD_print (simulator->simulationLog, "Output steps: %d", totalOutputSteps);
-  //     SD_print (simulator->simulationLog, "Simulation steps: %d", d->nstepRead ());
-  //     SD_print (simulator->simulationLog, "Simulation steps (accepted) : %d",
-	// 	d->naccptRead ());
-  //     SD_print (simulator->simulationLog, "Simulation steps (rejected) : %d",
-	// 	d->nrejctRead ());
-  //     SD_print (simulator->simulationLog,
-	// 	"Function evaluations (reported by DOPRI): %d", d->nfcnRead ());
-  //     SD_print (simulator->simulationLog, "Events detected : %d",
-	// 	clcData->totalEvents);
-  //   }
+  if (simulator->settings->debug == 0 || simulator->settings->debug > 1)
+    {
+      SD_print (simulator->simulationLog, "Simulation time (DOPRI):");
+      SD_print (simulator->simulationLog, "----------------");
+      SD_print (simulator->simulationLog, "Miliseconds: %g",
+		getTimeValue (simulator->stats->sTime));
+      SD_print (simulator->simulationLog, "Scalar function evaluations: %d",
+		clcData->scalarEvaluations);
+      SD_print (simulator->simulationLog, "Individual Zero Crossings : %d",
+		clcData->zeroCrossings);
+      SD_print (simulator->simulationLog, "Function evaluations: %llu",
+		clcData->funEvaluations);
+      //printLog("Function evaluations (reported by DASSL): %d",totalStepsDASSL);
+      //printLog("Zero crossing evaluations : %d", totalCrossingEvaluations );
+      SD_print (simulator->simulationLog, "Output steps: %d", totalOutputSteps);
+      SD_print (simulator->simulationLog, "Simulation steps: %d", dopri5->nstepRead ());
+      SD_print (simulator->simulationLog, "Simulation steps (accepted) : %d",
+		dopri5->naccptRead ());
+      SD_print (simulator->simulationLog, "Simulation steps (rejected) : %d",
+		dopri5->nrejctRead ());
+      SD_print (simulator->simulationLog,
+		"Function evaluations (reported by DOPRI): %d", dopri5->nfcnRead ());
+      SD_print (simulator->simulationLog, "Events detected : %d",
+		clcData->totalEvents);
+    }
   CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
   free (outvar);
   free (x);
   free (temp_x);
   free (solution_time);
   free (jroot);
-  free(d);
+  free(dopri5);
   for (i = 0; i < simOutput->outputs; i++)
     {
       free (solution[i]);

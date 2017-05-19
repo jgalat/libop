@@ -80,7 +80,6 @@ CLC_simulatorEnd (SIM_simulator simulate)
 {
   CLC_simulator simulator = (CLC_simulator) simulate->state->sim;
   CLC_freeSimulator (simulator);
-  // freeRandom ();
 }
 
 void

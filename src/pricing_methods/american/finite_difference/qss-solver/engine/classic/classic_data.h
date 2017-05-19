@@ -158,8 +158,12 @@ struct CLC_data_
  * @param name
  * @return
  */
+// CLC_data
+// CLC_Data (int states, int discretes, int events, int inputs, int algebraics, char *name);
+
 CLC_data
-CLC_Data (int states, int discretes, int events, int inputs, int algebraics, char *name);
+CLC_Data (int states, int discretes, int events, int inputs, int algebraics,
+  SD_Solver solver, double ft, double dqmin, double dqrel);
 /**
  *
  * @param data
