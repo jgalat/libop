@@ -20,6 +20,8 @@
 #ifndef DATA_H_
 #define DATA_H_
 
+#include <functional>
+
 #include <stdio.h>
 
 #include "utils.h"
@@ -32,8 +34,9 @@
  * @param
  * @param
  */
-typedef void
-(*SD_eq) (int, double*, double*, double*, double, double*);
+
+typedef
+std::function<void (int, double*, double*, double*, double, double*)> SD_eq;
 
 /**
  *

@@ -48,7 +48,7 @@ vpath %.c $(ENGINEDIR)
 .SUFFIXES: .c
 
 # Source files.
-COMMONSRC = $(COMMONDIR)/data.c $(COMMONDIR)/utils.c $(COMMONDIR)/settings.c $(COMMONDIR)/random.c $(COMMONDIR)/simulator.c $(COMMONDIR)/integrator.c $(COMMONDIR)/engine.c
+COMMONSRC = $(COMMONDIR)/data.c $(COMMONDIR)/utils.c $(COMMONDIR)/settings.c $(COMMONDIR)/simulator.c $(COMMONDIR)/integrator.c $(COMMONDIR)/engine.c
 
 CLASSICSRC = $(CLASSICDIR)/classic_data.c $(CLASSICDIR)/classic_integrator.c $(CLASSICDIR)/classic_dopri_integrator.c $(CLASSICDIR)/classic_dassl_integrator.c $(CLASSICDIR)/classic_simulator.c
 

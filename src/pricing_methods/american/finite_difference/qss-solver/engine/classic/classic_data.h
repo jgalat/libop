@@ -20,6 +20,8 @@
 #ifndef CLASSIC_DATA_H_
 #define CLASSIC_DATA_H_
 
+#include <functional>
+
 #include "../common/data.h"
 #include "../common/utils.h"
 
@@ -48,8 +50,10 @@ typedef void
  * @param
  * @param
  */
-typedef void
-(*CLC_eq) (double*, double*, double*, double, double*);
+
+typedef
+std::function<void (double*, double*, double*, double, double*)> CLC_eq;
+
 /**
  *
  * @param
@@ -58,8 +62,10 @@ typedef void
  * @param
  * @param
  */
-typedef void
-(*CLC_zc) (int, double*, double*, double*, double, double*);
+
+typedef
+std::function<void (int, double*, double*, double*, double, double*)> CLC_zc;
+
 /**
  *
  * @param
@@ -67,8 +73,10 @@ typedef void
  * @param
  * @param
  */
-typedef void
-(*CLC_hnd) (int, double*, double*, double*, double);
+
+typedef
+std::function<void (int, double*, double*, double*, double)> CLC_hnd;
+
 /**
  *
  * @param

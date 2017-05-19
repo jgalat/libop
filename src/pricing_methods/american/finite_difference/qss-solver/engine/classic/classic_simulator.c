@@ -21,7 +21,7 @@
 
 #include <classic/classic_simulator.h>
 #include <common/integrator.h>
-#include <common/random.h>
+// #include <common/random.h>
 #include <common/model.h>
 
 CLC_simulator
@@ -54,7 +54,7 @@ CLC_freeSimulator (CLC_simulator simulator)
 void
 CLC_simulate (SIM_simulator simulate)
 {
-  Random ();
+  // Random ();
   CLC_simulator simulator = (CLC_simulator) simulate->state->sim;
   // ((CLC_initializeDataStructs) simulator->initializeDataStructs) (simulator);
   simulator->initializeDataStructs ((void *) simulator);
@@ -80,7 +80,7 @@ CLC_simulatorEnd (SIM_simulator simulate)
 {
   CLC_simulator simulator = (CLC_simulator) simulate->state->sim;
   CLC_freeSimulator (simulator);
-  freeRandom ();
+  // freeRandom ();
 }
 
 void

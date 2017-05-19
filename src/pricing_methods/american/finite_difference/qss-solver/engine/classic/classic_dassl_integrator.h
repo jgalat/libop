@@ -82,6 +82,9 @@ typedef void
  * @param numConstrains
  * @param numOfOutputs
  */
+#ifdef __cplusplus
+extern "C" {
+#endif
 void
 ddaskr_ (dae_system s,                 // 1
     int *noOfEquations, // 2
@@ -105,6 +108,9 @@ ddaskr_ (dae_system s,                 // 1
     int *numConstrains, // 20
     int *numOfOutputs         // 21
     );
+#ifdef __cplusplus
+}
+#endif
 /**
  *
  * @param n
