@@ -26,4 +26,4 @@ $(TARGET): libop
 
 clean:
 	cd $(BUILDDIR) && $(MAKE) clean
-	$(RMS) $(TARGET) *.a
+	$(RMS) $(TARGET) *.a *.dat *.log

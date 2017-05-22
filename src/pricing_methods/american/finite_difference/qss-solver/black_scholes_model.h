@@ -24,11 +24,17 @@ class BlackScholesModel {
     SD_Solver solver;
     double ft, dqmin, dqrel;
 
-    CLC_data modelData;
+    // CLC_data modelData;
 
     int N;
-    double __PAR_Smax, __PAR_sigma, __PAR_r, __PAR_K, __PAR_d,
-          __PAR_u0, __PAR_uN1, __PAR_ds, __PAR_ds2;
+    double _Smax, _sigma, _r, _K,
+          _u0, _uN1, _ds, _ds2,
+          _cd,   //continuous dividend
+          *_discdiv_date, //discrete dividend date
+          *_discdiv_ammo; //discrete dividend ammount
+    int   _discdiv_n,
+          _discdiv_i; //discrete dividend index
+
     //double __PAR_td[365] = { [0 ... 364] = 2.0};
     //double __PAR_di[365] = { 0 };
 };
