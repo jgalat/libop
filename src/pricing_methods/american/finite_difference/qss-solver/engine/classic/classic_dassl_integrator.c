@@ -261,30 +261,30 @@ DASSL_integrate (SIM_simulator simulate)
   clcData->totalCrossingEvaluations += iwork[35];
   getTime (simulator->stats->sTime);
   subTime (simulator->stats->sTime, simulator->stats->iTime);
-  // if (simulator->settings->debug == 0 || simulator->settings->debug > 1)
-  //   {
-  //     SD_print (simulator->simulationLog, "Simulation time (DASSL):");
-  //     SD_print (simulator->simulationLog, "----------------");
-  //     SD_print (simulator->simulationLog, "Miliseconds: %g",
-	// 	getTimeValue (simulator->stats->sTime));
-  //     SD_print (simulator->simulationLog, "Function evaluations: %llu",
-	// 	clcData->funEvaluations);
-  //     //SD_print (simulator->simulationLog, "Scalar function evaluations: %d", clcData->scalarEvaluations);
-  //     //SD_print (simulator->simulationLog, "Zero Crossings : %d", clcData->zeroCrossings);
-  //     SD_print (simulator->simulationLog,
-	// 	"Function evaluations (reported by DASSL): %d",
-	// 	clcData->totalStepsDASSL);
-  //     SD_print (simulator->simulationLog, "Jacobian evaluations : %d",
-	// 	clcData->totalJacobians);
-  //     SD_print (simulator->simulationLog, "Zero crossing evaluations : %d",
-	// 	clcData->totalCrossingEvaluations);
-  //     SD_print (simulator->simulationLog, "Output steps: %d",
-	// 	clcData->totalOutputSteps);
-  //     SD_print (simulator->simulationLog, "Simulation steps: %d",
-	// 	clcData->totalSteps);
-  //     SD_print (simulator->simulationLog, "Events detected : %d",
-	// 	clcData->totalEvents);
-  //   }
+  if (simulator->settings->debug == 0 || simulator->settings->debug > 1)
+    {
+      SD_print (simulator->simulationLog, "Simulation time (DASSL):");
+      SD_print (simulator->simulationLog, "----------------");
+      SD_print (simulator->simulationLog, "Miliseconds: %g",
+		getTimeValue (simulator->stats->sTime));
+      SD_print (simulator->simulationLog, "Function evaluations: %llu",
+		clcData->funEvaluations);
+      //SD_print (simulator->simulationLog, "Scalar function evaluations: %d", clcData->scalarEvaluations);
+      //SD_print (simulator->simulationLog, "Zero Crossings : %d", clcData->zeroCrossings);
+      SD_print (simulator->simulationLog,
+		"Function evaluations (reported by DASSL): %d",
+		clcData->totalStepsDASSL);
+      SD_print (simulator->simulationLog, "Jacobian evaluations : %d",
+		clcData->totalJacobians);
+      SD_print (simulator->simulationLog, "Zero crossing evaluations : %d",
+		clcData->totalCrossingEvaluations);
+      SD_print (simulator->simulationLog, "Output steps: %d",
+		clcData->totalOutputSteps);
+      SD_print (simulator->simulationLog, "Simulation steps: %d",
+		clcData->totalSteps);
+      SD_print (simulator->simulationLog, "Events detected : %d",
+		clcData->totalEvents);
+    }
   CLC_write_output (simOutput, solution, solution_time,
 		    clcData->totalOutputSteps);
   // To avoid QSS output

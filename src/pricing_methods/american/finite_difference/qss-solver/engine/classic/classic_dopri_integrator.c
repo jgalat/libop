@@ -252,7 +252,7 @@ DOPRI_integrate (SIM_simulator simulate)
   free (temp_x);
   free (solution_time);
   free (jroot);
-  free(dopri5);
+  delete dopri5;
   for (i = 0; i < simOutput->outputs; i++)
     {
       free (solution[i]);
