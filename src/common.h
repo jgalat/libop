@@ -7,6 +7,7 @@
 #include <option_data.h>
 #include <pricing_data.h>
 
-typedef int (*price_function) (option_data, pricing_data, double S, date, result);
+typedef int (*price_function) (option_data, pricing_data, double S, date,
+  result, void*);
 
 #endif /* __COMMON_H__ */

@@ -4,7 +4,7 @@
 
 
 int american_finite_difference_option_price(option_data od, pricing_data pd,
-  double S, date ttl, result ret) {
+  double S, date ttl, result ret, void *pm_data) {
 
   // (int grid_size, BSM_OT ot, double smax,
   //   double vol, double rfr, double strike, double cont_div, int discdiv_n,
@@ -21,5 +21,5 @@ int american_finite_difference_option_price(option_data od, pricing_data pd,
 }
 
 pricing_method new_american_finite_difference(pricing_data pd) {
-  return new_pricing_method_(american_finite_difference_option_price, pd);
+  return new_pricing_method_(american_finite_difference_option_price, pd, NULL);
 }
