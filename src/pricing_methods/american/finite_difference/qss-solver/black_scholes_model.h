@@ -1,6 +1,11 @@
 #ifndef __BLACK_SCHOLES_H__
 #define __BLACK_SCHOLES_H__
 
+typedef enum {
+  CALL,
+  PUT
+} BSM_OT;
+
 #ifdef __cplusplus
 #include <qss-solver/engine/common/data.h>
 #include <qss-solver/engine/classic/classic_data.h>
@@ -8,8 +13,12 @@
 
 class BlackScholesModel {
   public:
-    BlackScholesModel();
+    BlackScholesModel(int grid_size, BSM_OT ot, double smax,
+      double vol, double rfr, double strike, double cont_div, int discdiv_n,
+      double *discdiv_date, double *discdiv_ammo,
+      double end_time, double tol, double abs_tol);
     ~BlackScholesModel();
+
     void testrun();
 
   private:
@@ -27,16 +36,14 @@ class BlackScholesModel {
     // CLC_data modelData;
 
     int N;
+    BSM_OT op_type;
     double _Smax, _sigma, _r, _K,
           _u0, _uN1, _ds, _ds2,
           _cd,   //continuous dividend
           *_discdiv_date, //discrete dividend date
           *_discdiv_ammo; //discrete dividend ammount
-    int   _discdiv_n,
-          _discdiv_i; //discrete dividend index
+    int   _discdiv_i; //discrete dividend index
 
-    //double __PAR_td[365] = { [0 ... 364] = 2.0};
-    //double __PAR_di[365] = { 0 };
 };
 #endif /* __cplusplus */
 
@@ -48,7 +55,11 @@ extern "C" {
 
   struct black_scholes_model_;
 
-  black_scholes_model new_black_scholes_model();
+  black_scholes_model new_black_scholes_model(int grid_size, BSM_OT ot, double smax,
+    double vol, double rfr, double strike, double cont_div, int discdiv_n,
+    double *discdiv_date, double *discdiv_ammo,
+    double end_time, double tol, double abs_tol);
+
   void black_scholes_model_testrun(black_scholes_model);
 
 #ifdef __cplusplus
