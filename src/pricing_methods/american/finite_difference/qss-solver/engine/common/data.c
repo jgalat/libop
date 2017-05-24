@@ -279,7 +279,7 @@ SD_freeOutputVariable (SD_outputVariable variable)
 SD_output
 SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	   int nPeriod, double it, SD_CommInterval commInterval,
-	   SD_StoreData store, SD_eq value)
+	   SD_StoreData store, SD_eq value, double ***solution)
 {
   SD_output p = (SD_output) checkedMalloc (sizeof(*p));
   p->name = name;
@@ -295,6 +295,7 @@ SD_Output (char *name, int outputs, int discretes, int states, double *period,
   p->OS = NULL;
   p->nOD = NULL;
   p->OD = NULL;
+  p->solution = solution;
   if (outputs)
     {
       if (discretes)
@@ -331,7 +332,8 @@ SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	case CI_Dense:
 	  break;
 	}
-      p->variable = SD_OutputVariable (outputs);
+      // p->variable = SD_OutputVariable (outputs);
+      p->variable = NULL;
       p->value = value;
     }
   return (p);

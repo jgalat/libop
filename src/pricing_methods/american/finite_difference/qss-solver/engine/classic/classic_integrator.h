@@ -17,7 +17,7 @@
 
  ******************************************************************************/
 
-/*! \file qss_integrator.h 
+/*! \file qss_integrator.h
  **	\brief This interface defines the Integrator used by the QSS Solver.
  **
  **	Given the state polynomials, the integrator uses structural information
@@ -26,7 +26,7 @@
  **  	\item Integrating the state derivatives $\dot x_i(t)$ to obtain the {\bf{state trajectories}} $x_i(t)$.
  **   	\item Advancing the {\bf{simulation time}}.
  **    	\item Deciding when each state derivative and zero--crossing function should be re--evaluated.
- **     	\item Searching for {\bf{discontinuities}}. 
+ **     	\item Searching for {\bf{discontinuities}}.
  ** 	 	\item Invoking the model's discontinuity handlers when zero crossings are detected.
  **  \end{itemize}
  **	\f$ x = a_0 + a_1 t + a_2 t^2 + ... + a_{n} t^{n} \f$
@@ -58,9 +58,9 @@
  * @param solution_time
  * @param totalOutputSteps
  */
-void
-CLC_write_output (SD_output simOutput, double **solution, double *solution_time,
-		  int totalOutputSteps);
+// void
+// CLC_write_output (SD_output simOutput, double **solution, double *solution_time,
+// 		  int totalOutputSteps);
 /**
  *
  * @param clcData

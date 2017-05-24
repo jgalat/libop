@@ -246,17 +246,18 @@ DOPRI_integrate (SIM_simulator simulate)
       SD_print (simulator->simulationLog, "Events detected : %d",
 		clcData->totalEvents);
     }
-  CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
+  //CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
   free (outvar);
   free (x);
   free (temp_x);
   free (solution_time);
   free (jroot);
   delete dopri5;
-  for (i = 0; i < simOutput->outputs; i++)
-    {
-      free (solution[i]);
-    }
-  free (solution);
+  // for (i = 0; i < simOutput->outputs; i++)
+  //   {
+  //     free (solution[i]);
+  //   }
+  // free (solution);
+  *simOutput->solution = solution;
   free (integrator_data);
 }

@@ -19,7 +19,7 @@ class BlackScholesModel {
       double end_time, double tol, double abs_tol);
     ~BlackScholesModel();
 
-    void testrun();
+    // void testrun();
 
   private:
     void initializeDataStructs(void *CLC_simulator);
@@ -42,7 +42,11 @@ class BlackScholesModel {
           _cd,   //continuous dividend
           *_discdiv_date, //discrete dividend date
           *_discdiv_ammo; //discrete dividend ammount
-    int   _discdiv_i; //discrete dividend index
+    int   _discdiv_n, //number of discrete dividends
+          _discdiv_i; //discrete dividend index
+
+    double **_solution;
+    double **v, **gamma, **delta, **m_theta;
 
 };
 #endif /* __cplusplus */
@@ -60,7 +64,8 @@ extern "C" {
     double *discdiv_date, double *discdiv_ammo,
     double end_time, double tol, double abs_tol);
 
-  void black_scholes_model_testrun(black_scholes_model);
+  // void black_scholes_model_testrun(black_scholes_model);
+  void delete_black_scholes_model(black_scholes_model);
 
 #ifdef __cplusplus
 }

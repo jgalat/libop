@@ -285,8 +285,7 @@ DASSL_integrate (SIM_simulator simulate)
       SD_print (simulator->simulationLog, "Events detected : %d",
 		clcData->totalEvents);
     }
-  CLC_write_output (simOutput, solution, solution_time,
-		    clcData->totalOutputSteps);
+  // CLC_write_output (simOutput, solution, solution_time, clcData->totalOutputSteps);
   // To avoid QSS output
   free (x);
   free (dx);
@@ -295,10 +294,11 @@ DASSL_integrate (SIM_simulator simulate)
   free (solution_time);
   free (rwork);
   free (iwork);
-  for (i = 0; i < simOutput->outputs; i++)
-    {
-      free (solution[i]);
-    }
-  free (solution);
+  // for (i = 0; i < simOutput->outputs; i++)
+  //   {
+  //     free (solution[i]);
+  //   }
+  // free (solution);
+	*simOutput->solution = solution;
   free (integrator_data);
 }

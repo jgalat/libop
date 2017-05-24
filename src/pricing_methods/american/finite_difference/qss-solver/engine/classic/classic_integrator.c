@@ -84,22 +84,22 @@ CLC_initialize (SIM_simulator simulate)
 #endif
 }
 
-void
-CLC_write_output (SD_output simOutput, double **solution, double *solution_time,
-		  int totalOutputSteps)
-{
-  int i, j;
-  char name[128];
-  for (i = 0; i < simOutput->outputs; i++)
-    {
-      sprintf (name, "%s.dat", simOutput->variable[i].name);
-      FILE *out = fopen (name, "w");
-      for (j = 0; j < totalOutputSteps; j++)
-	fprintf (out, "%13.13g\t\t%13.13g\n", solution_time[j], solution[i][j]);
-      fclose (out);
-    }
-
-}
+// void
+// CLC_write_output (SD_output simOutput, double **solution, double *solution_time,
+// 		  int totalOutputSteps)
+// {
+//   int i, j;
+//   char name[128];
+//   for (i = 0; i < simOutput->outputs; i++)
+//     {
+//       sprintf (name, "%s.dat", simOutput->variable[i].name);
+//       FILE *out = fopen (name, "w");
+//       for (j = 0; j < totalOutputSteps; j++)
+// 	fprintf (out, "%13.13g\t\t%13.13g\n", solution_time[j], solution[i][j]);
+//       fclose (out);
+//     }
+//
+// }
 
 void
 CLC_compute_outputs (SD_output simOutput, double **solution, int num_steps)
@@ -119,7 +119,7 @@ CLC_save_step (SD_output simOutput, double **solution, double *solution_time,
   int i;
   if (totalOutputSteps == MAX_OUTPUT_POINTS)
     {
-      CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
+      // CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
       printf ("Maximum number of output steps reached for DASSL\n");
       abort ();
     }

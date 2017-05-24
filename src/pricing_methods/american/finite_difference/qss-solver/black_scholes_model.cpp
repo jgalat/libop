@@ -1,3 +1,4 @@
+#include <iostream>
 #include <functional>
 
 #include <qss-solver/engine/common/utils.h>
@@ -39,6 +40,7 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   }
   _discdiv_date[discdiv_n] = ft + 1;
   _discdiv_ammo[discdiv_n] = 0.0;
+  _discdiv_n = discdiv_n;
   _discdiv_i = 0;
 
   _u0 = 0.0;
@@ -53,9 +55,25 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
 
   _ds = _Smax/(N + 1);
   _ds2 = pow(_ds,2.0);
+
+  using namespace std::placeholders;
+  MOD_settings bsms = std::bind(&BlackScholesModel::settings, this, _1);
+  InitializeDataStructs bsmids = std::bind(&BlackScholesModel::initializeDataStructs,
+                                            this, _1);
+  engine(bsms, bsmids);
+
+  v = _solution;
+  delta = &_solution[N];
+  gamma = &_solution[N*2];
+  m_theta = &_solution[N*3];
 }
 
 BlackScholesModel::~BlackScholesModel() {
+  int i;
+  for (i = 0; i < N*4; i++) {
+    free (_solution[i]);
+  }
+  free(_solution);
   delete _discdiv_date;
   delete _discdiv_ammo;
 }
@@ -240,7 +258,8 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   using namespace std::placeholders;
   SD_eq bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
 
-  simulator->output = SD_Output("bs",N*4,N*2,N,period,1,0,CI_Sampled,SD_Memory,bsmo);
+  simulator->output = SD_Output("bsm",N*4,N*2,N,period,1,0,CI_Sampled,
+    SD_Memory,bsmo,&_solution);
 	SD_output modelOutput = simulator->output;
 
   for(i = 0; i < N; i++) {
@@ -253,12 +272,12 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
 
   cleanVector(outputs,0,N*4);
 
-  for(i = 0; i < N; i++) {
-    sprintf(modelOutput->variable[i].name,"u[%d]",i+1);
-    sprintf(modelOutput->variable[i+N].name,"delta[%d]",i+1);
-    sprintf(modelOutput->variable[i+N*2].name,"gamma[%d]",i+1);
-    sprintf(modelOutput->variable[i+N*3].name,"theta[%d]",i+1);
-  }
+  // for(i = 0; i < N; i++) {
+  //   sprintf(modelOutput->variable[i].name,"u[%d]",i+1);
+  //   sprintf(modelOutput->variable[i+N].name,"delta[%d]",i+1);
+  //   sprintf(modelOutput->variable[i+N*2].name,"gamma[%d]",i+1);
+  //   sprintf(modelOutput->variable[i+N*3].name,"theta[%d]",i+1);
+  // }
 
   cleanVector(outputs,0,N*4);
 
@@ -277,14 +296,6 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   delete states;
 }
 
-void BlackScholesModel::testrun() {
-  using namespace std::placeholders;
-  MOD_settings bsms = std::bind(&BlackScholesModel::settings, this, _1);
-  InitializeDataStructs bsmids = std::bind(&BlackScholesModel::initializeDataStructs,
-                                            this, _1);
-  engine(bsms, bsmids);
-}
-
 /* C */
 
 black_scholes_model new_black_scholes_model(int grid_size, BSM_OT ot, double smax,
@@ -296,6 +307,10 @@ black_scholes_model new_black_scholes_model(int grid_size, BSM_OT ot, double sma
     tol,abs_tol));
 }
 
-void black_scholes_model_testrun (black_scholes_model m) {
-  reinterpret_cast<BlackScholesModel*>(m)->testrun();
+void delete_black_scholes_model(black_scholes_model bsm) {
+  delete reinterpret_cast<BlackScholesModel*>(bsm);
 }
+
+// void black_scholes_model_testrun (black_scholes_model m) {
+//   reinterpret_cast<BlackScholesModel*>(m)->testrun();
+// }
