@@ -19,7 +19,12 @@ class BlackScholesModel {
       double end_time, double tol, double abs_tol);
     ~BlackScholesModel();
 
-    // void testrun();
+    double v(int i, int j);
+    double delta(int i, int j);
+    double gamma(int i, int j);
+    double theta(int i, int j);
+    // double rho(double S, double t);
+    // double vega(double S, double t);
 
   private:
     void initializeDataStructs(void *CLC_simulator);
@@ -30,13 +35,15 @@ class BlackScholesModel {
     void handlerNeg(int i, double *x, double *d, double *alg, double t);
     void output(int i, double *x, double *d, double *alg, double t, double *out);
 
-    SD_Solver solver;
-    double ft, dqmin, dqrel;
+    void validate_indexes(int*, int*);
 
+    SD_Solver _solver;
+    double _ft, _dqmin, _dqrel;
+    double _period;
     // CLC_data modelData;
 
-    int N;
-    BSM_OT op_type;
+    int _N;
+    BSM_OT _op_type;
     double _Smax, _sigma, _r, _K,
           _u0, _uN1, _ds, _ds2,
           _cd,   //continuous dividend
@@ -46,7 +53,7 @@ class BlackScholesModel {
           _discdiv_i; //discrete dividend index
 
     double **_solution;
-    double **v, **gamma, **delta, **m_theta;
+    double **_v, **_delta, **_gamma, **_m_theta;
 
 };
 #endif /* __cplusplus */
@@ -55,18 +62,22 @@ class BlackScholesModel {
 extern "C" {
 #endif
 
-  typedef struct black_scholes_model_ *black_scholes_model;
+  typedef struct BSM_ *BSM;
 
-  struct black_scholes_model_;
+  struct BSM_;
 
-  black_scholes_model new_black_scholes_model(int grid_size, BSM_OT ot, double smax,
+  BSM new_BSM(int grid_size, BSM_OT ot, double smax,
     double vol, double rfr, double strike, double cont_div, int discdiv_n,
     double *discdiv_date, double *discdiv_ammo,
     double end_time, double tol, double abs_tol);
 
-  // void black_scholes_model_testrun(black_scholes_model);
-  void delete_black_scholes_model(black_scholes_model);
+  void delete_BSM(BSM);
 
+  double BSM_v(BSM, int, int);
+  double BSM_delta(BSM, int, int);
+  double BSM_gamma(BSM, int, int);
+  double BSM_theta(BSM, int, int);
+  
 #ifdef __cplusplus
 }
 #endif

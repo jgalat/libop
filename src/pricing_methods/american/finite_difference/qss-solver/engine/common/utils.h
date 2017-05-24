@@ -382,7 +382,7 @@ freeVMatrix(vMatrix m, int rows);
 /**
  *
  */
-#define MIN2(X,Y) ((X)<(Y) ? (X) : (Y))
+#define MIN(X,Y) ((X)<(Y) ? (X) : (Y))
 
 /**
  *

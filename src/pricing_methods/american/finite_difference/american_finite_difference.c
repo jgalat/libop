@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <qss-solver/black_scholes_model.h>
 #include "american_finite_difference.h"
@@ -12,12 +13,12 @@ static int option_price(option_data od, pricing_data pd,
   //   double end_time, double tol, double abs_tol)
 
   //test
-  black_scholes_model bsm = new_black_scholes_model(100, CALL, 100, 0.4, 0.09,
-     20, 0.1, 0, NULL, NULL, 1, 1e-9, 1e-12);
+  BSM bsm = new_BSM(100, CALL, 100, 0.4, 0.09, 20, 0.1, 0, NULL, NULL,
+    1, 1e-9, 1e-12);
 
-  delete_black_scholes_model(bsm);
+  fprintf(stderr, "<<%lg>>\n", BSM_v(bsm, 21, 365.0));
 
-  // black_scholes_model_testrun(bsm);
+  delete_BSM(bsm);
 
   return 0;
 }
