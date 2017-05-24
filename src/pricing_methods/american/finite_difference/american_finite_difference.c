@@ -3,7 +3,7 @@
 #include "american_finite_difference.h"
 
 
-int american_finite_difference_option_price(option_data od, pricing_data pd,
+static int option_price(option_data od, pricing_data pd,
   double S, date ttl, result ret, void *pm_data) {
 
   // (int grid_size, BSM_OT ot, double smax,
@@ -23,5 +23,5 @@ int american_finite_difference_option_price(option_data od, pricing_data pd,
 }
 
 pricing_method new_american_finite_difference(pricing_data pd) {
-  return new_pricing_method_(american_finite_difference_option_price, pd, NULL);
+  return new_pricing_method_(option_price, pd, NULL);
 }

@@ -25,7 +25,7 @@ static double cdf(double x) {
   return 0.5*(1.0 + sign*y);
 }
 
-int european_analytic_option_price(option_data od, pricing_data pd, double S,
+static int option_price(option_data od, pricing_data pd, double S,
   date ttl, result ret, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
@@ -54,5 +54,5 @@ int european_analytic_option_price(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_european_analytic(pricing_data pd) {
-  return new_pricing_method_(european_analytic_option_price, pd, NULL);
+  return new_pricing_method_(option_price, pd, NULL);
 }
