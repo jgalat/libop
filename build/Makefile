@@ -59,7 +59,8 @@ $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
-	@ar rvs $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
+	@ar rc $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
+	ranlib $(@)
 
 $(COMMONOBJ): | $(BUILDDIR)
 
