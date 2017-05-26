@@ -43,10 +43,15 @@ static int option_price(option_data od, pricing_data pd, double S,
   d1 = (log(S / K) + (r - d + powf(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
   d2 = d1 - sigma * sqrt(ttl);
 
-  if (type == OPTION_CALL) {
-    result = S * exp(-d * ttl) * cdf(d1) - K * exp(-r * ttl) * cdf(d2);
-  } else {
-    result = K * exp(-r * ttl) * cdf(-d2) - S * exp(-d * ttl) * cdf(-d1);
+  switch(type) {
+    case OPTION_CALL:
+      result = S * exp(-d * ttl) * cdf(d1) - K * exp(-r * ttl) * cdf(d2);
+      break;
+    case OPTION_PUT:
+      result = K * exp(-r * ttl) * cdf(-d2) - S * exp(-d * ttl) * cdf(-d1);
+      break;
+    default:
+      break;
   }
 
   set_result(ret, result);
