@@ -2,7 +2,7 @@
 #include "result.h"
 
 result new_result() {
-  result r = malloc(sizeof(double));
+  result r = (result) malloc(sizeof(double));
   if (r)
     *r = 0;
   return r;

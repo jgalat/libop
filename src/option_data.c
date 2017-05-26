@@ -31,7 +31,7 @@ option_data new_option_data(option_type t, exercise_type e, date m, double strik
   if (!valid_option_type(t) || !valid_exercise_type(e))
     return NULL;
 
-  option_data od = malloc(sizeof(struct option_data_));
+  option_data od = (option_data) malloc(sizeof(struct option_data_));
   if (od) {
     od->type = t;
     od->exercise = e;

@@ -33,7 +33,7 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
 
 pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
   theta_f tf, rho_f rf, vega_f vf, delete_f dlf, pricing_data pd, void *pm_d) {
-  pricing_method pm = malloc(sizeof(struct pricing_method_));
+  pricing_method pm = (pricing_method) malloc(sizeof(struct pricing_method_));
   if (pm) {
     pm->option_price = pf;
     pm->delta = df;

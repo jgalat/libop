@@ -9,7 +9,7 @@ struct option_ {
 };
 
 option new_option(option_type ot, exercise_type et, date m, double k) {
-  option o = malloc(sizeof(struct option_));
+  option o = (option) malloc(sizeof(struct option_));
   if (o) {
     o->option_data = new_option_data(ot, et, m, k);
     if (!o->option_data) {
