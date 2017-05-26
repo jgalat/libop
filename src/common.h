@@ -17,5 +17,6 @@ typedef common_f theta_f;
 typedef common_f rho_f;
 typedef common_f vega_f;
 
+typedef void (*delete_f) (void*);
 
 #endif /* __COMMON_H__ */

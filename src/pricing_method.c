@@ -11,6 +11,7 @@ struct pricing_method_ {
   vega_f        vega;
   pricing_data  pricing_data;
   void          *pm_data;
+  delete_f      delete;
 };
 
 pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
@@ -31,7 +32,7 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
 }
 
 pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
-  theta_f tf, rho_f rf, vega_f vf, pricing_data pd, void *pm_d) {
+  theta_f tf, rho_f rf, vega_f vf, delete_f dlf, pricing_data pd, void *pm_d) {
   pricing_method pm = malloc(sizeof(struct pricing_method_));
   if (pm) {
     pm->option_price = pf;
@@ -42,8 +43,15 @@ pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
     pm->vega = vf;
     pm->pricing_data = pd;
     pm->pm_data = pm_d;
+    pm->delete = dlf;
   }
   return pm;
+}
+
+void delete_pricing_method(pricing_method pm) {
+  if (pm)
+    pm->delete((void*) pm);
+  free(pm);
 }
 
 int pm_option_price(pricing_method pm, option_data od, double S, date ttl,

@@ -21,6 +21,10 @@ option new_option(option_type ot, exercise_type et, date m, double k) {
   return o;
 }
 
+void delete_option(option o) {
+  free(o);
+}
+
 int option_set_pricing_method(option o, pricing_method pm) {
   /** null */
   o->pm = pm;

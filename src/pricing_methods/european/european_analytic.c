@@ -218,5 +218,5 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
 pricing_method new_european_analytic(pricing_data pd) {
   return new_pricing_method_(option_price, greek_delta, greek_gamma, greek_theta,
-    greek_rho, greek_vega, pd, NULL);
+    greek_rho, greek_vega, NULL, pd, NULL);
 }

@@ -9,6 +9,8 @@ typedef struct option_ * option;
 
 option new_option(option_type, exercise_type, date, double);
 
+void delete_option(option);
+
 int option_set_pricing_method(option, pricing_method);
 
 int option_price(option, double, date, result);
