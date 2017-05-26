@@ -21,8 +21,10 @@ libop:
 	cd $(BUILDDIR) && $(MAKE)
 
 $(TARGET): libop
-	$(CC) $(INC) $(CFLAGS) $(SRC) -o $@ $(LIB) $(LDFLAGS)
+	$(CC) $(INC) $(SRC) $(CFLAGS) $(LIB) $(LDFLAGS) -o $(@)
 
+run: $(TARGET)
+	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	./$(TARGET)
 
 clean:
 	cd $(BUILDDIR) && $(MAKE) clean

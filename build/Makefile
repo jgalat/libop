@@ -4,7 +4,7 @@ CPPC := g++
 MAKE := make
 RMS := rm -rf
 
-TARGET := libop.a
+TARGET := libop.so
 
 
 #Directories
@@ -18,7 +18,7 @@ BUILDDIR := $(SRCDIR)/obj
 
 
 #Flags, Libraries and Includes
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O0 -g
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O0 -g -fPIC
 CPPFLAGS  := -std=gnu++11
 LDFLAGS  	:=
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
@@ -59,8 +59,9 @@ $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
-	@ar rc $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
-	ranlib $(@)
+	gcc -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
+	#@ar rc $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
+	#ranlib $(@)
 
 $(COMMONOBJ): | $(BUILDDIR)
 
