@@ -80,66 +80,59 @@ BlackScholesModel::~BlackScholesModel() {
   delete _discdiv_ammo;
 }
 
-void BlackScholesModel::validate_indexes(int *i, int *j) {
+// FIXME make static non-member version?
+void BlackScholesModel::validate_indexes(int *i, double *j) {
   *i = MIN(MAX(*i, 0), _N);
-  // rev for loss
-  double t = ((double) *j) * _period;
-  t = MIN(MAX(t, 0), _ft);
-  *j = (int) (t / _period);
+  *j = MIN(MAX(*j, 0), _ft);
 }
 
-double BlackScholesModel::v(int i, int j) {
+double BlackScholesModel::v(int i, double j) {
   validate_indexes(&i, &j);
 
   if (i == 0) {
     return _u0;
   }
-
-  return _v[i-1][j]; // rev
+  int jj = (int) (j / _period);
+  return _v[i-1][jj];
 }
 
-double BlackScholesModel::delta(int i, int j) {
+double BlackScholesModel::delta(int i, double j) {
   validate_indexes(&i, &j);
 
   if (i == 0) {
     return 0;
   }
 
-  return _delta[i-1][j];
+  int jj = (int) (j / _period);
+  return _delta[i-1][jj];
 }
 
-double BlackScholesModel::gamma(int i, int j) {
+double BlackScholesModel::gamma(int i, double j) {
   validate_indexes(&i, &j);
 
   if (i == 0) {
     return 0;
   }
 
-  return _gamma[i-1][j];
+  int jj = (int) (j / _period);
+  return _gamma[i-1][jj];
 }
 
-double BlackScholesModel::theta(int i, int j) {
+double BlackScholesModel::theta(int i, double j) {
   validate_indexes(&i, &j);
 
   if (i == 0) {
     return 0;
   }
 
-  double result = _m_theta[i-1][j];
+  int jj = (int) (j / _period);
+  double result = _m_theta[i-1][jj];
   // avoid negative 0
   if (result == 0) {
     return 0;
   }
   return -result;
 }
-
-// double BlackScholesModel::rho(double S, double t) {
-//   return -1;
-// }
-//
-// double BlackScholesModel::vega(double S, double t) {
-//   return -1;
-// }
 
 void BlackScholesModel::settings(SD_simulationSettings settings) {
   settings->debug = SD_DBG_NoDebug;
@@ -374,7 +367,7 @@ void delete_BSM(BSM bsm) {
   delete reinterpret_cast<BlackScholesModel*>(bsm);
 }
 
-double BSM_v(BSM bsm, int i, int j) {
+double BSM_v(BSM bsm, int i, double j) {
   return reinterpret_cast<BlackScholesModel*>(bsm)->v(i, j);
 }
 

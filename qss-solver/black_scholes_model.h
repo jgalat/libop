@@ -19,12 +19,10 @@ class BlackScholesModel {
       double end_time, double tol, double abs_tol);
     ~BlackScholesModel();
 
-    double v(int i, int j);
-    double delta(int i, int j);
-    double gamma(int i, int j);
-    double theta(int i, int j);
-    // double rho(double S, double t);
-    // double vega(double S, double t);
+    double v(int i, double j);
+    double delta(int i, double j);
+    double gamma(int i, double j);
+    double theta(int i, double j);
 
   private:
     void initializeDataStructs(void *CLC_simulator);
@@ -35,7 +33,7 @@ class BlackScholesModel {
     void handlerNeg(int i, double *x, double *d, double *alg, double t);
     void output(int i, double *x, double *d, double *alg, double t, double *out);
 
-    void validate_indexes(int*, int*);
+    void validate_indexes(int*, double*);
 
     SD_Solver _solver;
     double _ft, _dqmin, _dqrel;
@@ -73,11 +71,11 @@ extern "C" {
 
   void delete_BSM(BSM);
 
-  double BSM_v(BSM, int, int);
-  double BSM_delta(BSM, int, int);
-  double BSM_gamma(BSM, int, int);
-  double BSM_theta(BSM, int, int);
-  
+  double BSM_v(BSM, int, double);
+  double BSM_delta(BSM, int, double);
+  double BSM_gamma(BSM, int, double);
+  double BSM_theta(BSM, int, double);
+
 #ifdef __cplusplus
 }
 #endif

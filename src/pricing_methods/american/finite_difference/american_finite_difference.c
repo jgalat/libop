@@ -16,7 +16,7 @@ static int option_price(option_data od, pricing_data pd,
   BSM bsm = new_BSM(100, CALL, 100, 0.4, 0.09, 20, 0.1, 0, NULL, NULL,
     1, 1e-9, 1e-12);
 
-  fprintf(stderr, "<<%lg>>\n", BSM_v(bsm, 21, 365.0));
+  fprintf(stderr, "<<%lg>>\n", BSM_v(bsm, 21, 0.7506849315));
 
   delete_BSM(bsm);
 
