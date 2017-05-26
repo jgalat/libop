@@ -7,7 +7,15 @@
 #include <option_data.h>
 #include <pricing_data.h>
 
-typedef int (*price_function) (option_data, pricing_data, double S, date,
+typedef int (*common_f) (option_data, pricing_data, double S, date,
   result, void*);
+
+typedef common_f price_f;
+typedef common_f delta_f;
+typedef common_f gamma_f;
+typedef common_f theta_f;
+typedef common_f rho_f;
+typedef common_f vega_f;
+
 
 #endif /* __COMMON_H__ */

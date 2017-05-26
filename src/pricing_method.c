@@ -3,9 +3,14 @@
 #include "pricing_method.h"
 
 struct pricing_method_ {
-  price_function    option_price;
-  pricing_data      pricing_data;
-  void              *pm_data;
+  price_f       option_price;
+  delta_f       delta;
+  gamma_f       gamma;
+  theta_f       theta;
+  rho_f         rho;
+  vega_f        vega;
+  pricing_data  pricing_data;
+  void          *pm_data;
 };
 
 pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
@@ -25,11 +30,16 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
   return NULL;
 }
 
-pricing_method new_pricing_method_(price_function pf, pricing_data pd,
-  void *pm_d) {
+pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
+  theta_f tf, rho_f rf, vega_f vf, pricing_data pd, void *pm_d) {
   pricing_method pm = malloc(sizeof(struct pricing_method_));
   if (pm) {
     pm->option_price = pf;
+    pm->delta = df;
+    pm->gamma = gf;
+    pm->theta = tf;
+    pm->rho = rf;
+    pm->vega = vf;
     pm->pricing_data = pd;
     pm->pm_data = pm_d;
   }

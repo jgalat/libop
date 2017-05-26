@@ -54,5 +54,5 @@ static int option_price(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_european_analytic(pricing_data pd) {
-  return new_pricing_method_(option_price, pd, NULL);
+  return new_pricing_method_(option_price, NULL, NULL, NULL, NULL, NULL, pd, NULL);
 }

@@ -24,5 +24,5 @@ static int option_price(option_data od, pricing_data pd,
 }
 
 pricing_method new_american_finite_difference(pricing_data pd) {
-  return new_pricing_method_(option_price, pd, NULL);
+  return new_pricing_method_(option_price, NULL, NULL, NULL, NULL, NULL, pd, NULL);
 }
