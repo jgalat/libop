@@ -12,7 +12,7 @@ SRCDIR   := ../src
 PMDIR		 := $(SRCDIR)/pricing_methods
 PMEUR  	 := $(PMDIR)/european
 PMAM     := $(PMDIR)/american
-QSSDIR   := $(PMAM)/finite_difference/qss-solver
+QSSDIR   := ../qss-solver
 QSSLIBSDIR := $(QSSDIR)/libs
 BUILDDIR := $(SRCDIR)/obj
 
