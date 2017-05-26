@@ -48,5 +48,54 @@ pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
 
 int pm_option_price(pricing_method pm, option_data od, double S, date ttl,
   result r) {
-  return pm->option_price(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  if (pm->option_price)
+    return pm->option_price(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  return -1;
+}
+
+int pm_delta(pricing_method pm, option_data od, double S, date ttl,
+  result r) {
+
+  if (pm->delta)
+    return pm->delta(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  return -1;
+}
+
+int pm_gamma(pricing_method pm, option_data od, double S, date ttl,
+  result r) {
+
+  if (pm->gamma)
+    return pm->gamma(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  return -1;
+}
+
+int pm_theta(pricing_method pm, option_data od, double S, date ttl,
+  result r) {
+
+  if (pm->theta)
+    return pm->theta(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  return -1;
+}
+
+int pm_rho(pricing_method pm, option_data od, double S, date ttl,
+  result r) {
+
+  if (pm->rho)
+    return pm->rho(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  return -1;
+}
+
+int pm_vega(pricing_method pm, option_data od, double S, date ttl,
+  result r) {
+
+  if (pm->vega)
+    return pm->vega(od, pm->pricing_data, S, ttl, r, pm->pm_data);
+
+  return -1;
 }
