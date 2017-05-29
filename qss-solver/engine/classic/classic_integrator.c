@@ -63,7 +63,7 @@ CLC_initialize (SIM_simulator simulate)
   for (i = 0; i < forUL; i++)
     {
       e = clcData->ft * clcData->params->zcHyst;
-      clcModel->events->zeroCrossing (i, clcData->x, clcData->d, clcData->alg,
+      (*clcModel->events->zeroCrossing) (i, clcData->x, clcData->d, clcData->alg,
 				      t, zc);
       s = sign (zc[0]);
       clcData->event[i].zcSign = s;
@@ -127,7 +127,7 @@ CLC_save_step (SD_output simOutput, double **solution, double *solution_time,
   for (i = 0; i < simOutput->outputs; i++)
     {
       double out;
-      simOutput->value (i, x, d, a, t, &out);
+      (*simOutput->value) (i, x, d, a, t, &out);
       solution[i][totalOutputSteps] = out;
     }
 }
@@ -147,7 +147,7 @@ CLC_handle_event (CLC_data clcData, CLC_model clcModel, double *x,
 #ifdef DEBUG
 	  printf ("Execution handler pos for zc %d at %g\n", i, t);
 #endif
-	  clcModel->events->handlerPos (i, x, clcData->d, clcData->alg, t);
+	  (*clcModel->events->handlerPos) (i, x, clcData->d, clcData->alg, t);
 	  recheck = 1;
 	  clcData->event[i].zcSign = 1;
 #ifdef DEBUG
@@ -163,7 +163,7 @@ CLC_handle_event (CLC_data clcData, CLC_model clcModel, double *x,
 #ifdef DEBUG
 	  printf ("Execution handler neg for zc %d at %g\n", i, t);
 #endif
-	  clcModel->events->handlerNeg (i, x, clcData->d, clcData->alg, t);
+	  (*clcModel->events->handlerNeg) (i, x, clcData->d, clcData->alg, t);
 	  clcData->event[i].zcSign = -1;
 #ifdef DEBUG
 	  printf ("Changing sign of %d to %d at %g\n", i,
@@ -192,7 +192,7 @@ CLC_handle_event (CLC_data clcData, CLC_model clcModel, double *x,
       double out;
       for (j = 0; j < clcData->events; j++)
 	{
-	  clcModel->events->zeroCrossing (j, x, clcData->d, clcData->alg, t,
+	  (*clcModel->events->zeroCrossing) (j, x, clcData->d, clcData->alg, t,
 					  &out);
 #ifdef DEBUG
 	  printf (
@@ -213,7 +213,7 @@ CLC_handle_event (CLC_data clcData, CLC_model clcModel, double *x,
 #ifdef DEBUG
 		  printf ("Execution handler pos for zc %d at %g\n", j, t);
 #endif
-		  clcModel->events->handlerPos (j, x, clcData->d, clcData->alg,
+		  (*clcModel->events->handlerPos) (j, x, clcData->d, clcData->alg,
 						t);
 		  recheck = 1;
 		  clcData->fired[j]++;
@@ -226,7 +226,7 @@ CLC_handle_event (CLC_data clcData, CLC_model clcModel, double *x,
 #ifdef DEBUG
 		  printf ("Execution handler neg for zc %d at %g\n", j, t);
 #endif
-		  clcModel->events->handlerNeg (j, x, clcData->d, clcData->alg,
+		  (*clcModel->events->handlerNeg) (j, x, clcData->d, clcData->alg,
 						t);
 		  recheck = 1;
 		  clcData->fired[j]++;

@@ -64,7 +64,7 @@ DOPRI_events (int n, double x, double *y, double *g,
   CLC_data clcData = id->clcData;
   CLC_model clcModel = id->clcModel;
   double out;
-  clcModel->events->zeroCrossing (n, y, clcData->d, clcData->alg, x, &out);
+  (*clcModel->events->zeroCrossing) (n, y, clcData->d, clcData->alg, x, &out);
   g[0] = out + clcData->event[n].zcSign * HIST;
 }
 
@@ -76,7 +76,7 @@ DOPRI_model (unsigned n, double x, double *y, double *f,
   CLC_data clcData = id->clcData;
   CLC_model clcModel = id->clcModel;
   clcData->funEvaluations++;
-  clcModel->f (y, clcData->d, clcData->alg, x, f);
+  (*clcModel->f) (y, clcData->d, clcData->alg, x, f);
 }
 
 void

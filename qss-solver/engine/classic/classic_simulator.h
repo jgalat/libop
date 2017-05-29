@@ -31,7 +31,7 @@ struct CLC_simulator_
 {
   CLC_data data;
   CLC_model model;
-  InitializeDataStructs initializeDataStructs;
+  InitializeDataStructs *initializeDataStructs;
   SD_output output;
   SD_simulationSettings settings;
   SD_simulationLog simulationLog;
@@ -45,7 +45,7 @@ void
 CLC_freeSimulator (CLC_simulator simulator);
 
 void
-CLC_initSimulator (SIM_simulator simulator, InitializeDataStructs ids);
+CLC_initSimulator (SIM_simulator simulator, InitializeDataStructs *ids);
 
 
 #endif /* CLASSIC_SIMULATOR_H_ */

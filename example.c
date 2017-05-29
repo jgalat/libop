@@ -27,7 +27,7 @@ int main(int argc, char const *argv[]) {
 
   option_price(am_call, S, YEAR, result);
 
-  // printf("price = %lf\n", *result);
+  printf("price = %lf\n", *result);
 
   return 0;
 }

@@ -77,7 +77,7 @@ DASSL_events (int *n, double *t, double *x, double *dx,
   //DASSL_update_x(x);
   for (i = 0; i < clcData->events; i++)
     {
-      clcModel->events->zeroCrossing (i, x, clcData->d, clcData->alg, t[0],
+      (*clcModel->events->zeroCrossing) (i, x, clcData->d, clcData->alg, t[0],
 				      &out);
       res[i] = out + clcData->event[i].zcSign * HIST;
 #ifdef DEBUG
@@ -95,7 +95,7 @@ DASSL_model (double *t, double *x, double *dx,
   CLC_model clcModel = id->clcModel;
   CLC_data clcData = id->clcData;
 
-  clcModel->f (x, clcData->d, clcData->alg, t[0], res);
+  (*clcModel->f) (x, clcData->d, clcData->alg, t[0], res);
   for (i = 0; i < clcData->states; i++)
     res[i] -= dx[i];
   clcData->funEvaluations++;

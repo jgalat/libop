@@ -459,7 +459,7 @@ struct SD_output_
   SD_StoreData store; //!<
   SD_sampledOutput sampled; //!<
   SD_outputVariable variable; //!<
-  SD_eq value; //!<
+  SD_eq *value; //!<
   double ***solution;
 };
 
@@ -480,7 +480,7 @@ struct SD_output_
 SD_output
 SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	   int nPeriod, double it, SD_CommInterval commInterval,
-	   SD_StoreData store, SD_eq value, double ***solution);
+	   SD_StoreData store, SD_eq *value, double ***solution);
 
 /**
  *

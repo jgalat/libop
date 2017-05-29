@@ -7,6 +7,7 @@ typedef enum {
 } BSM_OT;
 
 #ifdef __cplusplus
+#include <qss-solver/engine/common/model.h>
 #include <qss-solver/engine/common/data.h>
 #include <qss-solver/engine/classic/classic_data.h>
 #include <qss-solver/engine/classic/classic_simulator.h>
@@ -53,6 +54,14 @@ class BlackScholesModel {
     double **_solution;
     double **_v, **_delta, **_gamma, **_m_theta;
 
+    /* binds for the engine */
+    MOD_settings bsms;
+    InitializeDataStructs bsmids;
+    SD_eq bsmo;
+    CLC_eq bsmf;
+    CLC_zc bsmzc;
+    CLC_hnd bsmhp, bsmhn;
+
 };
 #endif /* __cplusplus */
 
@@ -70,6 +79,8 @@ extern "C" {
     double end_time, double tol, double abs_tol);
 
   void delete_BSM(BSM);
+
+  typedef double (*BSM_F) (BSM, int, double);
 
   double BSM_v(BSM, int, double);
   double BSM_delta(BSM, int, double);

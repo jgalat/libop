@@ -59,10 +59,17 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   _ds2 = pow(_ds,2.0);
 
   using namespace std::placeholders;
-  MOD_settings bsms = std::bind(&BlackScholesModel::settings, this, _1);
-  InitializeDataStructs bsmids = std::bind(&BlackScholesModel::initializeDataStructs,
-                                            this, _1);
-  engine(bsms, bsmids);
+  bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
+
+  bsmf = std::bind(&BlackScholesModel::definition, this, _1, _2, _3, _4, _5);
+  bsmzc = std::bind(&BlackScholesModel::zeroCrossing, this, _1, _2, _3, _4, _5, _6);
+  bsmhp = std::bind(&BlackScholesModel::handlerPos, this, _1, _2, _3, _4, _5);
+  bsmhn = std::bind(&BlackScholesModel::handlerNeg, this, _1, _2, _3, _4, _5);
+
+  bsms = std::bind(&BlackScholesModel::settings, this, _1);
+  bsmids = std::bind(&BlackScholesModel::initializeDataStructs,this, _1);
+
+  engine(&bsms, &bsmids);
 
   _v = _solution;
   _delta = &_solution[_N];
@@ -76,8 +83,8 @@ BlackScholesModel::~BlackScholesModel() {
     free (_solution[i]);
   }
   free(_solution);
-  delete _discdiv_date;
-  delete _discdiv_ammo;
+  delete [] _discdiv_date;
+  delete [] _discdiv_ammo;
 }
 
 // FIXME make static non-member version?
@@ -311,11 +318,8 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   double period[1];
   period[0] = _period;
 
-  using namespace std::placeholders;
-  SD_eq bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
-
   simulator->output = SD_Output("bsm",_N*4,_N*2,_N,period,1,0,CI_Sampled,
-    SD_Memory,bsmo,&_solution);
+    SD_Memory,&bsmo,&_solution);
 	SD_output modelOutput = simulator->output;
 
   for(i = 0; i < _N; i++) {
@@ -342,14 +346,9 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
     modelOutput->OS[i][outputs[i]++] = i;
   }
 
-  CLC_eq bsmf = std::bind(&BlackScholesModel::definition, this, _1, _2, _3, _4, _5);
-  CLC_zc bsmzc = std::bind(&BlackScholesModel::zeroCrossing, this, _1, _2, _3, _4, _5, _6);
-  CLC_hnd bsmhp = std::bind(&BlackScholesModel::handlerPos, this, _1, _2, _3, _4, _5),
-          bsmhn = std::bind(&BlackScholesModel::handlerNeg, this, _1, _2, _3, _4, _5);
-
-	simulator->model = CLC_Model(bsmf,bsmzc,bsmhp,bsmhn);
-  delete outputs;
-  delete states;
+	simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,&bsmhn);
+  delete [] outputs;
+  delete [] states;
 }
 
 /* C */

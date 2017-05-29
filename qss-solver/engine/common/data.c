@@ -279,7 +279,7 @@ SD_freeOutputVariable (SD_outputVariable variable)
 SD_output
 SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	   int nPeriod, double it, SD_CommInterval commInterval,
-	   SD_StoreData store, SD_eq value, double ***solution)
+	   SD_StoreData store, SD_eq *value, double ***solution)
 {
   SD_output p = (SD_output) checkedMalloc (sizeof(*p));
   p->name = name;

@@ -25,7 +25,7 @@
 #include "../common/settings.h"
 
 CLC_event
-CLC_Event (CLC_zc zeroCrossing, CLC_hnd handlerPos, CLC_hnd handlerNeg)
+CLC_Event (CLC_zc *zeroCrossing, CLC_hnd *handlerPos, CLC_hnd *handlerNeg)
 {
   CLC_event p = (CLC_event) checkedMalloc (sizeof(*p));
   p->zeroCrossing = zeroCrossing;
@@ -222,8 +222,8 @@ CLC_freeData (CLC_data data)
 }
 
 CLC_model
-CLC_Model (CLC_eq f, CLC_zc zeroCrossing, CLC_hnd handlerPos,
-	   CLC_hnd handlerNeg)
+CLC_Model (CLC_eq *f, CLC_zc *zeroCrossing, CLC_hnd *handlerPos,
+	   CLC_hnd *handlerNeg)
 {
   CLC_model p = (CLC_model) checkedMalloc (sizeof(*p));
   p->f = f;

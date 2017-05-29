@@ -35,14 +35,14 @@ segfault_hdlr(int dummy)
 #endif
 
 int
-engine(MOD_settings MOD_settings, InitializeDataStructs ids)
+engine(MOD_settings *MOD_settings, InitializeDataStructs *ids)
 {
 
 #ifdef __linux__
   signal(SIGSEGV,segfault_hdlr);
 #endif
   SD_simulationSettings settings = SD_SimulationSettings();
-  MOD_settings(settings);
+  (*MOD_settings)(settings);
   SIM_simulator simulator = SIM_Simulator (settings, ids);
   SIM_simulate (simulator);
   SIM_freeSimulator (simulator);

@@ -26,6 +26,12 @@ $(TARGET): libop
 run: $(TARGET)
 	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	./$(TARGET)
 
+gdb: $(TARGET)
+	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	gdb ./$(TARGET)
+
+valgrind: $(TARGET)
+	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	valgrind ./$(TARGET) --track-origins=yes
+
 clean:
 	cd $(BUILDDIR) && $(MAKE) clean
 	$(RMS) $(TARGET) *.a *.dat *.log
