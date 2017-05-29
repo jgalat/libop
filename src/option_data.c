@@ -41,18 +41,18 @@ option_data new_option_data(option_type t, exercise_type e, date m, double strik
   return od;
 }
 
-option_type od_get_option_type(option_data od) {
+inline option_type od_get_option_type(option_data od) {
   return od->type;
 }
 
-exercise_type od_get_exercise_type(option_data od) {
+inline exercise_type od_get_exercise_type(option_data od) {
   return od->exercise;
 }
 
-date od_get_maturity(option_data od) {
+inline date od_get_maturity(option_data od) {
   return od->maturity;
 }
 
-double od_get_strike(option_data od) {
+inline double od_get_strike(option_data od) {
   return od->strike;
 }

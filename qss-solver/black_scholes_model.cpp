@@ -99,6 +99,7 @@ double BlackScholesModel::v(int i, double j) {
   if (i == 0) {
     return _u0;
   }
+
   int jj = (int) (j / _period);
   return _v[i-1][jj];
 }

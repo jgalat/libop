@@ -19,14 +19,14 @@ pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
   return pd;
 }
 
-volatility pd_get_volatility(pricing_data pd) {
+inline volatility pd_get_volatility(pricing_data pd) {
   return pd->vol;
 }
 
-risk_free_rate pd_get_risk_free_rate(pricing_data pd) {
+inline risk_free_rate pd_get_risk_free_rate(pricing_data pd) {
   return pd->r;
 }
 
-dividend pd_get_dividend(pricing_data pd) {
+inline dividend pd_get_dividend(pricing_data pd) {
   return pd->d;
 }

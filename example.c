@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]) {
 
   // option eu_call_option = new_option(OPTION_CALL, EU_EXERCISE, YEAR, strike);
 
-  option am_call = new_option(OPTION_CALL, EU_EXERCISE, YEAR, strike);
+  option am_call = new_option(OPTION_CALL, AM_EXERCISE, YEAR, strike);
 
   // pricing_method eur_an = new_pricing_method(EU_ANALYTIC, sigma, r, d);
 

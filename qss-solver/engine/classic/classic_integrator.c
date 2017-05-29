@@ -30,7 +30,7 @@ void
 CLC_initialize (SIM_simulator simulate)
 {
   int i, s, forUL;
-  double e, zc[4];
+  double e, zc = 0.0;
   CLC_simulator simulator = (CLC_simulator) simulate->state->sim;
   CLC_data clcData = simulator->data;
   CLC_model clcModel = simulator->model;
@@ -64,8 +64,8 @@ CLC_initialize (SIM_simulator simulate)
     {
       e = clcData->ft * clcData->params->zcHyst;
       (*clcModel->events->zeroCrossing) (i, clcData->x, clcData->d, clcData->alg,
-				      t, zc);
-      s = sign (zc[0]);
+				      t, &zc);
+      s = sign (zc);
       clcData->event[i].zcSign = s;
       clcData->event[i].zcHyst = e / 10.0;
     }

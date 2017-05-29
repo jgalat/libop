@@ -30,7 +30,7 @@ gdb: $(TARGET)
 	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	gdb ./$(TARGET)
 
 valgrind: $(TARGET)
-	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	valgrind ./$(TARGET) --track-origins=yes
+	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	valgrind --track-origins=yes ./$(TARGET)
 
 clean:
 	cd $(BUILDDIR) && $(MAKE) clean

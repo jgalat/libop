@@ -171,6 +171,7 @@ DOPRI_integrate (SIM_simulator simulate)
   simDataDopri.outvar = outvar;
   simDataDopri.totalOutputSteps = &totalOutputSteps;
   simDataDopri.step_size = step_size;
+  simDataDopri.last_step = 0;
   simDataDopri.final_time = _ft ;
   simDataDopri.size= clcData->states;
   // dopri_percentage = 0;

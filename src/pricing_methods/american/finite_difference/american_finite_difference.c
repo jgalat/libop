@@ -45,7 +45,7 @@ static BSM BSM_(int grid_size, option_data od, pricing_data pd) {
     maturity, 1e-9, 1e-12);
 }
 
-static double calculate_vdgt(BSM_F bsmf, option_data od, pricing_data pd,
+static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   double S, date ttl) {
 
   double K = od_get_strike(od),
@@ -59,18 +59,17 @@ static double calculate_vdgt(BSM_F bsmf, option_data od, pricing_data pd,
 
   double y50[np], y100[np], s[np], y[np];
 
-  int n = (int) (50 / smax * S);
+  int n = (int) (50.0 / smax * S);
   int p50[4] = { n-1, n, n+1, n+2 };
   int p100[4] = { 2*n-2, 2*n, 2*n+2, 2*n+4 };
 
-  // REV POS
   int i;
   for (i = 0; i < np; i++) {
     s[i] = ds * p50[i];
     y50[i] = bsmf(bsm50, p50[i], ttl);
     y100[i] = bsmf(bsm100, p100[i], ttl);
     /* richardson */
-    y[i] = (4 * y100[i] - y50[50]) / 3.0;
+    y[i] = (4.0 * y100[i] - y50[i]) / 3.0;
   }
 
   delete_BSM(bsm50);
@@ -85,7 +84,7 @@ static int option_price(option_data od, pricing_data pd,
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
 
-  double result = calculate_vdgt(BSM_v, od, pd, S, ttl);
+  double result = calculate_bsmf(BSM_v, od, pd, S, ttl);
 
   set_result(ret, result);
   return 0;
