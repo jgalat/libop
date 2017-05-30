@@ -20,6 +20,7 @@ class BlackScholesModel {
       double end_time, double tol, double abs_tol);
     ~BlackScholesModel();
 
+    /* TODO errors (index, etc) */
     double v(int i, double j);
     double delta(int i, double j);
     double gamma(int i, double j);

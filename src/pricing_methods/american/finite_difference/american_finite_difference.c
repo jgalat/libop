@@ -34,10 +34,10 @@ static BSM BSM_(int grid_size, option_data od, pricing_data pd) {
   BSM_OT ot = option_type_BSM_OT(type);
   date maturity = od_get_maturity(od);
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility  sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend d = pd_get_dividend(pd);
+  double K = od_get_strike(od);
 
   double smax = 5 * K;
 
@@ -90,7 +90,85 @@ static int option_price(option_data od, pricing_data pd,
   return 0;
 }
 
+static int greek_delta(option_data od, pricing_data pd, double S,
+  date ttl, result ret, void *pm_data) {
+
+  // exercise_type et = option_get_et(o);
+  /* check if it is ame... etcccc */
+
+  double result = calculate_bsmf(BSM_delta, od, pd, S, ttl);
+
+  set_result(ret, result);
+  return 0;
+}
+
+static int greek_gamma(option_data od, pricing_data pd, double S,
+  date ttl, result ret, void *pm_data) {
+
+  // exercise_type et = option_get_et(o);
+  /* check if it is ame... etcccc */
+
+  double result = calculate_bsmf(BSM_gamma, od, pd, S, ttl);
+
+  set_result(ret, result);
+  return 0;
+}
+
+static int greek_theta(option_data od, pricing_data pd, double S,
+  date ttl, result ret, void *pm_data) {
+
+  // exercise_type et = option_get_et(o);
+  /* check if it is ame... etcccc */
+
+  double result = calculate_bsmf(BSM_theta, od, pd, S, ttl);
+
+  set_result(ret, result);
+  return 0;
+}
+
+static int greek_rho(option_data od, pricing_data pd, double S,
+  date ttl, result ret, void *pm_data) {
+
+  // exercise_type et = option_get_et(o);
+  /* check if it is ame... etcccc */
+  static const double delta = 0.0001;
+
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+
+  pd_set_risk_free_rate(pd, r - delta);
+  double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+
+  pd_set_risk_free_rate(pd, r + delta);
+  double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+
+  double result =  (f2 - f1) / (2 * delta);
+
+  set_result(ret, result);
+  return 0;
+}
+
+static int greek_vega(option_data od, pricing_data pd, double S,
+  date ttl, result ret, void *pm_data) {
+
+  // exercise_type et = option_get_et(o);
+  /* check if it is ame... etcccc */
+  static const double delta = 0.0001;
+
+  volatility vol = pd_get_volatility(pd);
+
+  pd_set_volatility(pd, vol - delta);
+  double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+
+  pd_set_volatility(pd, vol + delta);
+  double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+
+  double result =  (f2 - f1) / (2 * delta);
+
+  set_result(ret, result);
+  return 0;
+}
+
 pricing_method new_american_finite_difference(pricing_data pd) {
-  return new_pricing_method_(option_price, NULL, NULL, NULL, NULL, NULL,
-    NULL, pd, NULL);
+  return new_pricing_method_(option_price, greek_delta, greek_gamma, greek_theta,
+    greek_rho, greek_vega, NULL, pd, NULL);
 }
