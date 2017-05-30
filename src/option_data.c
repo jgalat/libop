@@ -41,6 +41,10 @@ option_data new_option_data(option_type t, exercise_type e, date m, double strik
   return od;
 }
 
+void delete_option_data(option_data od) {
+  free(od);
+}
+
 inline option_type od_get_option_type(option_data od) {
   return od->type;
 }

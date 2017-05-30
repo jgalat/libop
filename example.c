@@ -29,5 +29,8 @@ int main(int argc, char const *argv[]) {
 
   printf("price = %lf\n", *result);
 
+  delete_result(result);
+  delete_pricing_method(am_fd);
+  delete_option(am_call);
   return 0;
 }

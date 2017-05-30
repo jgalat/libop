@@ -13,7 +13,7 @@ option new_option(option_type ot, exercise_type et, date m, double k) {
   if (o) {
     o->option_data = new_option_data(ot, et, m, k);
     if (!o->option_data) {
-      free(o);
+      delete_option(o);
       return NULL;
     }
     o->pm = NULL;
@@ -22,11 +22,15 @@ option new_option(option_type ot, exercise_type et, date m, double k) {
 }
 
 void delete_option(option o) {
+  if (o) {
+    delete_option_data(o->option_data);
+  }
   free(o);
 }
 
 int option_set_pricing_method(option o, pricing_method pm) {
-  /** null */
+  if (!o)
+    return -1;
   o->pm = pm;
   return 0;
 }

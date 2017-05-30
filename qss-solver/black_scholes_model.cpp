@@ -160,7 +160,7 @@ void BlackScholesModel::definition(double *x, double *d, double *alg, double t, 
   dx[0] = alg[_N*3];
 
   alg[_N*3-1] =
-            0.5*pow(_sigma,2.0)*pow(d[_N*2],2.0)*(_uN1-2.0*x[_N-1]+x[_N-2])/_ds2
+            0.5*pow(_sigma,2.0)*pow(d[_N*2-1],2.0)*(_uN1-2.0*x[_N-1]+x[_N-2])/_ds2
             + (_r-_cd)*d[_N*2-1]*0.5*(_uN1-x[_N-2])/_ds
             - _r*x[_N-1];
   alg[_N*4-1] = d[_N-1]*alg[_N*3-1];
@@ -189,7 +189,7 @@ void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, d
                   - _r*x[0];
         j1 = i;
 
-        if (j1 >= 1 && j1 <= _N-2) {
+        if (j1 >= 2 && j1 <= _N-2) {
           alg[i+(_N*2-1)] = 0.5*pow(_sigma,2.0)*pow(d[j1+_N-1],2.0)*(x[j1]-2.0*x[j1-1]+x[j1-2])/_ds2
                       + (_r-_cd)*d[j1+_N-1]*0.5*(x[j1]-x[j1-2])/_ds
                       - _r*x[j1-1];
@@ -330,7 +330,6 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
 
   SD_allocOutputMatrix(modelOutput,_N,_N*2);
   cleanVector(states,0,_N);
-
   cleanVector(outputs,0,_N*4);
 
   // for(i = 0; i < _N; i++) {
@@ -339,8 +338,6 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   //   sprintf(modelOutput->variable[i+_N*2].name,"gamma[%d]",i+1);
   //   sprintf(modelOutput->variable[i+_N*3].name,"theta[%d]",i+1);
   // }
-
-  cleanVector(outputs,0,_N*4);
 
   for(i = 0; i < _N; i++) {
     modelOutput->SO[i][states[i]++] = i;

@@ -8,6 +8,10 @@ result new_result() {
   return r;
 }
 
+void delete_result(result r) {
+  free(r);
+}
+
 void set_result(result r, double val) {
   if (r != NULL)
     *r = val;

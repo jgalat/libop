@@ -49,8 +49,11 @@ pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
 }
 
 void delete_pricing_method(pricing_method pm) {
-  if (pm)
-    pm->delete((void*) pm);
+  if (pm) {
+    if (pm->delete)
+      pm->delete((void*) pm->pm_data);
+    delete_pricing_data(pm->pricing_data);
+  }
   free(pm);
 }
 

@@ -64,7 +64,7 @@ CLC_initialize (SIM_simulator simulate)
     {
       e = clcData->ft * clcData->params->zcHyst;
       (*clcModel->events->zeroCrossing) (i, clcData->x, clcData->d, clcData->alg,
-				      t, &zc);
+        t, &zc);
       s = sign (zc);
       clcData->event[i].zcSign = s;
       clcData->event[i].zcHyst = e / 10.0;

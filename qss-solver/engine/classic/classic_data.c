@@ -162,6 +162,7 @@ CLC_Data (int states, int discretes, int events, int inputs, int algebraics,
     }
   cleanDoubleVector (p->d, 0, discretes);
   cleanDoubleVector (p->x, 0, states);
+  cleanDoubleVector (p->alg, 0, algebraics);
   double sameDQMin = (settings->nDQMin == 1) ? settings->dqmin[0] : 0;
   double sameDQRel = (settings->nDQRel == 1) ? settings->dqrel[0] : 0;
   for (i = 0; i < states; i++)
