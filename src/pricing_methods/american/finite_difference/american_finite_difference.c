@@ -141,6 +141,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   pd_set_risk_free_rate(pd, r + delta);
   double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl);
 
+  pd_set_risk_free_rate(pd, r);
   double result =  (f2 - f1) / (2 * delta);
 
   set_result(ret, result);
@@ -162,6 +163,7 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   pd_set_volatility(pd, vol + delta);
   double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl);
 
+  pd_set_volatility(pd, vol);
   double result =  (f2 - f1) / (2 * delta);
 
   set_result(ret, result);
