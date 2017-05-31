@@ -4,6 +4,7 @@
 #include <date.h>
 #include <result.h>
 #include <parameter.h>
+#include <dividend.h>
 #include <option_data.h>
 #include <pricing_data.h>
 

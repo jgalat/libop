@@ -36,24 +36,49 @@ static BSM BSM_(int grid_size, option_data od, pricing_data pd) {
 
   volatility  sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend d = pd_get_dividend(pd);
+  dividend divi = pd_get_dividend(pd);
   double K = od_get_strike(od);
+
+  double d;
+  int dd_n;
+  double *dd_d, *dd_a;
+  if (div_get_type(divi) == DIV_CONTINUOUS) {
+    d = div_cont_get_val(divi);
+    dd_n = 0;
+    dd_d = NULL;
+    dd_a = NULL;
+  } else {
+    d = 0.0;
+    dd_n = div_disc_get_n(divi);
+    dd_d = div_disc_get_dates(divi);
+    dd_a = div_disc_get_ammounts(divi);
+  }
 
   double smax = 5 * K;
 
-  return new_BSM(grid_size, ot, smax, sigma, r, K, d, 0, NULL, NULL,
+  return new_BSM(grid_size, ot, smax, sigma, r, K, d, dd_n, dd_d, dd_a,
     maturity, 1e-9, 1e-12);
 }
 
 static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   double S, date ttl) {
 
+  int i;
   double K = od_get_strike(od),
          smax = 5 * K,
          ds   = smax / 50.0;
 
   BSM bsm50 = BSM_(50, od, pd),
       bsm100 = BSM_(100, od, pd);
+
+  dividend d = pd_get_dividend(pd);
+  if (div_get_type(d) == DIV_DISCRETE) {
+    int ndivs = div_disc_get_n(d);
+    double *ammounts = div_disc_get_ammounts(d);
+
+    for (i = 0; i < ndivs; i++)
+      S -= ammounts[i];
+  }
 
   static const int np = 4;
 
@@ -63,7 +88,6 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   int p50[4] = { n-1, n, n+1, n+2 };
   int p100[4] = { 2*n-2, 2*n, 2*n+2, 2*n+4 };
 
-  int i;
   for (i = 0; i < np; i++) {
     s[i] = ds * p50[i];
     y50[i] = bsmf(bsm50, p50[i], ttl);

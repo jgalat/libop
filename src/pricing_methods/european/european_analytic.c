@@ -25,6 +25,28 @@ static double cdf(double x) {
   return 0.5*(1.0 + sign*y);
 }
 
+static double calculate_dividend(risk_free_rate r, int size, double *dates,
+  double *ammounts) {
+
+  int i;
+  double dividend = 0.0;
+
+  for (i = 0; i < size; i++)
+    dividend += ammounts[i] * exp(-r * dates[i]);
+
+  return dividend;
+}
+
+static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
+  if (div_get_type(divi) == DIV_CONTINUOUS) {
+    *d = div_cont_get_val(divi);
+  } else {
+    *d = 0.0;
+    *S -= calculate_dividend(r, div_disc_get_n(divi),
+            div_disc_get_dates(divi), div_disc_get_ammounts(divi));
+  }
+}
+
 static int option_price(option_data od, pricing_data pd, double S,
   date ttl, result ret, void *pm_data) {
   // exercise_type et = option_get_et(o);
@@ -33,10 +55,13 @@ static int option_price(option_data od, pricing_data pd, double S,
   option_type type = od_get_option_type(od);
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend divi = pd_get_dividend(pd);
+  double K = od_get_strike(od);
+
+  double d;
+  apply_div(r, divi, &d, &S);
 
   double d1, d2, result;
 
@@ -67,10 +92,13 @@ static int greek_delta(option_data od, pricing_data pd, double S,
   option_type type = od_get_option_type(od);
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend divi = pd_get_dividend(pd);
+  double K = od_get_strike(od);
+
+  double d;
+  apply_div(r, divi, &d, &S);
 
   double d1, result;
 
@@ -99,10 +127,13 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend divi = pd_get_dividend(pd);
+  double K = od_get_strike(od);
+
+  double d;
+  apply_div(r, divi, &d, &S);
 
   double d1, snpd, result;
 
@@ -124,10 +155,13 @@ static int greek_theta(option_data od, pricing_data pd, double S,
   option_type type = od_get_option_type(od);
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend divi = pd_get_dividend(pd);
+  double K = od_get_strike(od);
+
+  double d;
+  apply_div(r, divi, &d, &S);
 
   double d1, d2, snpd, result;
 
@@ -166,10 +200,13 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   option_type type = od_get_option_type(od);
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend divi = pd_get_dividend(pd);
+  double K = od_get_strike(od);
+
+  double d;
+  apply_div(r, divi, &d, &S);
 
   double d1, d2, result;
 
@@ -199,10 +236,13 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
   // date maturity = option_get_maturity(o); /* no use here */
 
-  double  sigma = pd_get_volatility(pd),
-          r = pd_get_risk_free_rate(pd),
-          d = pd_get_dividend(pd),
-          K = od_get_strike(od);
+  volatility sigma = pd_get_volatility(pd);
+  risk_free_rate r = pd_get_risk_free_rate(pd);
+  dividend divi = pd_get_dividend(pd);
+  double K = od_get_strike(od);
+
+  double d;
+  apply_div(r, divi, &d, &S);
 
   double d1, snpd, result;
 

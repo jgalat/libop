@@ -1,6 +1,5 @@
 #include <stdlib.h>
 
-// #include "parameter.h"
 #include "pricing_data.h"
 
 struct pricing_data_ {
@@ -22,7 +21,6 @@ pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
 void delete_pricing_data(pricing_data pd) {
   free(pd);
 }
-
 
 /* TODO errors (null checks) */
 inline volatility pd_get_volatility(pricing_data pd) {

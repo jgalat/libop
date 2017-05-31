@@ -2,6 +2,7 @@
 #define __PRICING_DATA_H__
 
 #include <parameter.h>
+#include <dividend.h>
 
 struct pricing_data_;
 typedef struct pricing_data_ * pricing_data;
