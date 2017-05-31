@@ -60,7 +60,7 @@ void delete_pricing_method(pricing_method pm) {
 int pm_option_price(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
-  if (pm->option_price)
+  if (pm && pm->option_price)
     return pm->option_price(od, pm->pricing_data, S, ttl, r, pm->pm_data);
 
   return -1;
@@ -69,7 +69,7 @@ int pm_option_price(pricing_method pm, option_data od, double S, date ttl,
 int pm_delta(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
-  if (pm->delta)
+  if (pm && pm->delta)
     return pm->delta(od, pm->pricing_data, S, ttl, r, pm->pm_data);
 
   return -1;
@@ -78,7 +78,7 @@ int pm_delta(pricing_method pm, option_data od, double S, date ttl,
 int pm_gamma(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
-  if (pm->gamma)
+  if (pm && pm->gamma)
     return pm->gamma(od, pm->pricing_data, S, ttl, r, pm->pm_data);
 
   return -1;
@@ -87,7 +87,7 @@ int pm_gamma(pricing_method pm, option_data od, double S, date ttl,
 int pm_theta(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
-  if (pm->theta)
+  if (pm && pm->theta)
     return pm->theta(od, pm->pricing_data, S, ttl, r, pm->pm_data);
 
   return -1;
@@ -96,7 +96,7 @@ int pm_theta(pricing_method pm, option_data od, double S, date ttl,
 int pm_rho(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
-  if (pm->rho)
+  if (pm && pm->rho)
     return pm->rho(od, pm->pricing_data, S, ttl, r, pm->pm_data);
 
   return -1;
@@ -105,7 +105,7 @@ int pm_rho(pricing_method pm, option_data od, double S, date ttl,
 int pm_vega(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
-  if (pm->vega)
+  if (pm && pm->vega)
     return pm->vega(od, pm->pricing_data, S, ttl, r, pm->pm_data);
 
   return -1;

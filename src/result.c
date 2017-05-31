@@ -13,6 +13,6 @@ void delete_result(result r) {
 }
 
 void set_result(result r, double val) {
-  if (r != NULL)
+  if (r)
     *r = val;
 }

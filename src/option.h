@@ -14,5 +14,10 @@ void delete_option(option);
 int option_set_pricing_method(option, pricing_method);
 
 int option_price(option, double, date, result);
+int option_delta(option, double, date, result);
+int option_gamma(option, double, date, result);
+int option_theta(option, double, date, result);
+int option_rho(option, double, date, result);
+int option_vega(option, double, date, result);
 
 #endif /* __OPTION_H__ */
