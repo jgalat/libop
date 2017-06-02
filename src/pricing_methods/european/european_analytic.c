@@ -48,7 +48,7 @@ static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
 }
 
 static int option_price(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -85,7 +85,7 @@ static int option_price(option_data od, pricing_data pd, double S,
 }
 
 static int greek_delta(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -121,7 +121,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 }
 
 static int greek_gamma(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -148,7 +148,7 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 }
 
 static int greek_theta(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -193,7 +193,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 }
 
 static int greek_rho(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -230,7 +230,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 }
 
 static int greek_vega(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 

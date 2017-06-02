@@ -26,7 +26,8 @@ INC       := -I$(SRCDIR) -I$(QSSDIR)/..
 
 #Source files
 COMMONSRC := $(SRCDIR)/option_data.c $(SRCDIR)/pricing_data.c $(SRCDIR)/result.c \
-	$(SRCDIR)/pricing_method.c $(SRCDIR)/option.c $(SRCDIR)/dividend.c
+	$(SRCDIR)/pm_options.c $(SRCDIR)/pricing_method.c $(SRCDIR)/option.c \
+	$(SRCDIR)/dividend.c
 
 PMSRC := $(PMEUR)/european_analytic.c \
 	$(PMAM)/finite_difference/american_finite_difference.c
@@ -60,8 +61,6 @@ $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 
 $(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
 	gcc -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
-	#@ar rc $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
-	#ranlib $(@)
 
 $(COMMONOBJ): | $(BUILDDIR)
 

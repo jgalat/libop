@@ -21,6 +21,10 @@ int main(int argc, char const *argv[]) {
 
   pricing_method am_fd = new_pricing_method(AM_FD, sigma, r, d);
 
+  pm_options pmo = new_pm_options();
+  pm_options_set_N(pmo, 50);
+  pm_set_options(am_fd, pmo);
+
   // option_set_pricing_method(eu_call_option, eur_an);
 
   option_set_pricing_method(am_call, am_fd);

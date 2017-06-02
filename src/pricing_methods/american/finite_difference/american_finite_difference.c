@@ -29,7 +29,9 @@ static BSM_OT option_type_BSM_OT(option_type ot) {
   return CALL;
 }
 
-static BSM BSM_(int grid_size, option_data od, pricing_data pd) {
+static BSM BSM_(int grid_size, double tol, double abstol,
+  option_data od, pricing_data pd) {
+
   option_type type = od_get_option_type(od);
   BSM_OT ot = option_type_BSM_OT(type);
   date maturity = od_get_maturity(od);
@@ -57,19 +59,27 @@ static BSM BSM_(int grid_size, option_data od, pricing_data pd) {
   double smax = 5 * K;
 
   return new_BSM(grid_size, ot, smax, sigma, r, K, d, dd_n, dd_d, dd_a,
-    maturity, 1e-9, 1e-12);
+    maturity, tol, abstol);
 }
 
 static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
-  double S, date ttl) {
+  double S, date ttl, pm_options pmo) {
+
+  if (!pmo) {
+    pmo = new_pm_options();
+  }
+
+  int N = pm_options_get_N(pmo);
+  double tol = pm_options_get_tol(pmo);
+  double abstol = pm_options_get_abstol(pmo);
 
   int i;
   double K = od_get_strike(od),
          smax = 5 * K,
-         ds   = smax / 50.0;
+         ds   = smax / ((double) N);
 
-  BSM bsm50 = BSM_(50, od, pd),
-      bsm100 = BSM_(100, od, pd);
+  BSM bsm50 = BSM_(N, tol, abstol, od, pd),
+      bsm100 = BSM_(N*2, tol, abstol, od, pd);
 
   dividend d = pd_get_dividend(pd);
   if (div_get_type(d) == DIV_DISCRETE) {
@@ -84,7 +94,7 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
 
   double y50[np], y100[np], s[np], y[np];
 
-  int n = (int) (50.0 / smax * S);
+  int n = (int) (((double) N) / smax * S);
   int p50[4] = { n-1, n, n+1, n+2 };
   int p100[4] = { 2*n-2, 2*n, 2*n+2, 2*n+4 };
 
@@ -102,56 +112,56 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   return lagrange_interpolation(S, s, y, np);
 }
 
-static int option_price(option_data od, pricing_data pd,
-  double S, date ttl, result ret, void *pm_data) {
+static int option_price(option_data od, pricing_data pd, double S,
+  date ttl, result ret, pm_options pmo, void *pm_data) {
 
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
 
-  double result = calculate_bsmf(BSM_v, od, pd, S, ttl);
+  double result = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
   set_result(ret, result);
   return 0;
 }
 
 static int greek_delta(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
 
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
 
-  double result = calculate_bsmf(BSM_delta, od, pd, S, ttl);
+  double result = calculate_bsmf(BSM_delta, od, pd, S, ttl, pmo);
 
   set_result(ret, result);
   return 0;
 }
 
 static int greek_gamma(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
 
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
 
-  double result = calculate_bsmf(BSM_gamma, od, pd, S, ttl);
+  double result = calculate_bsmf(BSM_gamma, od, pd, S, ttl, pmo);
 
   set_result(ret, result);
   return 0;
 }
 
 static int greek_theta(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
 
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
 
-  double result = calculate_bsmf(BSM_theta, od, pd, S, ttl);
+  double result = calculate_bsmf(BSM_theta, od, pd, S, ttl, pmo);
 
   set_result(ret, result);
   return 0;
 }
 
 static int greek_rho(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
 
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
@@ -160,10 +170,10 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   risk_free_rate r = pd_get_risk_free_rate(pd);
 
   pd_set_risk_free_rate(pd, r - delta);
-  double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+  double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
   pd_set_risk_free_rate(pd, r + delta);
-  double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+  double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
   pd_set_risk_free_rate(pd, r);
   double result =  (f2 - f1) / (2 * delta);
@@ -173,7 +183,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 }
 
 static int greek_vega(option_data od, pricing_data pd, double S,
-  date ttl, result ret, void *pm_data) {
+  date ttl, result ret, pm_options pmo, void *pm_data) {
 
   // exercise_type et = option_get_et(o);
   /* check if it is ame... etcccc */
@@ -182,10 +192,10 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   volatility vol = pd_get_volatility(pd);
 
   pd_set_volatility(pd, vol - delta);
-  double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+  double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
   pd_set_volatility(pd, vol + delta);
-  double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl);
+  double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
   pd_set_volatility(pd, vol);
   double result =  (f2 - f1) / (2 * delta);
