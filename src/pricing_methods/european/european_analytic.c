@@ -78,6 +78,20 @@ static double option_price_(option_data od, pricing_data pd, double S,
   return result;
 }
 
+static double iv_f(volatility vol, option_data od, pricing_data pd,
+  double S, date ttl_, pm_options pmo, void *pm_data) {
+  double V = pd_get_option_price(pd);
+  pd_set_volatility(pd, vol);
+  double result = option_price_(od, pd, S, ttl_, pmo, pm_data) - V;
+  pd_set_option_price(pd, V);
+  return result;
+}
+
+static int impl_vol(option_data od, pricing_data pd, double S,
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
+
+  return 0;
+}
 
 static int option_price(option_data od, pricing_data pd, double S,
   date ttl_, result ret, pm_options pmo, void *pm_data) {

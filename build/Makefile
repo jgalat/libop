@@ -12,6 +12,7 @@ SRCDIR   := ../src
 PMDIR		 := $(SRCDIR)/pricing_methods
 PMEUR  	 := $(PMDIR)/european
 PMAM     := $(PMDIR)/american
+IVMDIR   := $(SRCDIR)/impl_vol_methods
 QSSDIR   := ../qss-solver
 QSSLIBSDIR := $(QSSDIR)/libs
 BUILDDIR := $(SRCDIR)/obj
@@ -34,9 +35,12 @@ PMSRC := $(PMEUR)/european_analytic.c \
 
 CPPSRC := $(QSSDIR)/black_scholes_model.cpp
 
+IVMSRC := $(IVMDIR)/impl_vol_options.c $(IVMDIR)/secant_method.c
+
 #Objects
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
 PMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(PMSRC:.c=.o)))
+IVMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(IVMSRC:.c=.o)))
 QSSLIBS = $(QSSLIBSDIR)/libqss.a $(QSSLIBSDIR)/libtimestep.a
 QSSOBJ = $(QSSDIR)/engine/obj/release/*.o
 EXTRAOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(CPPSRC:.cpp=.o))) $(QSSOBJ)
@@ -59,8 +63,11 @@ $(BUILDDIR)/%.o: $(QSSDIR)/%.cpp
 $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
-	gcc -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ)
+$(BUILDDIR)/%.o: $(IVMDIR)/%.c
+	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
+
+$(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
+	gcc -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
 
 $(COMMONOBJ): | $(BUILDDIR)
 
