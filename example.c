@@ -38,6 +38,7 @@ int main(int argc, char const *argv[]) {
   printf("price = %lf\n", *result);
 
   delete_result(result);
+  delete_pm_options(pmo);
   delete_pricing_method(am_fd);
   delete_dividend(d);
   delete_option(am_call);

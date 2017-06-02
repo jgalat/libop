@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
 #include <qss-solver/black_scholes_model.h>
 #include "american_finite_difference.h"
 
@@ -78,8 +79,12 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
          smax = 5 * K,
          ds   = smax / ((double) N);
 
-  BSM bsm50 = BSM_(N, tol, abstol, od, pd),
-      bsm100 = BSM_(N*2, tol, abstol, od, pd);
+  BSM bsm[2];
+
+  //#pragma omp parallel for
+  for (i = 0; i < 2; i++) {
+    bsm[i] = BSM_(N + (N * i), tol, abstol, od, pd);
+  }
 
   dividend d = pd_get_dividend(pd);
   if (div_get_type(d) == DIV_DISCRETE) {
@@ -100,14 +105,14 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
 
   for (i = 0; i < np; i++) {
     s[i] = ds * p50[i];
-    y50[i] = bsmf(bsm50, p50[i], ttl);
-    y100[i] = bsmf(bsm100, p100[i], ttl);
+    y50[i] = bsmf(bsm[0], p50[i], ttl);
+    y100[i] = bsmf(bsm[1], p100[i], ttl);
     /* richardson */
     y[i] = (4.0 * y100[i] - y50[i]) / 3.0;
   }
 
-  delete_BSM(bsm50);
-  delete_BSM(bsm100);
+  delete_BSM(bsm[0]);
+  delete_BSM(bsm[1]);
 
   return lagrange_interpolation(S, s, y, np);
 }
