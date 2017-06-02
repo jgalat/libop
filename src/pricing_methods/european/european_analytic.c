@@ -48,12 +48,12 @@ static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
 }
 
 static int option_price(option_data od, pricing_data pd, double S,
-  date ttl, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
   option_type type = od_get_option_type(od);
-  // date maturity = option_get_maturity(o); /* no use here */
+  date ttl = od_get_maturity(od);
 
   volatility sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
@@ -85,12 +85,12 @@ static int option_price(option_data od, pricing_data pd, double S,
 }
 
 static int greek_delta(option_data od, pricing_data pd, double S,
-  date ttl, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
   option_type type = od_get_option_type(od);
-  // date maturity = option_get_maturity(o); /* no use here */
+  date ttl = od_get_maturity(od);
 
   volatility sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
@@ -121,11 +121,11 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 }
 
 static int greek_gamma(option_data od, pricing_data pd, double S,
-  date ttl, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  // date maturity = option_get_maturity(o); /* no use here */
+  date ttl = od_get_maturity(od);
 
   volatility sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
@@ -148,12 +148,12 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 }
 
 static int greek_theta(option_data od, pricing_data pd, double S,
-  date ttl, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
   option_type type = od_get_option_type(od);
-  // date maturity = option_get_maturity(o); /* no use here */
+  date ttl = od_get_maturity(od);
 
   volatility sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
@@ -193,12 +193,12 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 }
 
 static int greek_rho(option_data od, pricing_data pd, double S,
-  date ttl, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
   option_type type = od_get_option_type(od);
-  // date maturity = option_get_maturity(o); /* no use here */
+  date ttl = od_get_maturity(od);
 
   volatility sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
@@ -230,11 +230,11 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 }
 
 static int greek_vega(option_data od, pricing_data pd, double S,
-  date ttl, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  // date maturity = option_get_maturity(o); /* no use here */
+  date ttl = od_get_maturity(od);
 
   volatility sigma = pd_get_volatility(pd);
   risk_free_rate r = pd_get_risk_free_rate(pd);
