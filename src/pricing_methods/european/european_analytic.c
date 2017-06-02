@@ -47,10 +47,8 @@ static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
   }
 }
 
-static int option_price(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+static double option_price_(option_data od, pricing_data pd, double S,
+  date ttl_, pm_options pmo, void *pm_data) {
 
   option_type type = od_get_option_type(od);
   date ttl = od_get_maturity(od);
@@ -75,11 +73,18 @@ static int option_price(option_data od, pricing_data pd, double S,
     case OPTION_PUT:
       result = K * exp(-r * ttl) * cdf(-d2) - S * exp(-d * ttl) * cdf(-d1);
       break;
-    default:
-      return -1;
-      break;
   }
 
+  return result;
+}
+
+
+static int option_price(option_data od, pricing_data pd, double S,
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  // exercise_type et = option_get_et(o);
+  /* check if it is eur... etcccc */
+
+  double result = option_price_(od, pd, S, ttl_, pmo, pm_data);
   set_result(ret, result);
   return 0;
 }
@@ -183,9 +188,6 @@ static int greek_theta(option_data od, pricing_data pd, double S,
         * (-( ((S * sigma * exp(-d * ttl)) / (2 * sqrt(ttl))) * snpd )
           + r * K * exp(-r * ttl) * cdf(-d2) - d * S * exp(-d * ttl) * cdf(-d1));
       break;
-    default:
-      return -1;
-      break;
   }
 
   set_result(ret, result);
@@ -219,9 +221,6 @@ static int greek_rho(option_data od, pricing_data pd, double S,
       break;
     case OPTION_PUT:
       result = - K * ttl * exp(-r * ttl) * cdf(-d2);
-      break;
-    default:
-      return -1;
       break;
   }
 
