@@ -76,7 +76,7 @@ static int option_price(option_data od, pricing_data pd, double S,
       result = K * exp(-r * ttl) * cdf(-d2) - S * exp(-d * ttl) * cdf(-d1);
       break;
     default:
-      result = -1;
+      return -1;
       break;
   }
 
@@ -112,7 +112,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
       result = exp(-d * ttl) * (cdf(d1) - 1);
       break;
     default:
-      result = -1;
+      return -1;
       break;
   }
 
@@ -184,7 +184,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
           + r * K * exp(-r * ttl) * cdf(-d2) - d * S * exp(-d * ttl) * cdf(-d1));
       break;
     default:
-      result = -1;
+      return -1;
       break;
   }
 
@@ -221,7 +221,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
       result = - K * ttl * exp(-r * ttl) * cdf(-d2);
       break;
     default:
-      result = -1;
+      return -1;
       break;
   }
 
