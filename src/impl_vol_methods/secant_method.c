@@ -7,7 +7,7 @@ int secant_method(impl_vol_mf ivmf, impl_vol_options ivo, result r) {
 
   double x0 = ivo->range[0],
          x1 = ivo->range[1],
-         x2,
+         x2 = -1,
          eps = ivo->eps;
 
   int i, maxit = ivo->maxit;

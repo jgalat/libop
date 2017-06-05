@@ -61,7 +61,7 @@ static double option_price_(option_data od, pricing_data pd, double S) {
   double d;
   apply_div(r, divi, &d, &S);
 
-  double d1, d2, result;
+  double d1, d2, result = 0;
 
   d1 = (log(S / K) + (r - d + pow(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
   d2 = d1 - sigma * sqrt(ttl);
@@ -125,7 +125,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
   double d;
   apply_div(r, divi, &d, &S);
 
-  double d1, result;
+  double d1, result = 0;
 
   d1 = (log(S / K) + (r - d + pow(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
 
@@ -188,7 +188,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
   double d;
   apply_div(r, divi, &d, &S);
 
-  double d1, d2, snpd, result;
+  double d1, d2, snpd, result = 0;
 
   d1 = (log(S / K) + (r - d + pow(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
   d2 = d1 - sigma * sqrt(ttl);
@@ -230,7 +230,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   double d;
   apply_div(r, divi, &d, &S);
 
-  double d1, d2, result;
+  double d1, d2, result = 0;
 
   d1 = (log(S / K) + (r - d + pow(sigma, 2) / 2) * ttl) / (sigma * sqrt(ttl));
   d2 = d1 - sigma * sqrt(ttl);
