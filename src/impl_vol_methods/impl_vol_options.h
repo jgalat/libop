@@ -5,10 +5,9 @@
 
 typedef struct impl_vol_options_ * impl_vol_options;
 
+/* TODO check better name... no longer options */
+
 struct impl_vol_options_ {
-  int maxit;
-  double eps;
-  double range[2];
   /* impl_vol_f args */
   option_data od;
   pricing_data pd;
@@ -18,9 +17,8 @@ struct impl_vol_options_ {
   void* pm_data;
 };
 
-impl_vol_options new_impl_vol_options(int maxit, double eps, double a, double b,
-  option_data od, pricing_data pd, double S, date ttl, pm_options pmo,
-  void *pm_data);
+impl_vol_options new_impl_vol_options(option_data od, pricing_data pd,
+  double S, date ttl, pm_options pmo, void *pm_data);
 
 void delete_impl_vol_options(impl_vol_options);
 

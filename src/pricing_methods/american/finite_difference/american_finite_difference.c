@@ -135,15 +135,24 @@ static double iv_f(volatility vol, option_data od, pricing_data pd,
 static int impl_vol(option_data od, pricing_data pd, double S,
   date ttl_, result ret, pm_options pmo, void *pm_data) {
 
-  impl_vol_options ivo = new_impl_vol_options(5, 1e-5, 0.25, 0.75, od, pd, S, ttl_,
-    pmo, pm_data);
+  int f = 0;
+  if (!pmo) {
+    pmo = new_pm_options();
+    f = 1;
+  }
+
+  impl_vol_options ivo = new_impl_vol_options(od, pd, S, ttl_, pmo, pm_data);
 
   int res = secant_method(iv_f, ivo, ret);
 
   delete_impl_vol_options(ivo);
+
+  if (f) {
+    delete_pm_options(pmo);
+  }
+
   return res;
 }
-
 
 static int option_price(option_data od, pricing_data pd, double S,
   date ttl, result ret, pm_options pmo, void *pm_data) {

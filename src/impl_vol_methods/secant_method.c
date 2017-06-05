@@ -5,12 +5,16 @@ int secant_method(impl_vol_mf ivmf, impl_vol_options ivo, result r) {
   if (!ivo)
     return -1;
 
-  double x0 = ivo->range[0],
-         x1 = ivo->range[1],
-         x2 = -1,
-         eps = ivo->eps;
+  pm_options pmo = ivo->pmo;
 
-  int i, maxit = ivo->maxit;
+  double *init = pm_options_get_iv_init(pmo);
+
+  double x0 = init[0],
+         x1 = init[1],
+         x2 = -1,
+         eps = pm_options_get_iv_eps(pmo);
+
+  int i, maxit = pm_options_get_iv_max_it(pmo);
 
   double y0, y1, y2;
 
@@ -18,7 +22,6 @@ int secant_method(impl_vol_mf ivmf, impl_vol_options ivo, result r) {
   pricing_data pd = ivo->pd;
   double S = ivo->S;
   date ttl = ivo->ttl;
-  pm_options pmo = ivo->pmo;
   void *pm_data = ivo->pm_data;
 
   y0 = ivmf(x0, od, pd, S, ttl, pmo, pm_data);

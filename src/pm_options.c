@@ -6,6 +6,10 @@ struct pm_options_ {
   int N;
   double tol;
   double abstol;
+  /* impl vol */
+  int max_it;
+  double eps;
+  double init[2];
 };
 
 pm_options new_pm_options() {
@@ -14,6 +18,11 @@ pm_options new_pm_options() {
     pmo->N = 50;
     pmo->tol = 1e-09;
     pmo->abstol = 1e-12;
+
+    pmo->max_it = 5;
+    pmo->eps = 1e-4;
+    pmo->init[0] = 0.25;
+    pmo->init[1] = 0.75;
   }
   return pmo;
 }
@@ -53,4 +62,38 @@ int pm_options_set_abstol(pm_options pmo, double abstol) {
 
 double pm_options_get_abstol(pm_options pmo) {
   return pmo->abstol;
+}
+
+int pm_options_set_iv_max_it(pm_options pmo, int maxit) {
+  if (!pmo)
+    return -1;
+  pmo->max_it = maxit;
+  return 0;
+}
+
+int pm_options_get_iv_max_it(pm_options pmo) {
+  return pmo->max_it;
+}
+
+int pm_options_set_iv_eps(pm_options pmo, double eps) {
+  if (!pmo)
+    return -1;
+  pmo->eps = eps;
+  return 0;
+}
+
+double pm_options_get_iv_eps(pm_options pmo) {
+  return pmo->eps;
+}
+
+int pm_options_set_iv_init(pm_options pmo, double x0, double x1) {
+  if (!pmo)
+    return -1;
+  pmo->init[0] = x0;
+  pmo->init[1] = x1;
+  return 0;
+}
+
+double *pm_options_get_iv_init(pm_options pmo) {
+  return pmo->init;
 }

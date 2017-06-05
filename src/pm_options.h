@@ -10,10 +10,15 @@ void delete_pm_options(pm_options);
 int pm_options_set_N(pm_options, int);
 int pm_options_set_tol(pm_options, double);
 int pm_options_set_abstol(pm_options, double);
+int pm_options_set_iv_max_it(pm_options, int);
+int pm_options_set_iv_eps(pm_options, double);
+int pm_options_set_iv_init(pm_options, double, double);
 
 int pm_options_get_N(pm_options);
 double pm_options_get_tol(pm_options);
 double pm_options_get_abstol(pm_options);
-
+int pm_options_get_iv_max_it(pm_options);
+double pm_options_get_iv_eps(pm_options);
+double *pm_options_get_iv_init(pm_options);
 
 #endif /* __PM_OPTIONS_H__ */
