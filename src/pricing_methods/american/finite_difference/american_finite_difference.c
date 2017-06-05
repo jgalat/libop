@@ -34,14 +34,14 @@ static BSM_OT option_type_BSM_OT(option_type ot) {
 static BSM BSM_(int grid_size, double tol, double abstol,
   option_data od, pricing_data pd) {
 
-  option_type type = od_get_option_type(od);
+  option_type type = od->opt_type;
   BSM_OT ot = option_type_BSM_OT(type);
-  date maturity = od_get_maturity(od);
+  date maturity = od->maturity;
 
-  volatility  sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility  sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   int dd_n;
@@ -78,7 +78,7 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   double abstol = pm_options_get_abstol(pmo);
 
   int i;
-  double K = od_get_strike(od),
+  double K = od->strike,
          smax = 5 * K,
          ds   = smax / ((double) N);
 
@@ -89,7 +89,7 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
     bsm[i] = BSM_(N + (N * i), tol, abstol, od, pd);
   }
 
-  dividend d = pd_get_dividend(pd);
+  dividend d = pd->d;
   if (div_get_type(d) == DIV_DISCRETE) {
     int ndivs = div_disc_get_n(d);
     double *ammounts = div_disc_get_ammounts(d);
@@ -126,10 +126,10 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
 
 static double iv_f(volatility vol, option_data od, pricing_data pd,
   double S, date ttl, pm_options pmo, void *pm_data) {
-  double V = pd_get_option_price(pd);
-  pd_set_volatility(pd, vol);
+  double V = pd->option_price;
+  pd->vol = vol;
   double result = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo) - V;
-  pd_set_option_price(pd, V);
+  pd->option_price = V;
   return result;
 }
 
@@ -201,15 +201,15 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   /* check if it is ame... etcccc */
   static const double delta = 0.0001;
 
-  risk_free_rate r = pd_get_risk_free_rate(pd);
+  risk_free_rate r = pd->r;
 
-  pd_set_risk_free_rate(pd, r - delta);
+  pd->r = r - delta;
   double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
-  pd_set_risk_free_rate(pd, r + delta);
+  pd->r = r + delta;
   double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
-  pd_set_risk_free_rate(pd, r);
+  pd->r = r;
   double result =  (f2 - f1) / (2 * delta);
 
   set_result(ret, result);
@@ -223,15 +223,15 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   /* check if it is ame... etcccc */
   static const double delta = 0.0001;
 
-  volatility vol = pd_get_volatility(pd);
+  volatility vol = pd->vol;
 
-  pd_set_volatility(pd, vol - delta);
+  pd->vol = vol - delta;
   double f1 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
-  pd_set_volatility(pd, vol + delta);
+  pd->vol = vol + delta;
   double f2 = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
-  pd_set_volatility(pd, vol);
+  pd->vol = vol;
   double result =  (f2 - f1) / (2 * delta);
 
   set_result(ret, result);

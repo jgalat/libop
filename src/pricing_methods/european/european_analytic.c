@@ -50,13 +50,13 @@ static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
 
 static double option_price_(option_data od, pricing_data pd, double S) {
 
-  option_type type = od_get_option_type(od);
-  date ttl = od_get_maturity(od);
+  option_type type = od->opt_type;
+  date ttl = od->maturity;
 
-  volatility sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   apply_div(r, divi, &d, &S);
@@ -80,10 +80,10 @@ static double option_price_(option_data od, pricing_data pd, double S) {
 
 static double iv_f(volatility vol, option_data od, pricing_data pd,
   double S, date ttl_, pm_options pmo, void *pm_data) {
-  double V = pd_get_option_price(pd);
-  pd_set_volatility(pd, vol);
+  double V = pd->option_price;
+  pd->vol = vol;
   double result = option_price_(od, pd, S) - V;
-  pd_set_option_price(pd, V);
+  pd->option_price = V;
   return result;
 }
 
@@ -114,13 +114,13 @@ static int greek_delta(option_data od, pricing_data pd, double S,
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  option_type type = od_get_option_type(od);
-  date ttl = od_get_maturity(od);
+  option_type type = od->opt_type;
+  date ttl = od->maturity;
 
-  volatility sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   apply_div(r, divi, &d, &S);
@@ -150,12 +150,12 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  date ttl = od_get_maturity(od);
+  date ttl = od->maturity;
 
-  volatility sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   apply_div(r, divi, &d, &S);
@@ -177,13 +177,13 @@ static int greek_theta(option_data od, pricing_data pd, double S,
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  option_type type = od_get_option_type(od);
-  date ttl = od_get_maturity(od);
+  option_type type = od->opt_type;
+  date ttl = od->maturity;
 
-  volatility sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   apply_div(r, divi, &d, &S);
@@ -219,13 +219,13 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  option_type type = od_get_option_type(od);
-  date ttl = od_get_maturity(od);
+  option_type type = od->opt_type;
+  date ttl = od->maturity;
 
-  volatility sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   apply_div(r, divi, &d, &S);
@@ -253,12 +253,12 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  date ttl = od_get_maturity(od);
+  date ttl = od->maturity;
 
-  volatility sigma = pd_get_volatility(pd);
-  risk_free_rate r = pd_get_risk_free_rate(pd);
-  dividend divi = pd_get_dividend(pd);
-  double K = od_get_strike(od);
+  volatility sigma = pd->vol;
+  risk_free_rate r = pd->r;
+  dividend divi = pd->d;
+  double K = od->strike;
 
   double d;
   apply_div(r, divi, &d, &S);

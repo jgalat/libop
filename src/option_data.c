@@ -1,13 +1,6 @@
 #include <stdlib.h>
 #include "option_data.h"
 
-struct option_data_ {
-  option_type   type;
-  exercise_type exercise;
-  date          maturity;
-  double        strike; /***/
-};
-
 static int valid_option_type(option_type ot) {
   switch (ot) {
     case OPTION_CALL:
@@ -33,7 +26,7 @@ option_data new_option_data(option_type t, exercise_type e, date m, double strik
 
   option_data od = (option_data) malloc(sizeof(struct option_data_));
   if (od) {
-    od->type = t;
+    od->opt_type = t;
     od->exercise = e;
     od->maturity = m;
     od->strike = strike;
@@ -43,20 +36,4 @@ option_data new_option_data(option_type t, exercise_type e, date m, double strik
 
 void delete_option_data(option_data od) {
   free(od);
-}
-
-inline option_type od_get_option_type(option_data od) {
-  return od->type;
-}
-
-inline exercise_type od_get_exercise_type(option_data od) {
-  return od->exercise;
-}
-
-inline date od_get_maturity(option_data od) {
-  return od->maturity;
-}
-
-inline double od_get_strike(option_data od) {
-  return od->strike;
 }
