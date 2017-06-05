@@ -19,7 +19,7 @@ BUILDDIR := $(SRCDIR)/obj
 
 
 #Flags, Libraries and Includes
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O0 -g -fPIC
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2 -fPIC
 CPPFLAGS  := -std=gnu++11
 LDFLAGS  	:=
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..

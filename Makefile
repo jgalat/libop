@@ -8,7 +8,7 @@ TARGET := example
 SRCDIR := src
 BUILDDIR := build
 
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O0 -g
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
 LDFLAGS   := -lop -lm -lstdc++ -lgfortran
 LIB				:= -L$(BUILDDIR)
 INC				:= -I$(SRCDIR)
