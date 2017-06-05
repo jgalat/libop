@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 #include <qss-solver/black_scholes_model.h>
