@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <omp.h>
 #include <qss-solver/black_scholes_model.h>
+#include <impl_vol_methods/impl_vol_methods.h>
 #include "american_finite_difference.h"
 
 static double lagrange_interpolation(double X, double *x, double *y, int N) {
@@ -66,8 +67,10 @@ static BSM BSM_(int grid_size, double tol, double abstol,
 static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   double S, date ttl, pm_options pmo) {
 
+  int f = 0;
   if (!pmo) {
     pmo = new_pm_options();
+    f = 1;
   }
 
   int N = pm_options_get_N(pmo);
@@ -114,8 +117,34 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   delete_BSM(bsm[0]);
   delete_BSM(bsm[1]);
 
+  if (f) {
+    delete_pm_options(pmo);
+  }
+
   return lagrange_interpolation(S, s, y, np);
 }
+
+static double iv_f(volatility vol, option_data od, pricing_data pd,
+  double S, date ttl, pm_options pmo, void *pm_data) {
+  double V = pd_get_option_price(pd);
+  pd_set_volatility(pd, vol);
+  double result = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo) - V;
+  pd_set_option_price(pd, V);
+  return result;
+}
+
+static int impl_vol(option_data od, pricing_data pd, double S,
+  date ttl_, result ret, pm_options pmo, void *pm_data) {
+
+  impl_vol_options ivo = new_impl_vol_options(5, 1e-5, 0.25, 0.75, od, pd, S, ttl_,
+    pmo, pm_data);
+
+  int res = secant_method(iv_f, ivo, ret);
+
+  delete_impl_vol_options(ivo);
+  return res;
+}
+
 
 static int option_price(option_data od, pricing_data pd, double S,
   date ttl, result ret, pm_options pmo, void *pm_data) {
@@ -211,5 +240,5 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
 pricing_method new_american_finite_difference(pricing_data pd) {
   return new_pricing_method_(option_price, greek_delta, greek_gamma, greek_theta,
-    greek_rho, greek_vega, NULL, pd, NULL);
+    greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }

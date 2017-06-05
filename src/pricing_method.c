@@ -9,6 +9,7 @@ struct pricing_method_ {
   theta_f       theta;
   rho_f         rho;
   vega_f        vega;
+  impl_vol_f    ivf;
   pricing_data  pricing_data;
   void          *pm_data;
   delete_f      delete;
@@ -33,7 +34,8 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
 }
 
 pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
-  theta_f tf, rho_f rf, vega_f vf, delete_f dlf, pricing_data pd, void *pm_d) {
+  theta_f tf, rho_f rf, vega_f vf, impl_vol_f ivf,
+  delete_f dlf, pricing_data pd, void *pm_d) {
   pricing_method pm = (pricing_method) malloc(sizeof(struct pricing_method_));
   if (pm) {
     pm->option_price = pf;
@@ -42,6 +44,7 @@ pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
     pm->theta = tf;
     pm->rho = rf;
     pm->vega = vf;
+    pm->ivf = ivf;
     pm->pricing_data = pd;
     pm->pm_data = pm_d;
     pm->delete = dlf;
@@ -116,6 +119,15 @@ int pm_vega(pricing_method pm, option_data od, double S, date ttl,
 
   if (pm && pm->vega)
     return pm->vega(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+
+  return -1;
+}
+
+int pm_ivf(pricing_method pm, option_data od, double S, date ttl,
+  result r) {
+
+  if (pm && pm->ivf)
+    return pm->ivf(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
 
   return -1;
 }

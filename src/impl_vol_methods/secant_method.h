@@ -4,6 +4,6 @@
 #include <common.h>
 #include <impl_vol_methods/impl_vol_options.h>
 
-int secant_method(impl_vol_f, impl_vol_options, result);
+int secant_method(impl_vol_mf, impl_vol_options, result);
 
 #endif /* __SECANT_METHOD_H__ */

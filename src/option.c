@@ -70,3 +70,9 @@ int option_vega(option o, double S, date ttl, result r) {
     return pm_vega(o->pm, o->option_data, S, ttl, r);
   return -1;
 }
+
+int option_impl_vol(option o, double S, date ttl, result r) {
+  if (o)
+    return pm_ivf(o->pm, o->option_data, S, ttl, r);
+  return -1;
+}

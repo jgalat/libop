@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <impl_vol_methods/impl_vol_methods.h>
 
 #include "european_analytic.h"
 
@@ -47,8 +48,7 @@ static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
   }
 }
 
-static double option_price_(option_data od, pricing_data pd, double S,
-  date ttl_, pm_options pmo, void *pm_data) {
+static double option_price_(option_data od, pricing_data pd, double S) {
 
   option_type type = od_get_option_type(od);
   date ttl = od_get_maturity(od);
@@ -82,7 +82,7 @@ static double iv_f(volatility vol, option_data od, pricing_data pd,
   double S, date ttl_, pm_options pmo, void *pm_data) {
   double V = pd_get_option_price(pd);
   pd_set_volatility(pd, vol);
-  double result = option_price_(od, pd, S, ttl_, pmo, pm_data) - V;
+  double result = option_price_(od, pd, S) - V;
   pd_set_option_price(pd, V);
   return result;
 }
@@ -90,7 +90,13 @@ static double iv_f(volatility vol, option_data od, pricing_data pd,
 static int impl_vol(option_data od, pricing_data pd, double S,
   date ttl_, result ret, pm_options pmo, void *pm_data) {
 
-  return 0;
+  impl_vol_options ivo = new_impl_vol_options(10, 1e-5, 0.25, 0.75, od, pd, S, ttl_,
+    pmo, pm_data);
+
+  int res = secant_method(iv_f, ivo, ret);
+
+  delete_impl_vol_options(ivo);
+  return res;
 }
 
 static int option_price(option_data od, pricing_data pd, double S,
@@ -98,7 +104,7 @@ static int option_price(option_data od, pricing_data pd, double S,
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
-  double result = option_price_(od, pd, S, ttl_, pmo, pm_data);
+  double result = option_price_(od, pd, S);
   set_result(ret, result);
   return 0;
 }
@@ -271,5 +277,5 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
 pricing_method new_european_analytic(pricing_data pd) {
   return new_pricing_method_(option_price, greek_delta, greek_gamma, greek_theta,
-    greek_rho, greek_vega, NULL, pd, NULL);
+    greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }
