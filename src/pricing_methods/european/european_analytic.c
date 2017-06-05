@@ -195,17 +195,13 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 
   snpd = (1 / sqrt(2 * M_PI)) * exp(-pow(d1, 2) / 2);
 
-  double daysperyear = 365.0; /* FIXME */
-
   switch (type) {
     case OPTION_CALL:
-      result = (1.0 / daysperyear)
-        * (-( ((S * sigma * exp(-d * ttl)) / (2 * sqrt(ttl))) * snpd )
+      result = (-( ((S * sigma * exp(-d * ttl)) / (2 * sqrt(ttl))) * snpd )
           - r * K * exp(-r * ttl) * cdf(d2) + d * S * exp(-d * ttl) * cdf(d1));
       break;
     case OPTION_PUT:
-      result = (1.0 / daysperyear)
-        * (-( ((S * sigma * exp(-d * ttl)) / (2 * sqrt(ttl))) * snpd )
+      result = (-( ((S * sigma * exp(-d * ttl)) / (2 * sqrt(ttl))) * snpd )
           + r * K * exp(-r * ttl) * cdf(-d2) - d * S * exp(-d * ttl) * cdf(-d1));
       break;
   }
