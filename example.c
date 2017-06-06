@@ -20,7 +20,7 @@ int main(int argc, char const *argv[]) {
   pricing_method pm;
 
   if (eur) {
-    opt = new_option(OPTION_CALL, EU_EXERCISE, YEAR, strike);
+    opt = new_option(OPTION_CALL, EU_EXERCISE, ONE_YEAR, strike);
 
     if (iv) {
       pm = new_pricing_method(EU_ANALYTIC, option_value, r, d);
@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]) {
       pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
     }
   } else {
-    opt = new_option(OPTION_CALL, AM_EXERCISE, YEAR, strike);
+    opt = new_option(OPTION_CALL, AM_EXERCISE, ONE_YEAR, strike);
 
     if (iv) {
       pm = new_pricing_method(AM_FD, option_value, r, d);
@@ -46,25 +46,25 @@ int main(int argc, char const *argv[]) {
   result result = new_result();
 
   if (iv) {
-    option_impl_vol(opt, S, YEAR, result);
+    option_impl_vol(opt, S, ONE_YEAR, result);
     printf("impl_vol = %lf\n", *result);
   } else {
-    option_price(opt, S, YEAR, result);
+    option_price(opt, S, ONE_YEAR, result);
     printf("V = %lf\n", *result);
 
-    option_delta(opt, S, YEAR, result);
+    option_delta(opt, S, ONE_YEAR, result);
     printf("delta = %lf\n", *result);
 
-    option_gamma(opt, S, YEAR, result);
+    option_gamma(opt, S, ONE_YEAR, result);
     printf("gamma = %lf\n", *result);
 
-    option_theta(opt, S, YEAR, result);
+    option_theta(opt, S, ONE_YEAR, result);
     printf("theta = %lf\n", *result);
 
-    option_rho(opt, S, YEAR, result);
+    option_rho(opt, S, ONE_YEAR, result);
     printf("rho = %lf\n", *result);
 
-    option_vega(opt, S, YEAR, result);
+    option_vega(opt, S, ONE_YEAR, result);
     printf("vega = %lf\n", *result);
   }
 

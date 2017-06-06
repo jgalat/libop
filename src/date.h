@@ -3,8 +3,10 @@
 
 typedef double date;
 
-#define YEAR  (1.0)
-#define MONTH (YEAR / 12)
-#define DAY   (YEAR / 365)
+#define ONE_YEAR  (1.0)
+#define ONE_MONTH (YEAR / 12)
+#define ONE_DAY   (YEAR / 365)
+
+#define ON_EXPIRATION (-1.0)
 
 #endif /* __DATE_H__ */
