@@ -3,6 +3,5 @@
 
 typedef double volatility;
 typedef double risk_free_rate;
-// typedef double dividend;
 
 #endif /* __PARAMETER_H__ */

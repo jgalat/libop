@@ -163,7 +163,7 @@ static int option_price(option_data od, pricing_data pd, double S,
 
   double result = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo);
 
-  set_result(ret, result);
+  result_set_v(ret, result);
   return 0;
 }
 
@@ -175,7 +175,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 
   double result = calculate_bsmf(BSM_delta, od, pd, S, ttl, pmo);
 
-  set_result(ret, result);
+  result_set_delta(ret, result);
   return 0;
 }
 
@@ -187,7 +187,7 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 
   double result = calculate_bsmf(BSM_gamma, od, pd, S, ttl, pmo);
 
-  set_result(ret, result);
+  result_set_gamma(ret, result);
   return 0;
 }
 
@@ -199,7 +199,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 
   double result = calculate_bsmf(BSM_theta, od, pd, S, ttl, pmo);
 
-  set_result(ret, result);
+  result_set_theta(ret, result);
   return 0;
 }
 
@@ -221,7 +221,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   pd->r = r;
   double result =  (f2 - f1) / (2 * delta);
 
-  set_result(ret, result);
+  result_set_rho(ret, result);
   return 0;
 }
 
@@ -243,7 +243,7 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   pd->vol = vol;
   double result =  (f2 - f1) / (2 * delta);
 
-  set_result(ret, result);
+  result_set_vega(ret, result);
   return 0;
 }
 

@@ -47,25 +47,21 @@ int main(int argc, char const *argv[]) {
 
   if (iv) {
     option_impl_vol(opt, S, ONE_YEAR, result);
-    printf("impl_vol = %lf\n", *result);
+    printf("impl_vol = %lf\n", result_get_impl_vol(result));
   } else {
     option_price(opt, S, ONE_YEAR, result);
-    printf("V = %lf\n", *result);
-
     option_delta(opt, S, ONE_YEAR, result);
-    printf("delta = %lf\n", *result);
-
     option_gamma(opt, S, ONE_YEAR, result);
-    printf("gamma = %lf\n", *result);
-
     option_theta(opt, S, ONE_YEAR, result);
-    printf("theta = %lf\n", *result);
-
     option_rho(opt, S, ONE_YEAR, result);
-    printf("rho = %lf\n", *result);
-
     option_vega(opt, S, ONE_YEAR, result);
-    printf("vega = %lf\n", *result);
+
+    printf("V = %lf\n", result_get_v(result));
+    printf("delta = %lf\n", result_get_delta(result));
+    printf("gamma = %lf\n", result_get_gamma(result));
+    printf("theta = %lf\n", result_get_theta(result));
+    printf("rho = %lf\n", result_get_rho(result));
+    printf("vega = %lf\n", result_get_vega(result));
   }
 
   delete_result(result);

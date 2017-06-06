@@ -115,7 +115,7 @@ static int option_price(option_data od, pricing_data pd, double S,
   /* check if it is eur... etcccc */
 
   double result = option_price_(od, pd, S);
-  set_result(ret, result);
+  result_set_v(ret, result);
   return 0;
 }
 
@@ -151,7 +151,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
       break;
   }
 
-  set_result(ret, result);
+  result_set_delta(ret, result);
   return 0;
 }
 
@@ -178,7 +178,7 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 
   result = (exp(-d * ttl) / (S * sigma * sqrt(ttl))) * snpd;
 
-  set_result(ret, result);
+  result_set_gamma(ret, result);
   return 0;
 }
 
@@ -216,7 +216,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
       break;
   }
 
-  set_result(ret, result);
+  result_set_theta(ret, result);
   return 0;
 }
 
@@ -250,7 +250,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
       break;
   }
 
-  set_result(ret, result);
+  result_set_rho(ret, result);
   return 0;
 }
 
@@ -277,7 +277,7 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
   result = S * exp(-d * ttl) * sqrt(ttl) * snpd;
 
-  set_result(ret, result);
+  result_set_vega(ret, result);
   return 0;
 }
 
