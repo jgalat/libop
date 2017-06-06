@@ -7,10 +7,10 @@
 #include <dividend.h>
 #include <option_data.h>
 #include <pricing_data.h>
-#include <pm_options.h>
+#include <pm_settings.h>
 
 typedef int (*common_f) (option_data, pricing_data, double S, date,
-  result, pm_options, void*);
+  result, pm_settings, void*);
 
 typedef common_f price_f;
 typedef common_f delta_f;

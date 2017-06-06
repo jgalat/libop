@@ -88,29 +88,29 @@ static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
 }
 
 static int impl_vol(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
 
   int f = 0;
-  if (!pmo) {
-    pmo = new_pm_options();
+  if (!pms) {
+    pms = new_pm_settings(pms);
     f = 1;
   }
 
-  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, S, ttl_, pmo, NULL);
+  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, S, ttl_, pms, NULL);
 
   int res = secant_method(iv_f, ivmfa, ret);
 
   delete_impl_vol_mf_args(ivmfa);
 
   if (f) {
-    delete_pm_options(pmo);
+    delete_pm_settings(pms);
   }
 
   return res;
 }
 
 static int option_price(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -120,7 +120,7 @@ static int option_price(option_data od, pricing_data pd, double S,
 }
 
 static int greek_delta(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -156,7 +156,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 }
 
 static int greek_gamma(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -183,7 +183,7 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 }
 
 static int greek_theta(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -221,7 +221,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 }
 
 static int greek_rho(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 
@@ -255,7 +255,7 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 }
 
 static int greek_vega(option_data od, pricing_data pd, double S,
-  date ttl_, result ret, pm_options pmo, void *pm_data) {
+  date ttl_, result ret, pm_settings pms, void *pm_data) {
   // exercise_type et = option_get_et(o);
   /* check if it is eur... etcccc */
 

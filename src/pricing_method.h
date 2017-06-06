@@ -2,7 +2,7 @@
 #define __PRICING_METHOD_H__
 
 #include <common.h>
-#include <pm_options.h>
+#include <pm_settings.h>
 
 struct pricing_method_;
 typedef struct pricing_method_ * pricing_method;
@@ -15,7 +15,7 @@ pricing_method new_pricing_method_(price_f, delta_f, gamma_f,
 
 void delete_pricing_method(pricing_method);
 
-int pm_set_options(pricing_method, pm_options);
+int pm_set_settings(pricing_method, pm_settings);
 
 int pm_option_price(pricing_method, option_data, double, date, result);
 int pm_delta(pricing_method, option_data, double, date, result);

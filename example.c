@@ -37,9 +37,9 @@ int main(int argc, char const *argv[]) {
     }
   }
 
-  // pm_options pmo = new_pm_options();
-  // pm_options_set_N(pmo, 50);
-  // pm_set_options(pm, pmo);
+  // pm_settings pms = new_pm_settings();
+  // pm_settings_set_N(pms, 50);
+  // pm_set_settings(pm, pms);
 
   option_set_pricing_method(opt, pm);
 
@@ -65,7 +65,7 @@ int main(int argc, char const *argv[]) {
   }
 
   delete_result(result);
-  // delete_pm_options(pmo);
+  // delete_pm_settings(pms);
   delete_pricing_method(pm);
   delete_dividend(d);
   delete_option(opt);

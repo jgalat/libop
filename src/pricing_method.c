@@ -13,7 +13,7 @@ struct pricing_method_ {
   pricing_data  pricing_data;
   void          *pm_data;
   delete_f      delete;
-  pm_options    pm_options;
+  pm_settings    pm_settings;
 };
 
 pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
@@ -48,7 +48,7 @@ pricing_method new_pricing_method_(price_f pf, delta_f df, gamma_f gf,
     pm->pricing_data = pd;
     pm->pm_data = pm_d;
     pm->delete = dlf;
-    pm->pm_options = NULL;
+    pm->pm_settings = NULL;
   }
   return pm;
 }
@@ -62,10 +62,10 @@ void delete_pricing_method(pricing_method pm) {
   free(pm);
 }
 
-int pm_set_options(pricing_method pm, pm_options pmo) {
+int pm_set_options(pricing_method pm, pm_settings pms) {
   if (!pm)
     return -1;
-  pm->pm_options = pmo;
+  pm->pm_settings = pms;
   return 0;
 }
 
@@ -73,7 +73,7 @@ int pm_option_price(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->option_price)
-    return pm->option_price(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->option_price(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
@@ -82,7 +82,7 @@ int pm_delta(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->delta)
-    return pm->delta(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->delta(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
@@ -91,7 +91,7 @@ int pm_gamma(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->gamma)
-    return pm->gamma(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->gamma(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
@@ -100,7 +100,7 @@ int pm_theta(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->theta)
-    return pm->theta(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->theta(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
@@ -109,7 +109,7 @@ int pm_rho(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->rho)
-    return pm->rho(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->rho(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
@@ -118,7 +118,7 @@ int pm_vega(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->vega)
-    return pm->vega(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->vega(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
@@ -127,7 +127,7 @@ int pm_ivf(pricing_method pm, option_data od, double S, date ttl,
   result r) {
 
   if (pm && pm->ivf)
-    return pm->ivf(od, pm->pricing_data, S, ttl, r, pm->pm_options, pm->pm_data);
+    return pm->ivf(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }

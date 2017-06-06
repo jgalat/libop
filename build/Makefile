@@ -27,7 +27,7 @@ INC       := -I$(SRCDIR) -I$(QSSDIR)/..
 
 #Source files
 COMMONSRC := $(SRCDIR)/option_data.c $(SRCDIR)/pricing_data.c $(SRCDIR)/result.c \
-	$(SRCDIR)/pm_options.c $(SRCDIR)/pricing_method.c $(SRCDIR)/option.c \
+	$(SRCDIR)/pm_settings.c $(SRCDIR)/pricing_method.c $(SRCDIR)/option.c \
 	$(SRCDIR)/dividend.c
 
 PMSRC := $(PMEUR)/european_analytic.c \

@@ -10,14 +10,14 @@ struct impl_vol_mf_args_ {
   pricing_data pd;
   double S;
   date ttl;
-  pm_options pmo;
+  pm_settings pms;
   void* pm_data;
 };
 
 typedef double (*impl_vol_mf) (volatility, impl_vol_mf_args);
 
 impl_vol_mf_args new_impl_vol_mf_args(option_data od, pricing_data pd,
-  double S, date ttl, pm_options pmo, void *pm_data);
+  double S, date ttl, pm_settings pmo, void *pm_data);
 
 void delete_impl_vol_mf_args(impl_vol_mf_args);
 

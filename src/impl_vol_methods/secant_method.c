@@ -5,16 +5,16 @@ int secant_method(impl_vol_mf ivmf, impl_vol_mf_args ivmfa, result r) {
   if (!ivmfa)
     return -1;
 
-  pm_options pmo = ivmfa->pmo;
+  pm_settings pms = ivmfa->pms;
 
-  double *init = pm_options_get_iv_init(pmo);
+  double *init = pm_settings_get_iv_init(pms);
 
   double x0 = init[0],
          x1 = init[1],
          x2 = -1,
-         eps = pm_options_get_iv_eps(pmo);
+         eps = pm_settings_get_iv_eps(pms);
 
-  int i, maxit = pm_options_get_iv_max_it(pmo);
+  int i, maxit = pm_settings_get_iv_max_it(pms);
 
   double y0, y1, y2;
 
