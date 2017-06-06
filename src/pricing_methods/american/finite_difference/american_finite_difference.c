@@ -123,11 +123,12 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   return lagrange_interpolation(S, s, y, np);
 }
 
-static double iv_f(volatility vol, option_data od, pricing_data pd,
-  double S, date ttl, pm_options pmo, void *pm_data) {
+static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
+  pricing_data pd = ivmfa->pd;
   double V = pd->option_price;
   pd->vol = vol;
-  double result = calculate_bsmf(BSM_v, od, pd, S, ttl, pmo) - V;
+  double result = calculate_bsmf(BSM_v, ivmfa->od, pd, ivmfa->S,
+    ivmfa->ttl, ivmfa->pmo) - V;
   pd->option_price = V;
   return result;
 }
@@ -141,11 +142,11 @@ static int impl_vol(option_data od, pricing_data pd, double S,
     f = 1;
   }
 
-  impl_vol_options ivo = new_impl_vol_options(od, pd, S, ttl_, pmo, pm_data);
+  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, S, ttl_, pmo, NULL);
 
-  int res = secant_method(iv_f, ivo, ret);
+  int res = secant_method(iv_f, ivmfa, ret);
 
-  delete_impl_vol_options(ivo);
+  delete_impl_vol_mf_args(ivmfa);
 
   if (f) {
     delete_pm_options(pmo);

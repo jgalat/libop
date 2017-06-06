@@ -78,11 +78,11 @@ static double option_price_(option_data od, pricing_data pd, double S) {
   return result;
 }
 
-static double iv_f(volatility vol, option_data od, pricing_data pd,
-  double S, date ttl_, pm_options pmo, void *pm_data) {
+static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
+  pricing_data pd = ivmfa->pd;
   double V = pd->option_price;
   pd->vol = vol;
-  double result = option_price_(od, pd, S) - V;
+  double result = option_price_(ivmfa->od, pd, ivmfa->S) - V;
   pd->option_price = V;
   return result;
 }
@@ -96,11 +96,11 @@ static int impl_vol(option_data od, pricing_data pd, double S,
     f = 1;
   }
 
-  impl_vol_options ivo = new_impl_vol_options(od, pd, S, ttl_, pmo, pm_data);
+  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, S, ttl_, pmo, NULL);
 
-  int res = secant_method(iv_f, ivo, ret);
+  int res = secant_method(iv_f, ivmfa, ret);
 
-  delete_impl_vol_options(ivo);
+  delete_impl_vol_mf_args(ivmfa);
 
   if (f) {
     delete_pm_options(pmo);

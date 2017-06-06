@@ -35,7 +35,7 @@ PMSRC := $(PMEUR)/european_analytic.c \
 
 CPPSRC := $(QSSDIR)/black_scholes_model.cpp
 
-IVMSRC := $(IVMDIR)/impl_vol_options.c $(IVMDIR)/secant_method.c
+IVMSRC := $(IVMDIR)/impl_vol_mf.c $(IVMDIR)/secant_method.c
 
 #Objects
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
