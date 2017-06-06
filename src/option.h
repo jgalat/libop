@@ -19,6 +19,9 @@ int option_gamma(option, double, date, result);
 int option_theta(option, double, date, result);
 int option_rho(option, double, date, result);
 int option_vega(option, double, date, result);
-int option_impl_vol(option, double, date, result); 
+int option_impl_vol(option, double, date, result);
+
+/* TODO better name? */
+int option_price_and_greeks(option, double, date, result);
 
 #endif /* __OPTION_H__ */

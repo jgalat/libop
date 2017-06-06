@@ -49,12 +49,7 @@ int main(int argc, char const *argv[]) {
     option_impl_vol(opt, S, ONE_YEAR, result);
     printf("impl_vol = %lf\n", result_get_impl_vol(result));
   } else {
-    option_price(opt, S, ONE_YEAR, result);
-    option_delta(opt, S, ONE_YEAR, result);
-    option_gamma(opt, S, ONE_YEAR, result);
-    option_theta(opt, S, ONE_YEAR, result);
-    option_rho(opt, S, ONE_YEAR, result);
-    option_vega(opt, S, ONE_YEAR, result);
+    option_price_and_greeks(opt, S, ONE_YEAR, result);
 
     printf("V = %lf\n", result_get_v(result));
     printf("delta = %lf\n", result_get_delta(result));

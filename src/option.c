@@ -76,3 +76,18 @@ int option_impl_vol(option o, double S, date ttl, result r) {
     return pm_ivf(o->pm, o->option_data, S, ttl, r);
   return -1;
 }
+
+int option_price_and_greeks(option o, double S, date ttl, result r) {
+  typedef int (*opt_f) (option, double, date, result);
+  static const opt_f fs[6] = { option_price, option_delta,
+    option_gamma, option_theta, option_rho, option_vega };
+
+  int i, res = 0;
+  for (i = 0; i < 6; i++) {
+    if ((res = fs[i](o, S, ttl, r))) {
+        return res;
+    }
+  }
+
+  return 0;
+}
