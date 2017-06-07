@@ -1,5 +1,5 @@
-#ifndef __IMPL_VOL_F_H__
-#define __IMPL_VOL_F_H__
+#ifndef __IMPL_VOL_MF_H__
+#define __IMPL_VOL_MF_H__
 
 #include <common.h>
 
@@ -22,4 +22,4 @@ impl_vol_mf_args new_impl_vol_mf_args(option_data od, pricing_data pd, double V,
 
 void delete_impl_vol_mf_args(impl_vol_mf_args);
 
-#endif /* __IMPL_VOL_F_H__ */
+#endif /* __IMPL_VOL_MF_H__ */
