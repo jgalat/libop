@@ -62,7 +62,7 @@ void delete_pricing_method(pricing_method pm) {
   free(pm);
 }
 
-int pm_set_options(pricing_method pm, pm_settings pms) {
+int pm_set_settings(pricing_method pm, pm_settings pms) {
   if (!pm)
     return -1;
   pm->pm_settings = pms;
