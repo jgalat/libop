@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]) {
   dividend d = new_continuous_dividend(0.1);
   double option_value = 3.447474;
 
-  int iv = 0, eur = 0;
+  int iv = 0 , eur = 0;
 
   // dividend d = new_discrete_dividend();
   // div_disc_set_dates(d, 1, 0.5);
@@ -21,20 +21,10 @@ int main(int argc, char const *argv[]) {
 
   if (eur) {
     opt = new_option(OPTION_CALL, EU_EXERCISE, ONE_YEAR, strike);
-
-    if (iv) {
-      pm = new_pricing_method(EU_ANALYTIC, option_value, r, d);
-    } else {
-      pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
-    }
+    pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
   } else {
     opt = new_option(OPTION_CALL, AM_EXERCISE, ONE_YEAR, strike);
-
-    if (iv) {
-      pm = new_pricing_method(AM_FD, option_value, r, d);
-    } else {
-      pm = new_pricing_method(AM_FD, sigma, r, d);
-    }
+    pm = new_pricing_method(AM_FD, sigma, r, d);
   }
 
   // pm_settings pms = new_pm_settings();
@@ -46,7 +36,7 @@ int main(int argc, char const *argv[]) {
   result result = new_result();
 
   if (iv) {
-    option_impl_vol(opt, S, ONE_YEAR, result);
+    option_impl_vol(opt, option_value, S, ONE_YEAR, result);
     printf("impl_vol = %lf\n", result_get_impl_vol(result));
   } else {
     option_price_and_greeks(opt, S, ONE_YEAR, result);

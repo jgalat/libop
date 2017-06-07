@@ -123,11 +123,12 @@ int pm_vega(pricing_method pm, option_data od, double S, date ttl,
   return -1;
 }
 
-int pm_ivf(pricing_method pm, option_data od, double S, date ttl,
+int pm_ivf(pricing_method pm, option_data od, double V, double S, date ttl,
   result r) {
 
   if (pm && pm->ivf)
-    return pm->ivf(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->ivf(od, pm->pricing_data, V, S, ttl, r,
+      pm->pm_settings, pm->pm_data);
 
   return -1;
 }

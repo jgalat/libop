@@ -23,6 +23,6 @@ int pm_gamma(pricing_method, option_data, double, date, result);
 int pm_theta(pricing_method, option_data, double, date, result);
 int pm_rho(pricing_method, option_data, double, date, result);
 int pm_vega(pricing_method, option_data, double, date, result);
-int pm_ivf(pricing_method, option_data, double, date, result);
+int pm_ivf(pricing_method, option_data, double, double, date, result);
 
 #endif /* __PRICING_METHOD_H__ */

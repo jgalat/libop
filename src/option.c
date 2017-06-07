@@ -71,9 +71,9 @@ int option_vega(option o, double S, date ttl, result r) {
   return -1;
 }
 
-int option_impl_vol(option o, double S, date ttl, result r) {
+int option_impl_vol(option o, double V, double S, date ttl, result r) {
   if (o)
-    return pm_ivf(o->pm, o->option_data, S, ttl, r);
+    return pm_ivf(o->pm, o->option_data, V, S, ttl, r);
   return -1;
 }
 
