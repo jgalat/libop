@@ -36,10 +36,10 @@ int main(int argc, char const *argv[]) {
   result result = new_result();
 
   if (iv) {
-    option_impl_vol(opt, option_value, S, ONE_YEAR, result);
+    option_impl_vol(opt, option_value, S, result);
     printf("impl_vol = %lf\n", result_get_impl_vol(result));
   } else {
-    option_price_and_greeks(opt, S, ONE_YEAR, result);
+    option_price_and_greeks(opt, S, result);
 
     printf("V = %lf\n", result_get_v(result));
     printf("delta = %lf\n", result_get_delta(result));

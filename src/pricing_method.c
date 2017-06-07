@@ -69,65 +69,58 @@ int pm_set_settings(pricing_method pm, pm_settings pms) {
   return 0;
 }
 
-int pm_option_price(pricing_method pm, option_data od, double S, date ttl,
-  result r) {
+int pm_option_price(pricing_method pm, option_data od, double S, result r) {
 
   if (pm && pm->option_price)
-    return pm->option_price(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->option_price(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
 
-int pm_delta(pricing_method pm, option_data od, double S, date ttl,
-  result r) {
+int pm_delta(pricing_method pm, option_data od, double S, result r) {
 
   if (pm && pm->delta)
-    return pm->delta(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->delta(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
 
-int pm_gamma(pricing_method pm, option_data od, double S, date ttl,
-  result r) {
+int pm_gamma(pricing_method pm, option_data od, double S, result r) {
 
   if (pm && pm->gamma)
-    return pm->gamma(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->gamma(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
 
-int pm_theta(pricing_method pm, option_data od, double S, date ttl,
-  result r) {
+int pm_theta(pricing_method pm, option_data od, double S, result r) {
 
   if (pm && pm->theta)
-    return pm->theta(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->theta(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
 
-int pm_rho(pricing_method pm, option_data od, double S, date ttl,
-  result r) {
+int pm_rho(pricing_method pm, option_data od, double S, result r) {
 
   if (pm && pm->rho)
-    return pm->rho(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->rho(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
 
-int pm_vega(pricing_method pm, option_data od, double S, date ttl,
-  result r) {
+int pm_vega(pricing_method pm, option_data od, double S, result r) {
 
   if (pm && pm->vega)
-    return pm->vega(od, pm->pricing_data, S, ttl, r, pm->pm_settings, pm->pm_data);
+    return pm->vega(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
 
   return -1;
 }
 
-int pm_ivf(pricing_method pm, option_data od, double V, double S, date ttl,
-  result r) {
+int pm_ivf(pricing_method pm, option_data od, double V, double S, result r) {
 
   if (pm && pm->ivf)
-    return pm->ivf(od, pm->pricing_data, V, S, ttl, r,
+    return pm->ivf(od, pm->pricing_data, V, S, r,
       pm->pm_settings, pm->pm_data);
 
   return -1;

@@ -35,56 +35,56 @@ int option_set_pricing_method(option o, pricing_method pm) {
   return 0;
 }
 
-int option_price(option o, double S, date ttl, result r) {
+int option_price(option o, double S, result r) {
   if (o)
-    return pm_option_price(o->pm, o->option_data, S, ttl, r);
+    return pm_option_price(o->pm, o->option_data, S, r);
   return -1;
 }
 
-int option_delta(option o, double S, date ttl, result r) {
+int option_delta(option o, double S, result r) {
   if (o)
-    return pm_delta(o->pm, o->option_data, S, ttl, r);
+    return pm_delta(o->pm, o->option_data, S, r);
   return -1;
 }
 
-int option_gamma(option o, double S, date ttl, result r) {
+int option_gamma(option o, double S, result r) {
   if (o)
-    return pm_gamma(o->pm, o->option_data, S, ttl, r);
+    return pm_gamma(o->pm, o->option_data, S, r);
   return -1;
 }
 
-int option_theta(option o, double S, date ttl, result r) {
+int option_theta(option o, double S, result r) {
   if (o)
-    return pm_theta(o->pm, o->option_data, S, ttl, r);
+    return pm_theta(o->pm, o->option_data, S, r);
   return -1;
 }
 
-int option_rho(option o, double S, date ttl, result r) {
+int option_rho(option o, double S, result r) {
   if (o)
-    return pm_rho(o->pm, o->option_data, S, ttl, r);
+    return pm_rho(o->pm, o->option_data, S, r);
   return -1;
 }
 
-int option_vega(option o, double S, date ttl, result r) {
+int option_vega(option o, double S, result r) {
   if (o)
-    return pm_vega(o->pm, o->option_data, S, ttl, r);
+    return pm_vega(o->pm, o->option_data, S, r);
   return -1;
 }
 
-int option_impl_vol(option o, double V, double S, date ttl, result r) {
+int option_impl_vol(option o, double V, double S, result r) {
   if (o)
-    return pm_ivf(o->pm, o->option_data, V, S, ttl, r);
+    return pm_ivf(o->pm, o->option_data, V, S, r);
   return -1;
 }
 
-int option_price_and_greeks(option o, double S, date ttl, result r) {
-  typedef int (*opt_f) (option, double, date, result);
+int option_price_and_greeks(option o, double S, result r) {
+  typedef int (*opt_f) (option, double, result);
   static const opt_f fs[6] = { option_price, option_delta,
     option_gamma, option_theta, option_rho, option_vega };
 
   int i, res = 0;
   for (i = 0; i < 6; i++) {
-    if ((res = fs[i](o, S, ttl, r))) {
+    if ((res = fs[i](o, S, r))) {
         return res;
     }
   }

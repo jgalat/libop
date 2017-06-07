@@ -17,12 +17,12 @@ void delete_pricing_method(pricing_method);
 
 int pm_set_settings(pricing_method, pm_settings);
 
-int pm_option_price(pricing_method, option_data, double, date, result);
-int pm_delta(pricing_method, option_data, double, date, result);
-int pm_gamma(pricing_method, option_data, double, date, result);
-int pm_theta(pricing_method, option_data, double, date, result);
-int pm_rho(pricing_method, option_data, double, date, result);
-int pm_vega(pricing_method, option_data, double, date, result);
-int pm_ivf(pricing_method, option_data, double, double, date, result);
+int pm_option_price(pricing_method, option_data, double, result);
+int pm_delta(pricing_method, option_data, double, result);
+int pm_gamma(pricing_method, option_data, double, result);
+int pm_theta(pricing_method, option_data, double, result);
+int pm_rho(pricing_method, option_data, double, result);
+int pm_vega(pricing_method, option_data, double, result);
+int pm_ivf(pricing_method, option_data, double, double, result);
 
 #endif /* __PRICING_METHOD_H__ */

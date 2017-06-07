@@ -13,15 +13,15 @@ void delete_option(option);
 
 int option_set_pricing_method(option, pricing_method);
 
-int option_price(option, double, date, result);
-int option_delta(option, double, date, result);
-int option_gamma(option, double, date, result);
-int option_theta(option, double, date, result);
-int option_rho(option, double, date, result);
-int option_vega(option, double, date, result);
-int option_impl_vol(option, double, double, date, result);
+int option_price(option, double, result);
+int option_delta(option, double, result);
+int option_gamma(option, double, result);
+int option_theta(option, double, result);
+int option_rho(option, double, result);
+int option_vega(option, double, result);
+int option_impl_vol(option, double, double, result);
 
 /* TODO better name? */
-int option_price_and_greeks(option, double, date, result);
+int option_price_and_greeks(option, double, result);
 
 #endif /* __OPTION_H__ */
