@@ -10,40 +10,25 @@ struct time_period_ {
   double period;
 };
 
-time_period new_time_period() {
+time_period new_time_period(double p) {
   time_period tp = (time_period) malloc(sizeof(struct time_period_));
   if (tp) {
     tp->t = 0;
-    tp->period = _365;
+    tp->period = p;
   }
   return tp;
 }
 
+time_period new_time_period_365d() {
+  return new_time_period(_365);
+}
+
+time_period new_time_period_252d() {
+  return new_time_period(_252);
+}
+
 void delete_time_period(time_period tp) {
   free(tp);
-}
-
-
-int tp_set_365d_calendar(time_period tp) {
-  if (!tp)
-    return -1;
-  tp->period = _365;
-  return 0;
-}
-
-int tp_set_252d_calendar(time_period tp) {
-  if (!tp)
-    return -1;
-  tp->period = _252;
-  return 0;
-}
-
-int tp_set_calendar(time_period tp, int d) {
-  if (!tp)
-    return -1;
-  double p = 1.0 / (double) d;
-  tp->period = p;
-  return 0;
 }
 
 int tp_set_days(time_period tp, int d) {

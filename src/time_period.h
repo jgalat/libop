@@ -4,13 +4,11 @@
 typedef struct time_period_ * time_period;
 struct time_period;
 
-time_period new_time_period();
+time_period new_time_period(double);
+time_period new_time_period_365d();
+time_period new_time_period_252d();
 
 void delete_time_period(time_period);
-
-int tp_set_365d_calendar(time_period);
-int tp_set_252d_calendar(time_period);
-int tp_set_calendar(time_period, int);
 
 int tp_set_days(time_period, int);
 int tp_set_years(time_period, int);
