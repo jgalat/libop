@@ -7,7 +7,7 @@
 struct option_;
 typedef struct option_ * option;
 
-option new_option(option_type, exercise_type, date, double);
+option new_option(option_type, exercise_type, time_period, double);
 
 void delete_option(option);
 

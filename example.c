@@ -10,6 +10,8 @@ int main(int argc, char const *argv[]) {
   dividend d = new_continuous_dividend(0.1);
   double option_value = 3.447474;
 
+  time_period tp = new_time_period_365d();
+
   int iv = 0 , eur = 0;
 
   // dividend d = new_discrete_dividend();
@@ -20,10 +22,10 @@ int main(int argc, char const *argv[]) {
   pricing_method pm;
 
   if (eur) {
-    opt = new_option(OPTION_CALL, EU_EXERCISE, ONE_YEAR, strike);
+    opt = new_option(OPTION_CALL, EU_EXERCISE, YEARS(tp, 1), strike);
     pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
   } else {
-    opt = new_option(OPTION_CALL, AM_EXERCISE, ONE_YEAR, strike);
+    opt = new_option(OPTION_CALL, AM_EXERCISE, YEARS(tp, 1), strike);
     pm = new_pricing_method(AM_FD, sigma, r, d);
   }
 

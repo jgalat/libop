@@ -35,7 +35,8 @@ static BSM BSM_(int grid_size, double tol, double abstol,
 
   option_type type = od->opt_type;
   BSM_OT ot = option_type_BSM_OT(type);
-  date maturity = od->maturity;
+  time_period tp = od->maturity;
+  date maturity = tp_get_date(tp);
 
   volatility  sigma = pd->vol;
   risk_free_rate r = pd->r;
@@ -72,7 +73,8 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
     f = 1;
   }
 
-  date ttl = od->maturity;
+  time_period tp = od->maturity;
+  date ttl = tp_get_date(tp);
   int N = pm_settings_get_N(pms);
   double tol = pm_settings_get_tol(pms);
   double abstol = pm_settings_get_abstol(pms);

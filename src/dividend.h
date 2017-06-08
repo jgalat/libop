@@ -1,7 +1,7 @@
 #ifndef __DIVIDEND_H__
 #define __DIVIDEND_H__
 
-#include <date.h>
+#include <time_period.h>
 
 typedef enum {
   DIV_DISCRETE,

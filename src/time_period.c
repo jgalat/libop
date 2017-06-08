@@ -6,7 +6,7 @@ static const double _365 = 0.00273972602;
 static const double _252 = 0.00396825396;
 
 struct time_period_ {
-  double t;
+  date t;
   double period;
 };
 
@@ -34,7 +34,7 @@ void delete_time_period(time_period tp) {
 int tp_set_days(time_period tp, int d) {
   if (!tp)
     return -1;
-  double t = d * tp->period;
+  date t = (date) ((double) d * tp->period);
   tp->t = t;
   return 0;
 }
@@ -42,11 +42,11 @@ int tp_set_days(time_period tp, int d) {
 int tp_set_years(time_period tp, int y) {
   if (!tp)
     return -1;
-  tp->t = (double) y;
+  tp->t = (date) y;
   return 0;
 }
 
-double tp_get_time(time_period tp) {
+date tp_get_date(time_period tp) {
   return tp->t;
 }
 

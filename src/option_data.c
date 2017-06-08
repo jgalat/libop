@@ -20,7 +20,8 @@ static int valid_exercise_type(exercise_type et) {
   }
 }
 
-option_data new_option_data(option_type t, exercise_type e, date m, double strike) {
+option_data new_option_data(option_type t, exercise_type e, time_period m,
+  double strike) {
   if (!valid_option_type(t) || !valid_exercise_type(e))
     return NULL;
 

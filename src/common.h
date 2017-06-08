@@ -1,7 +1,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#include <date.h>
+#include <time_period.h>
 #include <result.h>
 #include <parameter.h>
 #include <dividend.h>
