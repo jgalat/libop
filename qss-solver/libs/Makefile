@@ -6,14 +6,6 @@ DEBUG ?= False
 CC          := g++
 FC 			:= gfortran
 
-#The Target Binary Program
-TARGET      := libqss.a
-LIBTIMESTEP := libtimestep.a
-ifeq ($(DEBUG),True)
-TARGET      := libqssd.a
-LIBTIMESTEP := libtimestepd.a
-endif
-
 #The Directories, Source, Includes, Objects, Binary
 SRCDIR      := ../../qss-solver
 ENGINEDIR 	:= ../engine
@@ -67,7 +59,7 @@ DOPRIOBJ=$(addprefix $(BUILDDIR)/, $(notdir $(DOPRISRC:.cpp=.o)))
 # Make dependencies
 DEPS = $(COMMONOBJ:.o=.d) $(CLASSICOBJ:.o=.d) $(DOPRIOBJ:.o=.d)
 
-default: $(TARGET) $(LIBTIMESTEP)
+default: $(COMMONOBJ) $(CLASSICOBJ)  $(DASSLOBJ) $(DOPRIOBJ)
 
 $(BUILDDIR)/%.o : $(COMMONDIR)/%.c
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
@@ -84,12 +76,6 @@ $(BUILDDIR)/%.o : $(DOPRIDIR)/%.cpp
 
 $(BUILDDIR)/%.o : $(DASSLDIR)/%.f
 	$(FC) $(INC) -c $< -o $@ $(CFLAGS)
-
-$(LIBTIMESTEP): $(DASSLOBJ) $(DOPRIOBJ)
-	@ar rvs $(@) $(DASSLOBJ) $(DOPRIOBJ)
-
-$(TARGET): $(COMMONOBJ) $(CLASSICOBJ)
-	@ar rsc $@ $(COMMONOBJ) $(CLASSICOBJ)
 
 $(COMMONOBJ): | $(BUILDDIR)
 

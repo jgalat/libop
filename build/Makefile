@@ -6,7 +6,6 @@ RMS := rm -rf
 
 TARGET := libop.so
 
-
 #Directories
 SRCDIR   := ../src
 PMDIR		 := $(SRCDIR)/pricing_methods
@@ -41,7 +40,6 @@ IVMSRC := $(IVMDIR)/impl_vol_mf.c $(IVMDIR)/secant_method.c
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
 PMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(PMSRC:.c=.o)))
 IVMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(IVMSRC:.c=.o)))
-QSSLIBS = $(QSSLIBSDIR)/libqss.a $(QSSLIBSDIR)/libtimestep.a
 QSSOBJ = $(QSSDIR)/engine/obj/release/*.o
 EXTRAOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(CPPSRC:.cpp=.o))) $(QSSOBJ)
 
@@ -54,8 +52,10 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 $(BUILDDIR)/%.o: $(PMEUR)/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(QSSOBJ):
-	@cd $(QSSLIBSDIR) && $(MAKE)
+$(QSSOBJ): QSSSOLVER
+
+QSSSOLVER:
+	$(MAKE) -C $(QSSLIBSDIR)
 
 $(BUILDDIR)/%.o: $(QSSDIR)/%.cpp
 	$(CPPC) $(INC) -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
@@ -78,6 +78,8 @@ $(EXTRAOBJ): | $(BUILDDIR)
 $(BUILDDIR):
 	@mkdir -p $(BUILDDIR)
 
+.PHONY : clean
+
 clean:
-	cd $(QSSLIBSDIR) && $(MAKE) clean
+	$(MAKE) -C $(QSSLIBSDIR) clean
 	$(RMS) $(BUILDDIR) $(TARGET) *.a
