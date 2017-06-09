@@ -34,7 +34,7 @@ void delete_time_period(time_period tp) {
 int tp_set_days(time_period tp, int d) {
   if (!tp)
     return -1;
-  tp->t = ((double) d * tp->period);
+  tp->t = (date) ((double) d * tp->period);
   return 0;
 }
 
