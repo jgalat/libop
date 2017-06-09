@@ -1,9 +1,9 @@
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "time_period.h"
 
-static const double _365 = 0.00273972602;
-static const double _252 = 0.00396825396;
+static const double _365 = 1 / 365.0;
+static const double _252 = 1 / 252.0;
 
 struct time_period_ {
   date t;
@@ -34,8 +34,7 @@ void delete_time_period(time_period tp) {
 int tp_set_days(time_period tp, int d) {
   if (!tp)
     return -1;
-  date t = (date) ((double) d * tp->period);
-  tp->t = t;
+  tp->t = ((double) d * tp->period);
   return 0;
 }
 

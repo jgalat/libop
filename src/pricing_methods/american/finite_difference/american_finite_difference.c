@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <omp.h>
+#include <stdio.h>
 #include <qss-solver/black_scholes_model.h>
 #include <impl_vol_methods/impl_vol_methods.h>
 #include "american_finite_difference.h"
@@ -37,6 +37,7 @@ static BSM BSM_(int grid_size, double tol, double abstol,
   BSM_OT ot = option_type_BSM_OT(type);
   time_period tp = od->maturity;
   date maturity = tp_get_date(tp);
+  double period = tp_get_period(tp);
 
   volatility  sigma = pd->vol;
   risk_free_rate r = pd->r;
@@ -60,7 +61,7 @@ static BSM BSM_(int grid_size, double tol, double abstol,
 
   double smax = 5 * K;
 
-  return new_BSM(grid_size, ot, smax, sigma, r, K, d, dd_n, dd_d, dd_a,
+  return new_BSM(grid_size, ot, smax, sigma, r, K, d, dd_n, dd_d, dd_a, period,
     maturity, tol, abstol);
 }
 

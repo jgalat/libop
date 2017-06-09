@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <functional>
 
 #include <qss-solver/engine/common/utils.h>
@@ -12,16 +13,16 @@
 
 BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   double vol, double rfr, double strike, double cont_div, int discdiv_n,
-  double *discdiv_date, double *discdiv_ammo,
+  double *discdiv_date, double *discdiv_ammo, double period,
   double end_time, double tol, double abs_tol) {
 
   _solver = SD_DOPRI;
-  _ft = end_time < 0 ? 0 : end_time;
+  _ft = end_time < 0.0 ? 0.0 : end_time;
 
   _dqrel = tol < 0 ? 0 : tol; //1e-9
   _dqmin = abs_tol < 0 ? 0 : abs_tol; //1e-12
 
-  _period = 0.00273972602; // 1 / 365 rev
+  _period = period; // 0.00273972602; // 1 / 365 rev
 
   _N = grid_size < 1 ? 0 : grid_size - 1;
 
@@ -353,11 +354,11 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
 
 BSM new_BSM(int grid_size, BSM_OT ot, double smax,
   double vol, double rfr, double strike, double cont_div, int discdiv_n,
-  double *discdiv_date, double *discdiv_ammo,
+  double *discdiv_date, double *discdiv_ammo, double period,
   double end_time, double tol, double abs_tol) {
   return reinterpret_cast<BSM>(new BlackScholesModel(grid_size,ot,
-    smax,vol,rfr,strike,cont_div,discdiv_n,discdiv_date,discdiv_ammo,end_time,
-    tol,abs_tol));
+    smax,vol,rfr,strike,cont_div,discdiv_n,discdiv_date,discdiv_ammo,
+    period,end_time,tol,abs_tol));
 }
 
 void delete_BSM(BSM bsm) {

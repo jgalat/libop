@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]) {
     opt = new_option(OPTION_CALL, EU_EXERCISE, YEARS(tp, 1), strike);
     pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
   } else {
-    opt = new_option(OPTION_CALL, AM_EXERCISE, YEARS(tp, 1), strike);
+    opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 365), strike);
     pm = new_pricing_method(AM_FD, sigma, r, d);
   }
 
@@ -53,6 +53,7 @@ int main(int argc, char const *argv[]) {
 
   delete_result(result);
   // delete_pm_settings(pms);
+  delete_time_period(tp);
   delete_pricing_method(pm);
   delete_dividend(d);
   delete_option(opt);

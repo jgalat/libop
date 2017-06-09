@@ -16,7 +16,7 @@ class BlackScholesModel {
   public:
     BlackScholesModel(int grid_size, BSM_OT ot, double smax,
       double vol, double rfr, double strike, double cont_div, int discdiv_n,
-      double *discdiv_date, double *discdiv_ammo,
+      double *discdiv_date, double *discdiv_ammo, double period,
       double end_time, double tol, double abs_tol);
     ~BlackScholesModel();
 
@@ -76,7 +76,7 @@ extern "C" {
 
   BSM new_BSM(int grid_size, BSM_OT ot, double smax,
     double vol, double rfr, double strike, double cont_div, int discdiv_n,
-    double *discdiv_date, double *discdiv_ammo,
+    double *discdiv_date, double *discdiv_ammo, double period,
     double end_time, double tol, double abs_tol);
 
   void delete_BSM(BSM);
