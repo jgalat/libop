@@ -51,6 +51,7 @@ struct simData_DOPRI
   double *temp_x;
   double final_time;
   int size;
+  int num_steps;
   Dopri5 *dopri5;
 };
 
@@ -105,8 +106,11 @@ DOPRI_solout (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
   } else { // Do sample
       while (simDataDopri->last_step+simDataDopri->step_size<x) {
         // Skip last step
-        if (fabs(simDataDopri->last_step+simDataDopri->step_size-simDataDopri->final_time)/simDataDopri->step_size < 1)
-          break;
+        if (fabs(simDataDopri->last_step+simDataDopri->step_size-simDataDopri->final_time)/simDataDopri->step_size < 1) {
+          if (simDataDopri->num_steps - simDataDopri->totalOutputSteps[0] == 1) {
+            break;
+          }
+        }
         clcData->totalSteps++;
         int i;
         for (i=0;i< simDataDopri->size; i++)
@@ -120,11 +124,6 @@ DOPRI_solout (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
         simDataDopri->last_step+=simDataDopri->step_size;
       }
   }
-  // if ((int) (x * 100 / _ft) > dopri_percentage) {
-  //   dopri_percentage = 100 * x / _ft;
-  //   fprintf (stderr, "*%g", x);
-  //   fflush (stderr);
-  // }
 }
 
 void
@@ -172,6 +171,7 @@ DOPRI_integrate (SIM_simulator simulate)
   simDataDopri.totalOutputSteps = &totalOutputSteps;
   simDataDopri.step_size = step_size;
   simDataDopri.last_step = 0;
+  simDataDopri.num_steps = num_steps;
   simDataDopri.final_time = _ft ;
   simDataDopri.size= clcData->states;
   // dopri_percentage = 0;
