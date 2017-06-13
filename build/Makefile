@@ -67,7 +67,7 @@ $(BUILDDIR)/%.o: $(IVMDIR)/%.c
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
-	gcc -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
+	$(CC) $(CFLAGS) -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
 
 $(COMMONOBJ): | $(BUILDDIR)
 
