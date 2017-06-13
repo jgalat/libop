@@ -6,7 +6,7 @@ typedef double date;
 typedef struct time_period_ * time_period;
 struct time_period;
 
-time_period new_time_period(double);
+time_period new_time_period(int);
 time_period new_time_period_365d();
 time_period new_time_period_252d();
 

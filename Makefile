@@ -33,7 +33,7 @@ valgrind: $(TARGET)
 	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	valgrind --track-origins=yes ./$(TARGET)
 
 .PHONY: clean
-	
+
 clean:
 	$(MAKE) -C $(BUILDDIR) clean
 	$(RMS) $(TARGET) *.a *.dat *.log

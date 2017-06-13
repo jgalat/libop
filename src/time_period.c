@@ -10,7 +10,7 @@ struct time_period_ {
   double period;
 };
 
-time_period new_time_period(double p) {
+time_period new_time_period_(double p) {
   time_period tp = (time_period) malloc(sizeof(struct time_period_));
   if (tp) {
     tp->t = 0;
@@ -19,12 +19,17 @@ time_period new_time_period(double p) {
   return tp;
 }
 
+time_period new_time_period(int days) {
+  return new_time_period_((1.0 - 1e-7) / (double) days);
+}
+
+
 time_period new_time_period_365d() {
-  return new_time_period(_365);
+  return new_time_period_(_365);
 }
 
 time_period new_time_period_252d() {
-  return new_time_period(_252);
+  return new_time_period_(_252);
 }
 
 void delete_time_period(time_period tp) {
