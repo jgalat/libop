@@ -89,53 +89,34 @@ BlackScholesModel::~BlackScholesModel() {
 }
 
 // FIXME make static non-member version?
-void BlackScholesModel::validate_indexes(int *i, double *j) {
+void BlackScholesModel::validate_index(int *i) {
   *i = MIN(MAX(*i, 0), _N);
-  *j = MIN(MAX(*j, 0), _ft);
 }
 
-double BlackScholesModel::v(int i, double j) {
-  validate_indexes(&i, &j);
+double BlackScholesModel::get_value(double **vals, int i) {
+  validate_index(&i);
 
   if (i == 0) {
     return _u0;
   }
 
-  int jj = (int) (j / _period);
-  return _v[i-1][jj];
+  return vals[i-1][_last];
 }
 
-double BlackScholesModel::delta(int i, double j) {
-  validate_indexes(&i, &j);
-
-  if (i == 0) {
-    return 0;
-  }
-
-  int jj = (int) (j / _period);
-  return _delta[i-1][jj];
+double BlackScholesModel::v(int i) {
+  return get_value(_v, i);
 }
 
-double BlackScholesModel::gamma(int i, double j) {
-  validate_indexes(&i, &j);
-
-  if (i == 0) {
-    return 0;
-  }
-
-  int jj = (int) (j / _period);
-  return _gamma[i-1][jj];
+double BlackScholesModel::delta(int i) {
+  return get_value(_delta, i);
 }
 
-double BlackScholesModel::theta(int i, double j) {
-  validate_indexes(&i, &j);
+double BlackScholesModel::gamma(int i) {
+  return get_value(_gamma, i);
+}
 
-  if (i == 0) {
-    return 0;
-  }
-
-  int jj = (int) (j / _period);
-  double result = _m_theta[i-1][jj];
+double BlackScholesModel::theta(int i) {
+  double result = get_value(_m_theta, i);
   // avoid negative 0
   if (result == 0) {
     return 0;
@@ -321,7 +302,7 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   period[0] = _period;
 
   simulator->output = SD_Output("bsm",_N*4,_N*2,_N,period,1,0,CI_Sampled,
-    SD_Memory,&bsmo,&_solution);
+    SD_Memory,&bsmo,&_solution,&_last);
 	SD_output modelOutput = simulator->output;
 
   for(i = 0; i < _N; i++) {
@@ -365,18 +346,18 @@ void delete_BSM(BSM bsm) {
   delete reinterpret_cast<BlackScholesModel*>(bsm);
 }
 
-double BSM_v(BSM bsm, int i, double j) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->v(i, j);
+double BSM_v(BSM bsm, int i) {
+  return reinterpret_cast<BlackScholesModel*>(bsm)->v(i);
 }
 
-double BSM_delta(BSM bsm, int i, double j) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->delta(i, j);
+double BSM_delta(BSM bsm, int i) {
+  return reinterpret_cast<BlackScholesModel*>(bsm)->delta(i);
 }
 
-double BSM_gamma(BSM bsm, int i, double j) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->gamma(i, j);
+double BSM_gamma(BSM bsm, int i) {
+  return reinterpret_cast<BlackScholesModel*>(bsm)->gamma(i);
 }
 
-double BSM_theta(BSM bsm, int i, double j) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->theta(i, j);
+double BSM_theta(BSM bsm, int i) {
+  return reinterpret_cast<BlackScholesModel*>(bsm)->theta(i);
 }

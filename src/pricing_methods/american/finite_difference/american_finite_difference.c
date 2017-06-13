@@ -75,7 +75,6 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   }
 
   time_period tp = od->maturity;
-  date ttl = tp_get_date(tp);
   int N = pm_settings_get_N(pms);
   double tol = pm_settings_get_tol(pms);
   double abstol = pm_settings_get_abstol(pms);
@@ -111,8 +110,8 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
 
   for (i = 0; i < np; i++) {
     s[i] = ds * p50[i];
-    y50[i] = bsmf(bsm[0], p50[i], ttl);
-    y100[i] = bsmf(bsm[1], p100[i], ttl);
+    y50[i] = bsmf(bsm[0], p50[i]);
+    y100[i] = bsmf(bsm[1], p100[i]);
     /* richardson */
     y[i] = (4.0 * y100[i] - y50[i]) / 3.0;
   }

@@ -21,10 +21,10 @@ class BlackScholesModel {
     ~BlackScholesModel();
 
     /* TODO errors (index, etc) */
-    double v(int i, double j);
-    double delta(int i, double j);
-    double gamma(int i, double j);
-    double theta(int i, double j);
+    double v(int i);
+    double delta(int i);
+    double gamma(int i);
+    double theta(int i);
 
   private:
     void initializeDataStructs(void *CLC_simulator);
@@ -35,7 +35,8 @@ class BlackScholesModel {
     void handlerNeg(int i, double *x, double *d, double *alg, double t);
     void output(int i, double *x, double *d, double *alg, double t, double *out);
 
-    void validate_indexes(int*, double*);
+    void validate_index(int*);
+    double get_value(double**, int);
 
     SD_Solver _solver;
     double _ft, _dqmin, _dqrel;
@@ -52,6 +53,7 @@ class BlackScholesModel {
     int   _discdiv_n, //number of discrete dividends
           _discdiv_i; //discrete dividend index
 
+    unsigned long _last;
     double **_solution;
     double **_v, **_delta, **_gamma, **_m_theta;
 
@@ -81,12 +83,12 @@ extern "C" {
 
   void delete_BSM(BSM);
 
-  typedef double (*BSM_F) (BSM, int, double);
+  typedef double (*BSM_F) (BSM, int);
 
-  double BSM_v(BSM, int, double);
-  double BSM_delta(BSM, int, double);
-  double BSM_gamma(BSM, int, double);
-  double BSM_theta(BSM, int, double);
+  double BSM_v(BSM, int);
+  double BSM_delta(BSM, int);
+  double BSM_gamma(BSM, int);
+  double BSM_theta(BSM, int);
 
 #ifdef __cplusplus
 }

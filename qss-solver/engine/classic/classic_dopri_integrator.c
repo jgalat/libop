@@ -261,6 +261,7 @@ DOPRI_integrate (SIM_simulator simulate)
   //   }
   // free (solution);
   *simOutput->solution = solution;
+  *simOutput->lastStep = totalOutputSteps - 1;
   // for (i = num_steps-5; i < num_steps; i++)
   //   fprintf(stderr, "[%d]<%.18f><%f>\n", i, solution_time[i], solution[20][i]);
   free (integrator_data);

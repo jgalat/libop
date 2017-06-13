@@ -300,5 +300,6 @@ DASSL_integrate (SIM_simulator simulate)
   //   }
   // free (solution);
 	*simOutput->solution = solution;
+	*simOutput->lastStep = clcData->totalOutputSteps - 1;
   free (integrator_data);
 }

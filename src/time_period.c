@@ -20,7 +20,7 @@ time_period new_time_period_(double p) {
 }
 
 time_period new_time_period(int days) {
-  return new_time_period_((1.0 - 1e-7) / (double) days);
+  return new_time_period_(1.0 / (double) days);
 }
 
 
