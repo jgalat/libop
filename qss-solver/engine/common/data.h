@@ -460,8 +460,7 @@ struct SD_output_
   SD_sampledOutput sampled; //!<
   SD_outputVariable variable; //!<
   SD_eq *value; //!<
-  double ***solution;
-  unsigned long *lastStep;
+  double *solution;
 };
 
 /**
@@ -481,7 +480,7 @@ struct SD_output_
 SD_output
 SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	   int nPeriod, double it, SD_CommInterval commInterval,
-	   SD_StoreData store, SD_eq *value, double ***solution, unsigned long *lastStep);
+	   SD_StoreData store, SD_eq *value, double *solution);
 
 /**
  *
@@ -556,5 +555,10 @@ SD_freeStatistics (SD_statistics stats);
 
 void
 SD_setStatisticsLPS (SD_statistics stats, int lps);
+
+/* export */
+void
+SD_exportSolution (double **solution, unsigned long totalOutputSteps, int outputs,
+  double *out);
 
 #endif /* DATA_H_ */

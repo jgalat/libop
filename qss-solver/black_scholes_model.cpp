@@ -59,6 +59,8 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   _ds = _Smax/(_N + 1);
   _ds2 = pow(_ds,2.0);
 
+  _solution = new double[_N*4];
+
   using namespace std::placeholders;
   bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
 
@@ -79,11 +81,7 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
 }
 
 BlackScholesModel::~BlackScholesModel() {
-  int i;
-  for (i = 0; i < _N*4; i++) {
-    free (_solution[i]);
-  }
-  free(_solution);
+  delete [] _solution;
   delete [] _discdiv_date;
   delete [] _discdiv_ammo;
 }
@@ -93,14 +91,14 @@ void BlackScholesModel::validate_index(int *i) {
   *i = MIN(MAX(*i, 0), _N);
 }
 
-double BlackScholesModel::get_value(double **vals, int i) {
+double BlackScholesModel::get_value(double *vals, int i) {
   validate_index(&i);
 
   if (i == 0) {
     return _u0;
   }
 
-  return vals[i-1][_last];
+  return vals[i-1];
 }
 
 double BlackScholesModel::v(int i) {
@@ -302,7 +300,7 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   period[0] = _period;
 
   simulator->output = SD_Output("bsm",_N*4,_N*2,_N,period,1,0,CI_Sampled,
-    SD_Memory,&bsmo,&_solution,&_last);
+    SD_Memory,&bsmo,_solution);
 	SD_output modelOutput = simulator->output;
 
   for(i = 0; i < _N; i++) {

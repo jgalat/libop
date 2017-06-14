@@ -279,7 +279,7 @@ SD_freeOutputVariable (SD_outputVariable variable)
 SD_output
 SD_Output (char *name, int outputs, int discretes, int states, double *period,
 	   int nPeriod, double it, SD_CommInterval commInterval,
-	   SD_StoreData store, SD_eq *value, double ***solution, unsigned long *lastStep)
+	   SD_StoreData store, SD_eq *value, double *solution)
 {
   SD_output p = (SD_output) checkedMalloc (sizeof(*p));
   p->name = name;
@@ -296,7 +296,6 @@ SD_Output (char *name, int outputs, int discretes, int states, double *period,
   p->nOD = NULL;
   p->OD = NULL;
   p->solution = solution;
-  p->lastStep = lastStep;
   if (outputs)
     {
       if (discretes)
@@ -499,4 +498,13 @@ SD_setStatisticsLPS (SD_statistics stats, int lps)
   stats->simulationExternalEvents = (long unsigned int*) checkedMalloc (lps * sizeof(unsigned long));
   stats->steps = (int*) checkedMalloc (lps * sizeof(int));
   cleanVector (stats->steps, 0, lps);
+}
+
+void
+SD_exportSolution (double **solution, unsigned long totalOutputSteps, int outputs,
+  double *out) {
+  int i, j = totalOutputSteps - 1;
+  for (i = 0; i < outputs; i++) {
+    out[i] = solution[i][j];
+  }
 }

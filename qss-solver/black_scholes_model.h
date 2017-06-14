@@ -36,7 +36,7 @@ class BlackScholesModel {
     void output(int i, double *x, double *d, double *alg, double t, double *out);
 
     void validate_index(int*);
-    double get_value(double**, int);
+    double get_value(double*, int);
 
     SD_Solver _solver;
     double _ft, _dqmin, _dqrel;
@@ -53,9 +53,8 @@ class BlackScholesModel {
     int   _discdiv_n, //number of discrete dividends
           _discdiv_i; //discrete dividend index
 
-    unsigned long _last;
-    double **_solution;
-    double **_v, **_delta, **_gamma, **_m_theta;
+    double *_solution;
+    double *_v, *_delta, *_gamma, *_m_theta;
 
     /* binds for the engine */
     MOD_settings bsms;

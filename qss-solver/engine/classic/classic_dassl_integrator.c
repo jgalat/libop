@@ -294,12 +294,12 @@ DASSL_integrate (SIM_simulator simulate)
   free (solution_time);
   free (rwork);
   free (iwork);
-  // for (i = 0; i < simOutput->outputs; i++)
-  //   {
-  //     free (solution[i]);
-  //   }
-  // free (solution);
-	*simOutput->solution = solution;
-	*simOutput->lastStep = clcData->totalOutputSteps - 1;
+	SD_exportSolution(solution, clcData->totalOutputSteps, simOutput->outputs,
+		simOutput->solution);
+  for (i = 0; i < simOutput->outputs; i++)
+    {
+      free (solution[i]);
+    }
+  free (solution);
   free (integrator_data);
 }
