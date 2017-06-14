@@ -4,6 +4,7 @@
 
 struct pm_settings_ {
   int N;
+  double Smax;
   double tol;
   double abstol;
   /* impl vol */
@@ -16,6 +17,7 @@ pm_settings new_pm_settings() {
   pm_settings pms = (pm_settings) malloc(sizeof(struct pm_settings_));
   if (pms) {
     pms->N = 50;
+    pms->Smax = -1;
     pms->tol = 1e-09;
     pms->abstol = 1e-12;
 
@@ -40,6 +42,17 @@ int pm_settings_set_N(pm_settings pms, int N) {
 /* TODO NULL CHECK */
 int pm_settings_get_N(pm_settings pms) {
   return pms->N;
+}
+
+int pm_settings_set_Smax(pm_settings pms, double smax) {
+  if (!pms)
+    return -1;
+  pms->Smax = smax;
+  return 0;
+}
+
+double pm_settings_get_Smax(pm_settings pms) {
+  return pms->Smax;
 }
 
 int pm_settings_set_tol(pm_settings pms, double tol) {

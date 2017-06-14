@@ -30,7 +30,7 @@ static BSM_OT option_type_BSM_OT(option_type ot) {
   return CALL;
 }
 
-static BSM BSM_(int grid_size, double tol, double abstol,
+static BSM BSM_(int grid_size, double Smax, double tol, double abstol,
   option_data od, pricing_data pd) {
 
   option_type type = od->opt_type;
@@ -59,9 +59,7 @@ static BSM BSM_(int grid_size, double tol, double abstol,
     dd_a = div_disc_get_ammounts(divi);
   }
 
-  double smax = 5 * K;
-
-  return new_BSM(grid_size, ot, smax, sigma, r, K, d, dd_n, dd_d, dd_a, period,
+  return new_BSM(grid_size, ot, Smax, sigma, r, K, d, dd_n, dd_d, dd_a, period,
     maturity, tol, abstol);
 }
 
@@ -80,14 +78,18 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
 
   int i;
   double K = od->strike,
-         smax = 5 * K,
-         ds   = smax / ((double) N);
+         Smax = pm_settings_get_Smax(pms);
+
+  if (Smax < 0)
+    Smax = 5 * K;
+
+  double ds = Smax / ((double) N);
 
   BSM bsm[2];
 
   //#pragma omp parallel for
   for (i = 0; i < 2; i++) {
-    bsm[i] = BSM_(N + (N * i), tol, abstol, od, pd);
+    bsm[i] = BSM_(N + (N * i), Smax, tol, abstol, od, pd);
   }
 
   dividend d = pd->d;
@@ -103,7 +105,7 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
 
   double y50[np], y100[np], s[np], y[np];
 
-  int n = (int) (((double) N) / smax * S);
+  int n = (int) ((double) N / Smax * S);
   int p50[4] = { n-1, n, n+1, n+2 };
   int p100[4] = { 2*n-2, 2*n, 2*n+2, 2*n+4 };
 
