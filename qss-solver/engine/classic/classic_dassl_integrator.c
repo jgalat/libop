@@ -248,6 +248,7 @@ DASSL_integrate (SIM_simulator simulate)
   clcData->totalCrossingEvaluations += iwork[35];
   getTime (simulator->stats->sTime);
   subTime (simulator->stats->sTime, simulator->stats->iTime);
+#ifdef DEBUG
   if (simulator->settings->debug == 0 || simulator->settings->debug > 1)
     {
       SD_print (simulator->simulationLog, "Simulation time (DASSL):");
@@ -272,6 +273,7 @@ DASSL_integrate (SIM_simulator simulate)
       SD_print (simulator->simulationLog, "Events detected : %d",
 		clcData->totalEvents);
     }
+#endif
   // CLC_write_output (simOutput, solution, solution_time, clcData->totalOutputSteps);
   // To avoid QSS output
   free (x);

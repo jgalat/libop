@@ -187,8 +187,10 @@ DOPRI_integrate (SIM_simulator simulate)
 
   if (res < 0)
 	{
+#ifdef DEBUG
 	  SD_print (simulator->simulationLog,
 		    "DOPRI failed with res=%d at %g\n", res, t);
+#endif
 	  printf ("DOPRI failed with res=%d at %g\n", res, t);
 	}
 #ifdef SYNC_RT
@@ -207,6 +209,7 @@ DOPRI_integrate (SIM_simulator simulate)
 	}
   getTime (simulator->stats->sTime);
   subTime (simulator->stats->sTime, simulator->stats->iTime);
+#ifdef DEBUG
   if (simulator->settings->debug == 0 || simulator->settings->debug > 1)
     {
       SD_print (simulator->simulationLog, "Simulation time (DOPRI):");
@@ -232,6 +235,7 @@ DOPRI_integrate (SIM_simulator simulate)
       SD_print (simulator->simulationLog, "Events detected : %d",
 		clcData->totalEvents);
     }
+#endif
   //CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
   free (outvar);
   free (x);

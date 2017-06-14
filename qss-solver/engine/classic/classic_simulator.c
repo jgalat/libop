@@ -41,7 +41,9 @@ CLC_Simulator ()
 void
 CLC_freeSimulator (CLC_simulator simulator)
 {
+#ifdef DEBUG
   SD_freeSimulationLog (simulator->simulationLog);
+#endif
   SD_freeOutput (simulator->output, simulator->data->states,
 		 simulator->data->discretes);
   CLC_freeData (simulator->data);
@@ -59,8 +61,10 @@ CLC_simulate (SIM_simulator simulate)
   // ((CLC_initializeDataStructs) simulator->initializeDataStructs) (simulator);
   (*simulator->initializeDataStructs) ((void *) simulator);
   INT_integrator integrator = INT_Integrator (simulate);
+#ifdef DEBUG
   SD_output output = simulator->output;
   simulator->simulationLog = SD_SimulationLog (output->name);
+#endif
   INT_initialize (integrator, simulate);
 #ifdef DEBUG
   SD_simulationSettings settings = simulator->settings;
