@@ -29,12 +29,6 @@
 #include "classic_integrator.h"
 #include "classic_simulator.h"
 
-// static CLC_data clcData = NULL;
-
-// static CLC_model clcModel = NULL;
-
-// static SD_output simOutput = NULL;
-
 // void
 // DASSL_update_x (const double *x)
 // {
@@ -153,7 +147,6 @@ DASSL_integrate (SIM_simulator simulate)
     }
   liw = 60040;
   iwork = (int *) checkedMalloc (sizeof(int) * liw);
-  //int percentage = 0;
   // Save first step
   CLC_save_step (simOutput, solution, solution_time, t,
 		 clcData->totalOutputSteps, x, clcData->d, clcData->alg);
@@ -240,12 +233,6 @@ DASSL_integrate (SIM_simulator simulate)
 	    }
 	}
 
-  //     if ((int) (t * 100 / _ft) > percentage)
-	// {
-	//   percentage = 100 * t / _ft;
-	//   fprintf (stderr, "*%g", t);
-	//   fflush (stderr);
-	// }
     }
   /*
    if (!event_detected && is_sampled) {
