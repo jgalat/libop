@@ -108,7 +108,6 @@ CLC_compute_outputs (SD_output simOutput, double **solution, int num_steps)
   for (i = 0; i < simOutput->outputs; i++)
     {
       solution[i] = (double*) checkedMalloc (sizeof(double) * num_steps);
-      cleanDoubleVector(solution[i], 0.0, num_steps);
     }
 }
 
