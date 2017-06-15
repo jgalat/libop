@@ -34,7 +34,6 @@ struct simData_DOPRI
 {
   double **solution;
   double *solution_time;
-  double **outvar;
   double *x;
   double *t;
   unsigned long *totalOutputSteps;
@@ -140,7 +139,6 @@ DOPRI_integrate (SIM_simulator simulate)
   const int num_steps = (is_sampled ? _ft / step_size + 1 : MAX_OUTPUT_POINTS);
   double **solution = (double**) malloc (sizeof(double*) * simOutput->outputs);
   double *solution_time = (double*) malloc (sizeof(double) * num_steps);
-  double **outvar = (double**) malloc (sizeof(double*) * simOutput->outputs);
   int *jroot = (int*) malloc (sizeof(int) * clcData->events);
   double troot = 0;
   int size = clcData->states, res;
@@ -154,12 +152,11 @@ DOPRI_integrate (SIM_simulator simulate)
   simDataDopri.solution_time = solution_time;
   simDataDopri.x = x;
   simDataDopri.temp_x = temp_x;
-  simDataDopri.outvar = outvar;
   simDataDopri.totalOutputSteps = &totalOutputSteps;
   simDataDopri.step_size = step_size;
   simDataDopri.last_step = t;
   simDataDopri.final_time = _ft ;
-  simDataDopri.size= clcData->states;
+  simDataDopri.size = clcData->states;
   getTime (simulator->stats->sTime);
   if (is_sampled) {
     CLC_save_step (simOutput, solution, solution_time, t, totalOutputSteps,
@@ -237,7 +234,6 @@ DOPRI_integrate (SIM_simulator simulate)
     }
 #endif
   //CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
-  free (outvar);
   free (x);
   free (temp_x);
   free (solution_time);
