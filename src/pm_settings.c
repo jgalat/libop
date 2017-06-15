@@ -39,20 +39,12 @@ int pm_settings_set_N(pm_settings pms, int N) {
   pms->N = N;
   return 0;
 }
-/* TODO NULL CHECK */
-int pm_settings_get_N(pm_settings pms) {
-  return pms->N;
-}
 
 int pm_settings_set_Smax(pm_settings pms, double smax) {
   if (!pms)
     return -1;
   pms->Smax = smax;
   return 0;
-}
-
-double pm_settings_get_Smax(pm_settings pms) {
-  return pms->Smax;
 }
 
 int pm_settings_set_tol(pm_settings pms, double tol) {
@@ -62,19 +54,11 @@ int pm_settings_set_tol(pm_settings pms, double tol) {
   return 0;
 }
 
-double pm_settings_get_tol(pm_settings pms) {
-  return pms->tol;
-}
-
 int pm_settings_set_abstol(pm_settings pms, double abstol) {
   if (!pms)
     return -1;
   pms->abstol = abstol;
   return 0;
-}
-
-double pm_settings_get_abstol(pm_settings pms) {
-  return pms->abstol;
 }
 
 int pm_settings_set_iv_max_it(pm_settings pms, int maxit) {
@@ -84,19 +68,11 @@ int pm_settings_set_iv_max_it(pm_settings pms, int maxit) {
   return 0;
 }
 
-int pm_settings_get_iv_max_it(pm_settings pms) {
-  return pms->max_it;
-}
-
 int pm_settings_set_iv_eps(pm_settings pms, double eps) {
   if (!pms)
     return -1;
   pms->eps = eps;
   return 0;
-}
-
-double pm_settings_get_iv_eps(pm_settings pms) {
-  return pms->eps;
 }
 
 int pm_settings_set_iv_init(pm_settings pms, double x0, double x1) {
@@ -105,6 +81,30 @@ int pm_settings_set_iv_init(pm_settings pms, double x0, double x1) {
   pms->init[0] = x0;
   pms->init[1] = x1;
   return 0;
+}
+
+int pm_settings_get_N(pm_settings pms) {
+  return pms->N;
+}
+
+double pm_settings_get_Smax(pm_settings pms) {
+  return pms->Smax;
+}
+
+double pm_settings_get_tol(pm_settings pms) {
+  return pms->tol;
+}
+
+double pm_settings_get_abstol(pm_settings pms) {
+  return pms->abstol;
+}
+
+int pm_settings_get_iv_max_it(pm_settings pms) {
+  return pms->max_it;
+}
+
+double pm_settings_get_iv_eps(pm_settings pms) {
+  return pms->eps;
 }
 
 double *pm_settings_get_iv_init(pm_settings pms) {

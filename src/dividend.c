@@ -62,8 +62,78 @@ void delete_dividend(dividend d) {
   }
 }
 
+
+static int get_correct_size(struct disc_div *dd, int size) {
+  if (dd->size == -1) {
+    dd->size = size;
+    return size;
+  } else {
+    if (dd->size < size) {
+      return dd->size;
+    } else {
+      dd->size = size;
+      return size;
+    }
+  }
+}
+
+int div_disc_set_dates(dividend d, int size, ...) {
+  if (!d)
+    return -1;
+
+  if (d->div_type != DIV_DISCRETE)
+    return -1;
+
+  struct disc_div *dd = (struct disc_div *) d->actual_div;
+
+  int n = get_correct_size(dd, size);
+  dd->dates = (date *) malloc(sizeof(date) * n);
+
+  if (!dd->dates)
+    return -1;
+
+  va_list vl;
+  va_start(vl, size);
+
+  int i;
+  for (i = 0; i < n; i++) {
+    dd->dates[i] = va_arg(vl, date);
+  }
+
+  va_end(vl);
+  return 0;
+
+}
+
+int div_disc_set_ammounts(dividend d, int size, ...) {
+  if (!d)
+    return -1;
+
+  if (d->div_type != DIV_DISCRETE)
+    return -1;
+
+  struct disc_div *dd = (struct disc_div *) d->actual_div;
+
+  int n = get_correct_size(dd, size);
+  dd->ammounts = (date *) malloc(sizeof(double) * n);
+
+  if (!dd->ammounts)
+    return -1;
+
+  va_list vl;
+  va_start(vl, size);
+
+  int i;
+  for (i = 0; i < n; i++) {
+    dd->ammounts[i] = va_arg(vl, double);
+  }
+
+  va_end(vl);
+  return 0;
+
+}
+
 dividend_type div_get_type(dividend d) {
-  /* TODO null check ? */
   return d->div_type;
 }
 
@@ -89,72 +159,4 @@ double *div_disc_get_ammounts(dividend d) {
   if (d && d->div_type == DIV_DISCRETE)
     return ((struct disc_div *) d->actual_div)->ammounts;
   return NULL;
-}
-
-static int get_correct_size(struct disc_div *dd, int size) {
-  if (dd->size == -1) {
-    dd->size = size;
-    return size;
-  } else {
-    if (dd->size < size) {
-      return dd->size;
-    } else {
-      dd->size = size;
-      return size;
-    }
-  }
-}
-
-int div_disc_set_dates(dividend d, int size, ...) {
-  if (d) {
-    if (d->div_type != DIV_DISCRETE)
-      return -1;
-
-    struct disc_div *dd = (struct disc_div *) d->actual_div;
-
-    int n = get_correct_size(dd, size);
-    dd->dates = (date *) malloc(sizeof(date) * n);
-
-    if (!dd->dates)
-      return -1;
-
-    va_list vl;
-    va_start(vl, size);
-
-    int i;
-    for (i = 0; i < n; i++) {
-      dd->dates[i] = va_arg(vl, date);
-    }
-
-    va_end(vl);
-    return 0;
-  }
-  return -1;
-}
-
-int div_disc_set_ammounts(dividend d, int size, ...) {
-  if (d) {
-    if (d->div_type != DIV_DISCRETE)
-      return -1;
-
-    struct disc_div *dd = (struct disc_div *) d->actual_div;
-
-    int n = get_correct_size(dd, size);
-    dd->ammounts = (date *) malloc(sizeof(double) * n);
-
-    if (!dd->ammounts)
-      return -1;
-
-    va_list vl;
-    va_start(vl, size);
-
-    int i;
-    for (i = 0; i < n; i++) {
-      dd->ammounts[i] = va_arg(vl, double);
-    }
-
-    va_end(vl);
-    return 0;
-  }
-  return -1;
 }
