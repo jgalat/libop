@@ -77,7 +77,7 @@ static int get_correct_size(struct disc_div *dd, int size) {
   }
 }
 
-int div_disc_set_dates(dividend d, int size, ...) {
+int div_disc_set_dates(dividend d, time_period tp, int size, ...) {
   if (!d)
     return -1;
 
@@ -87,6 +87,10 @@ int div_disc_set_dates(dividend d, int size, ...) {
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
   int n = get_correct_size(dd, size);
+
+  if (dd->dates)
+    free(dd->dates);
+
   dd->dates = (date *) malloc(sizeof(date) * n);
 
   if (!dd->dates)
@@ -95,9 +99,10 @@ int div_disc_set_dates(dividend d, int size, ...) {
   va_list vl;
   va_start(vl, size);
 
-  int i;
+  int i, days;
   for (i = 0; i < n; i++) {
-    dd->dates[i] = va_arg(vl, date);
+    days = va_arg(vl, int);
+    dd->dates[i] = tp_int_to_date(tp, days);
   }
 
   va_end(vl);
@@ -115,6 +120,10 @@ int div_disc_set_ammounts(dividend d, int size, ...) {
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
   int n = get_correct_size(dd, size);
+
+  if (dd->ammounts)
+    free(dd->ammounts);
+
   dd->ammounts = (date *) malloc(sizeof(double) * n);
 
   if (!dd->ammounts)

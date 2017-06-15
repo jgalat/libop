@@ -12,6 +12,8 @@ time_period new_time_period_252d();
 
 void delete_time_period(time_period);
 
+date tp_int_to_date(time_period, int);
+
 int tp_set_days(time_period, int);
 int tp_set_years(time_period, int);
 

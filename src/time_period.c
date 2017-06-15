@@ -36,10 +36,14 @@ void delete_time_period(time_period tp) {
   free(tp);
 }
 
+date tp_int_to_date(time_period tp, int days) {
+  return (date) ((double) days * tp->period);
+}
+
 int tp_set_days(time_period tp, int d) {
   if (!tp)
     return -1;
-  tp->t = (date) ((double) d * tp->period);
+  tp->t = tp_int_to_date(tp, d);
   return 0;
 }
 

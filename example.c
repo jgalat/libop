@@ -15,7 +15,7 @@ int main(int argc, char const *argv[]) {
   int iv = 0 , eur = 0;
 
   // dividend d = new_discrete_dividend();
-  // div_disc_set_dates(d, 1, 0.5);
+  // div_disc_set_dates(d, tp, 1, 182);
   // div_disc_set_ammounts(d, 1, 1.0);
 
   option opt;

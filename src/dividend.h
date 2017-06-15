@@ -24,7 +24,7 @@ int div_disc_get_n(dividend);
 date *div_disc_get_dates(dividend);
 double *div_disc_get_ammounts(dividend);
 
-int div_disc_set_dates(dividend, int, ...);
+int div_disc_set_dates(dividend, time_period, int, ...);
 int div_disc_set_ammounts(dividend, int, ...);
 
 #endif /* __DIVIDEND_H__ */
