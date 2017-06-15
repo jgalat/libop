@@ -1,6 +1,5 @@
-#include <iostream>
-#include <stdio.h>
 #include <functional>
+#include <math.h>
 
 #include <qss-solver/engine/common/utils.h>
 #include <qss-solver/engine/common/model.h>
@@ -19,19 +18,19 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   _solver = SD_DOPRI;
   _ft = end_time < 0.0 ? 0.0 : end_time;
 
-  _dqrel = tol < 0 ? 0 : tol; //1e-9
-  _dqmin = abs_tol < 0 ? 0 : abs_tol; //1e-12
+  _dqrel = fabs(tol);
+  _dqmin = fabs(abs_tol);
 
-  _period = period; // 0.00273972602; // 1 / 365 rev
+  _period = fabs(period);
 
   _N = grid_size < 1 ? 0 : grid_size - 1;
 
   _op_type = ot;
 
-  _Smax = smax;
+  _Smax = fabs(smax);
   _sigma = vol;
   _r = rfr;
-  _K = strike;
+  _K = fabs(strike);
   _cd = cont_div;
 
   _discdiv_date = new double[discdiv_n + 1];
@@ -39,7 +38,7 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   int i;
   for (i = 0; i < discdiv_n; i++) {
     _discdiv_date[i] = _ft - discdiv_date[i];
-    _discdiv_ammo[i] = discdiv_ammo[i]; //<-- !!!!
+    _discdiv_ammo[i] = discdiv_ammo[i];
   }
   _discdiv_date[discdiv_n] = _ft + 1;
   _discdiv_ammo[discdiv_n] = 0.0;
