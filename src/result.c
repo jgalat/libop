@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "result.h"
+#include "result_internal.h"
 
 struct result_ {
   double v;

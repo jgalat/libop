@@ -1,5 +1,8 @@
 #include <stdlib.h>
-#include <stdio.h>
+#include <result_internal.h>
+#include <option_data.h>
+#include <option_data_internal.h>
+#include <pricing_method_internal.h>
 #include <qss-solver/black_scholes_model.h>
 #include <impl_vol_methods/impl_vol_methods.h>
 #include "american_finite_difference.h"

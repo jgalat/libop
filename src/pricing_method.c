@@ -1,6 +1,8 @@
 #include <stdlib.h>
 
+#include <common.h>
 #include "pricing_method.h"
+#include "pricing_method_internal.h"
 
 struct pricing_method_ {
   price_f       option_price;

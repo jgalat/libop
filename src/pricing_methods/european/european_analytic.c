@@ -1,5 +1,9 @@
 #include <stdlib.h>
 #include <math.h>
+#include <result_internal.h>
+#include <option_data.h>
+#include <option_data_internal.h>
+#include <pricing_method_internal.h>
 #include <impl_vol_methods/impl_vol_methods.h>
 
 #include "european_analytic.h"

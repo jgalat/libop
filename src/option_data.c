@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "option_data.h"
+#include "option_data_internal.h"
 
 static int valid_option_type(option_type ot) {
   switch (ot) {

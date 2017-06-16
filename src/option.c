@@ -1,6 +1,8 @@
 #include <stdlib.h>
 
 #include <common.h>
+#include <option_data_internal.h>
+#include <pricing_method_internal.h>
 #include "option.h"
 
 struct option_ {

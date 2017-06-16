@@ -1,4 +1,5 @@
 #include <math.h>
+#include <result_internal.h>
 #include "secant_method.h"
 
 int secant_method(impl_vol_mf ivmf, impl_vol_mf_args ivmfa, result r) {

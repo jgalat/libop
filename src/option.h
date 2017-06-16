@@ -1,7 +1,8 @@
 #ifndef __OPTION_H__
 #define __OPTION_H__
 
-#include <common.h>
+#include <result.h>
+#include <option_data.h>
 #include <pricing_method.h>
 
 struct option_;

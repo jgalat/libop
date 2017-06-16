@@ -6,6 +6,7 @@
 #include <parameter.h>
 #include <dividend.h>
 #include <option_data.h>
+#include <option_data_internal.h>
 #include <pricing_data.h>
 #include <pm_settings.h>
 
