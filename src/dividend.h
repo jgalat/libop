@@ -31,6 +31,9 @@ double *div_disc_get_ammounts(dividend);
 int div_disc_set_dates(dividend, time_period, int, ...);
 int div_disc_set_ammounts(dividend, int, ...);
 
+int div_disc_set_dates_(dividend, time_period, int, int*);
+int div_disc_set_ammounts_(dividend, int, double*);
+
 #ifdef __cplusplus
 }
 #endif
