@@ -1,6 +1,10 @@
 #ifndef __PM_SETTINGS_H__
 #define __PM_SETTINGS_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct pm_settings_ * pm_settings;
 struct pm_settings_;
 
@@ -22,5 +26,9 @@ double pm_settings_get_abstol(pm_settings);
 int pm_settings_get_iv_max_it(pm_settings);
 double pm_settings_get_iv_eps(pm_settings);
 double *pm_settings_get_iv_init(pm_settings);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __PM_SETTINGS_H__ */

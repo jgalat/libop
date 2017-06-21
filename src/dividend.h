@@ -3,6 +3,10 @@
 
 #include <time_period.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum {
   DIV_DISCRETE,
   DIV_CONTINUOUS
@@ -26,5 +30,9 @@ double *div_disc_get_ammounts(dividend);
 
 int div_disc_set_dates(dividend, time_period, int, ...);
 int div_disc_set_ammounts(dividend, int, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __DIVIDEND_H__ */

@@ -5,6 +5,10 @@
 #include <dividend.h>
 #include <pm_settings.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct pricing_method_;
 typedef struct pricing_method_ * pricing_method;
 
@@ -15,5 +19,9 @@ pricing_method new_pricing_method(method_id, volatility, risk_free_rate, dividen
 void delete_pricing_method(pricing_method);
 
 int pm_set_settings(pricing_method, pm_settings);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __PRICING_METHOD_H__ */

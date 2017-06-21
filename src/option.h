@@ -5,6 +5,10 @@
 #include <option_data.h>
 #include <pricing_method.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct option_;
 typedef struct option_ * option;
 
@@ -24,5 +28,9 @@ int option_impl_vol(option, double, double, result);
 
 /* TODO better name? */
 int option_price_and_greeks(option, double, result);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __OPTION_H__ */
