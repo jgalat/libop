@@ -23,6 +23,9 @@ libop:
 $(TARGET): libop
 	$(CC) $(INC) $(SRC) $(CFLAGS) $(LIB) $(LDFLAGS) -o $(@)
 
+export_all: $(TARGET)
+	$(MAKE) -C $(BUILDDIR) $(@)
+
 run: $(TARGET)
 	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	./$(TARGET)
 
@@ -36,4 +39,4 @@ valgrind: $(TARGET)
 
 clean:
 	$(MAKE) -C $(BUILDDIR) clean
-	$(RMS) $(TARGET) *.a *.dat *.log
+	$(RMS) $(TARGET) *.dat *.log

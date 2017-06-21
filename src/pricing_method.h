@@ -12,7 +12,10 @@ extern "C" {
 struct pricing_method_;
 typedef struct pricing_method_ * pricing_method;
 
-#include <pricing_methods/pricing_methods.h>
+typedef enum {
+  EU_ANALYTIC,
+  AM_FD
+} method_id;
 
 pricing_method new_pricing_method(method_id, volatility, risk_free_rate, dividend);
 

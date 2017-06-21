@@ -39,3 +39,4 @@ example
 qss-solver/engine/obj/
 test*
 *.log
+export/

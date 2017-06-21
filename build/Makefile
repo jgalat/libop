@@ -3,6 +3,8 @@ CC 	:= gcc
 CPPC := g++
 MAKE := make
 RMS := rm -rf
+MKDIR := mkdir
+CP := cp
 
 TARGET := libop.so
 
@@ -15,6 +17,7 @@ IVMDIR   := $(SRCDIR)/impl_vol_methods
 QSSDIR   := ../qss-solver
 QSSLIBSDIR := $(QSSDIR)/libs
 BUILDDIR := $(SRCDIR)/obj
+EXPORTDIR := ../export
 
 
 #Flags, Libraries and Includes
@@ -35,6 +38,10 @@ PMSRC := $(PMEUR)/european_analytic.c \
 CPPSRC := $(QSSDIR)/black_scholes_model.cpp
 
 IVMSRC := $(IVMDIR)/impl_vol_mf.c $(IVMDIR)/secant_method.c
+
+EXPORTH := $(SRCDIR)/libop.h $(SRCDIR)/option.h $(SRCDIR)/pricing_method.h \
+	$(SRCDIR)/option_data.h $(SRCDIR)/pm_settings.h $(SRCDIR)/dividend.h \
+	$(SRCDIR)/parameter.h $(SRCDIR)/result.h $(SRCDIR)/time_period.h
 
 #Objects
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
@@ -76,10 +83,15 @@ $(PMOBJ): | $(BUILDDIR)
 $(EXTRAOBJ): | $(BUILDDIR)
 
 $(BUILDDIR):
-	@mkdir -p $(BUILDDIR)
+	$(MKDIR) -p $(BUILDDIR)
+
+export_all: $(TARGET)
+	$(MKDIR) -p $(EXPORTDIR) $(EXPORTDIR)/include $(EXPORTDIR)/lib
+	$(CP) $(TARGET) $(EXPORTDIR)/lib
+	$(CP) $(EXPORTH) $(EXPORTDIR)/include
 
 .PHONY : clean
 
 clean:
 	$(MAKE) -C $(QSSLIBSDIR) clean
-	$(RMS) $(BUILDDIR) $(TARGET) *.a
+	$(RMS) $(EXPORTDIR) $(BUILDDIR) $(TARGET)
