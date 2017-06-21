@@ -12,7 +12,7 @@ struct time_period_;
 
 time_period new_time_period(int);
 time_period new_time_period_365d();
-time_period new_time_period_252d();
+time_period new_time_period_260d();
 
 void delete_time_period(time_period);
 
