@@ -1,10 +1,14 @@
 #ifndef __TIME_PERIOD_H__
 #define __TIME_PERIOD_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef double date;
 
 typedef struct time_period_ * time_period;
-struct time_period;
+struct time_period_;
 
 time_period new_time_period(int);
 time_period new_time_period_365d();
@@ -25,5 +29,9 @@ double tp_get_period(time_period);
 
 #define YEARS(tp, i) ({ tp_set_years(tp, i); \
                         tp; })
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
