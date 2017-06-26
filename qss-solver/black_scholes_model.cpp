@@ -295,11 +295,30 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
     modelData->event[i].direction = 0;
   }
 
-  double period[1];
-  period[0] = _period;
+  SD_CommInterval interval = CI_Sampled;
 
-  simulator->output = SD_Output("bsm",_N*4,_N*2,_N,period,1,0,CI_Sampled,
-    SD_Memory,&bsmo,_solution);
+  const char *modelname =  "bsm";
+
+  switch(interval) {
+    case CI_Sampled:
+      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,&_period,1,0,interval,
+        SD_Memory,&bsmo,_solution);
+      break;
+    case CI_Step:
+      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,NULL,0,0,interval,
+        SD_Memory,&bsmo,_solution);
+      break;
+    default:
+      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,&_period,1,0,CI_Sampled,
+        SD_Memory,&bsmo,_solution);
+      break;
+  }
+
+  // double period[1];
+  // period[0] = _period;
+  //
+  // simulator->output = SD_Output("bsm",_N*4,_N*2,_N,period,1,0,CI_Sampled,
+  //   SD_Memory,&bsmo,_solution);
 	SD_output modelOutput = simulator->output;
 
   for(i = 0; i < _N; i++) {
@@ -310,13 +329,6 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
   SD_allocOutputMatrix(modelOutput,_N,_N*2);
   cleanVector(states,0,_N);
   cleanVector(outputs,0,_N*4);
-
-  // for(i = 0; i < _N; i++) {
-  //   sprintf(modelOutput->variable[i].name,"u[%d]",i+1);
-  //   sprintf(modelOutput->variable[i+_N].name,"delta[%d]",i+1);
-  //   sprintf(modelOutput->variable[i+_N*2].name,"gamma[%d]",i+1);
-  //   sprintf(modelOutput->variable[i+_N*3].name,"theta[%d]",i+1);
-  // }
 
   for(i = 0; i < _N; i++) {
     modelOutput->SO[i][states[i]++] = i;
