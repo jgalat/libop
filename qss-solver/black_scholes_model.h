@@ -34,11 +34,13 @@ class BlackScholesModel {
     void handlerPos(int i, double *x, double *d, double *alg, double t);
     void handlerNeg(int i, double *x, double *d, double *alg, double t);
     void output(int i, double *x, double *d, double *alg, double t, double *out);
+    void outputAll(int i, double *x, double *d, double *alg, double t, double *out);
 
     void validate_index(int*);
     double get_value(double*, int);
 
     SD_Solver _solver;
+    SD_CommInterval _comm_interval;
     double _ft, _dqmin, _dqrel;
     double _period;
     // CLC_data modelData;

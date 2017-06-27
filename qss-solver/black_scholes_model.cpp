@@ -16,6 +16,8 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   double end_time, double tol, double abs_tol) {
 
   _solver = SD_DOPRI;
+  /* Possible CI_Step only for DOPRI */
+  _comm_interval = CI_Sampled;
   _ft = end_time < 0.0 ? 0.0 : end_time;
 
   _dqrel = fabs(tol);
@@ -61,7 +63,17 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   _solution = new double[_N*4];
 
   using namespace std::placeholders;
-  bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
+  switch (_comm_interval) {
+    case CI_Sampled:
+      bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
+      break;
+    case CI_Step:
+      bsmo = std::bind(&BlackScholesModel::outputAll, this, _1, _2, _3, _4, _5, _6);
+      break;
+    default:
+      bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
+      break;
+  }
 
   bsmf = std::bind(&BlackScholesModel::definition, this, _1, _2, _3, _4, _5);
   bsmzc = std::bind(&BlackScholesModel::zeroCrossing, this, _1, _2, _3, _4, _5, _6);
@@ -155,7 +167,6 @@ void BlackScholesModel::definition(double *x, double *d, double *alg, double t, 
 }
 
 void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {
-  int j1 = 0;
   //modelData->zeroCrossings++;
   switch(i) {
     case 0:
@@ -166,12 +177,11 @@ void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, d
         alg[_N*2] = 0.5*pow(_sigma,2.0)*pow(d[_N],2.0)*(x[1]-2.0*x[0]+_u0)/_ds2
                   +(_r-_cd)*d[_N]*0.5*(x[1]-_u0)/_ds
                   - _r*x[0];
-        j1 = i;
 
-        if (j1 >= 2 && j1 <= _N-2) {
-          alg[i+(_N*2-1)] = 0.5*pow(_sigma,2.0)*pow(d[j1+_N-1],2.0)*(x[j1]-2.0*x[j1-1]+x[j1-2])/_ds2
-                      + (_r-_cd)*d[j1+_N-1]*0.5*(x[j1]-x[j1-2])/_ds
-                      - _r*x[j1-1];
+        if (i >= 2 && i <= _N-2) {
+          alg[i+(_N*2-1)] = 0.5*pow(_sigma,2.0)*pow(d[i+_N-1],2.0)*(x[i]-2.0*x[i-1]+x[i-2])/_ds2
+            + (_r-_cd)*d[i+_N-1]*0.5*(x[i]-x[i-2])/_ds
+            - _r*x[i-1];
         }
 
         alg[_N*3-1] = 0.5*pow(_sigma,2.0)*pow(d[_N*2-1],2.0)*(_uN1-2.0*x[_N-1]+x[_N-2])/_ds2
@@ -204,13 +214,11 @@ void BlackScholesModel::handlerNeg(int i, double *x, double *d, double *alg, dou
   }
 }
 
-void BlackScholesModel::output(int i, double *x, double *d, double *alg, double t, double *out) {
-  int j = 0;
-  int j1 = 0;
-  int j2 = 0;
-  int j3 = 0;
-  j = i;
+void BlackScholesModel::output(int i, double *x, double *d, double *alg,
+  double t, double *out) {
+  int j;
 
+  j = i;
   if(j >=0 && j < _N) {
     out[0] = x[j];
   }
@@ -218,19 +226,18 @@ void BlackScholesModel::output(int i, double *x, double *d, double *alg, double 
   j = i-_N;
   if(j >=0 && j < _N) {
     alg[0] = 0.5*(x[1]-_u0)/_ds;
-    j1 = j;
-    if (j1 >= 1 && j1 < _N-1) {
-      alg[j] = 0.5*(x[j1+1]-x[j1-1])/_ds;
+    if (j >= 1 && j < _N-1) {
+      alg[j] = 0.5*(x[j+1]-x[j-1])/_ds;
     }
     alg[_N-1] = 0.5*(_uN1-x[_N-2])/_ds;
     out[0] = alg[j];
   }
+
   j = i-_N*2;
   if(j >=0 && j < _N) {
     alg[_N] = (x[1]-2.0*x[0]+_u0)/_ds2;
-    j2 = j;
-    if (j2 >= 1 && j2 < _N-1) {
-      alg[j+_N] = (x[j2+1]-2.0*x[j2]+x[j2-1])/_ds2;
+    if (j >= 1 && j < _N-1) {
+      alg[j+_N] = (x[j+1]-2.0*x[j]+x[j-1])/_ds2;
     }
     alg[_N*2-1] = (_uN1-2.0*x[_N-1]+x[_N-2])/_ds2;
     out[0] = alg[j+_N];
@@ -238,20 +245,76 @@ void BlackScholesModel::output(int i, double *x, double *d, double *alg, double 
 
   j = i-_N*3;
   if(j >=0 && j < _N) {
-    alg[_N*2] = 0.5*pow(_sigma,2.0)*pow(d[_N],2.0)*(x[1]-2.0*x[0]+_u0)/_ds2
-              + (_r-_cd)*d[_N]*0.5*(x[1]-_u0)/_ds
-              - _r*x[0];
-    alg[_N*3-1] = 0.5*pow(_sigma,2.0)*pow(d[_N*2-1],2.0)*(_uN1-2.0*x[_N-1]+x[_N-2])/_ds2
-                + (_r-_cd)*d[_N*2-1]*0.5*(_uN1-x[_N-2])/_ds
-                - _r*x[_N-1];
     alg[_N*3] = d[0]*alg[_N*2];
-    j3 = j;
-    if (j3 >= 1 && j3 < _N-1) {
-      alg[j+_N*3] = d[j3]*alg[j3+_N*2];
+    if (j >= 1 && j < _N-1) {
+      alg[j+_N*3] = d[j]*alg[j+_N*2];
     }
     alg[_N*4-1] = d[_N-1]*alg[_N*3-1];
     out[0] = alg[j+_N*3];
   }
+}
+
+void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
+  double t, double *out) {
+
+  int j;
+
+  /*
+    out: 0 -> _N-1
+    x: 0 -> _N-1
+  */
+
+  for (j = 0; j < _N; j++) {
+    out[j] = x[j];
+  }
+
+  /*
+    out: _N -> _N*2-1
+    alg: 0 -> _N-1
+  */
+
+  alg[0] = 0.5*(x[1]-_u0)/_ds;
+  out[_N] = alg[0];
+
+  for (j = 1; j < _N-1; j++) {
+    alg[j] = 0.5*(x[j+1]-x[j-1])/_ds;
+    out[_N+j] = alg[j];
+  }
+
+  alg[_N-1] = 0.5*(_uN1-x[_N-2])/_ds;
+  alg[_N*2-1] = alg[_N-1];
+
+  /*
+    out: _N*2 -> _N*3-1
+    alg: _N -> _N*2-1
+  */
+
+  alg[_N] = (x[1]-2.0*x[0]+_u0)/_ds2;
+  out[_N*2] = alg[_N];
+
+  for (j = 1; j < _N-1 ; j++) {
+    alg[j+_N] = (x[j+1]-2.0*x[j]+x[j-1])/_ds2;
+    out[_N*2+j] = alg[_N+j];
+  }
+
+  alg[_N*2-1] = (_uN1-2.0*x[_N-1]+x[_N-2])/_ds2;
+  out[_N*3-1] = alg[_N*2-1];
+
+  /*
+    out: _N*3 -> _N*4-1
+    alg: _N*3 -> _N*4-1
+  */
+
+  alg[_N*3] = d[0]*alg[_N*2];
+  out[_N*3] = alg[_N*3];
+
+  for (j = 1; j < _N-1; j++) {
+    alg[j+_N*3] = d[j]*alg[j+_N*2];
+    out[_N*3+j] = alg[_N*3+j];
+  }
+
+  alg[_N*4-1] = d[_N-1]*alg[_N*3-1];
+  out[_N*4-1] = alg[_N*4-1];
 }
 
 void BlackScholesModel::initializeDataStructs(void *simulator_) {
@@ -295,30 +358,23 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
     modelData->event[i].direction = 0;
   }
 
-  SD_CommInterval interval = CI_Sampled;
-
   const char *modelname =  "bsm";
 
-  switch(interval) {
+  switch(_comm_interval) {
     case CI_Sampled:
-      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,&_period,1,0,interval,
-        SD_Memory,&bsmo,_solution);
+      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,&_period,1,0,
+        _comm_interval,SD_Memory,&bsmo,_solution);
       break;
     case CI_Step:
-      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,NULL,0,0,interval,
-        SD_Memory,&bsmo,_solution);
+      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,NULL,0,0,
+        _comm_interval,SD_Memory,&bsmo,_solution);
       break;
     default:
-      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,&_period,1,0,CI_Sampled,
-        SD_Memory,&bsmo,_solution);
+      simulator->output = SD_Output(modelname,_N*4,_N*2,_N,&_period,1,0,
+        CI_Sampled,SD_Memory,&bsmo,_solution);
       break;
   }
 
-  // double period[1];
-  // period[0] = _period;
-  //
-  // simulator->output = SD_Output("bsm",_N*4,_N*2,_N,period,1,0,CI_Sampled,
-  //   SD_Memory,&bsmo,_solution);
 	SD_output modelOutput = simulator->output;
 
   for(i = 0; i < _N; i++) {

@@ -29,34 +29,6 @@
 #include "classic_integrator.h"
 #include "classic_simulator.h"
 
-// void
-// DASSL_update_x (const double *x)
-// {
-//   abort ();
-//   int i;
-//   for (i = 0; i < clcData->states; i++)
-//     {
-// #ifdef DEBUG
-//       //printf("x[%d]=%g ",i,x[i]);
-// #endif
-//       clcData->x[i] = x[i];
-//     }
-// #ifdef DEBUG
-//   //printf("\n");
-// #endif
-// }
-//
-// void
-// DASSL_reset_x (double *x)
-// {
-//   abort ();
-//   int i;
-//   for (i = 0; i < clcData->states; i++)
-//     {
-//       x[i] = clcData->x[i];
-//     }
-// }
-
 #define HIST 1e-12
 void
 DASSL_events (int *n, double *t, double *x, double *dx,
@@ -276,6 +248,8 @@ DASSL_integrate (SIM_simulator simulate)
 #endif
   // CLC_write_output (simOutput, solution, solution_time, clcData->totalOutputSteps);
   // To avoid QSS output
+	SD_exportSolution(solution, clcData->totalOutputSteps, simOutput->outputs,
+			simOutput->solution);
   free (x);
   free (dx);
   free (outvar);
@@ -283,8 +257,6 @@ DASSL_integrate (SIM_simulator simulate)
   free (solution_time);
   free (rwork);
   free (iwork);
-	SD_exportSolution(solution, clcData->totalOutputSteps, simOutput->outputs,
-		simOutput->solution);
   for (i = 0; i < simOutput->outputs; i++)
     {
       free (solution[i]);

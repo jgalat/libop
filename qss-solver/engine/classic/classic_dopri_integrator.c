@@ -86,11 +86,11 @@ DOPRI_solout (long nr, double xold, double x, double* y, unsigned n, int* irtrn,
     CLC_handle_event (clcData, clcModel, y, jroot, x, NULL);
   if (!id->is_sampled) {
       clcData->totalSteps++;
-      CLC_save_step (simOutput, simDataDopri->solution,
-		     simDataDopri->solution_time, x,
-		     simDataDopri->totalOutputSteps[0], y, clcData->d,
-		     clcData->alg);
-      simDataDopri->totalOutputSteps[0]++;
+      // CLC_save_step (simOutput, simDataDopri->solution,
+		  //    simDataDopri->solution_time, x,
+		  //    simDataDopri->totalOutputSteps[0], y, clcData->d,
+		  //    clcData->alg);
+      // simDataDopri->totalOutputSteps[0]++;
   } else { // Do sample
       while (simDataDopri->last_step+simDataDopri->step_size<x) {
         // Skip last step
@@ -136,7 +136,7 @@ DOPRI_integrate (SIM_simulator simulate)
     {
       step_size = simOutput->sampled->period[0];
     }
-  const int num_steps = (is_sampled ? _ft / step_size + 1 : MAX_OUTPUT_POINTS);
+  const int num_steps = (is_sampled ? _ft / step_size + 1 : 0);
   double **solution = (double**) malloc (sizeof(double*) * simOutput->outputs);
   double *solution_time = (double*) malloc (sizeof(double) * num_steps);
   int *jroot = (int*) malloc (sizeof(int) * clcData->events);
@@ -234,13 +234,19 @@ DOPRI_integrate (SIM_simulator simulate)
     }
 #endif
   //CLC_write_output (simOutput, solution, solution_time, totalOutputSteps);
+
+  if (is_sampled) {
+    SD_exportSolution(solution, totalOutputSteps, simOutput->outputs,
+      simOutput->solution);
+  } else {
+    (*simOutput->value) (0, x, clcData->d, clcData->alg, 0, simOutput->solution);
+  }
+
   free (x);
   free (temp_x);
   free (solution_time);
   free (jroot);
   delete dopri5;
-  SD_exportSolution(solution, totalOutputSteps, simOutput->outputs,
-    simOutput->solution);
   for (i = 0; i < simOutput->outputs; i++)
     {
       free (solution[i]);
