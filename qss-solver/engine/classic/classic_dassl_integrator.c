@@ -89,7 +89,7 @@ DASSL_integrate (SIM_simulator simulate)
       step_size = simOutput->sampled->period[0];
     }
   const int num_steps = (
-      is_sampled ? ceil (_ft / step_size) + 2 : MAX_OUTPUT_POINTS);
+      is_sampled ? ceil (_ft / step_size) + 2 : 0);
   double **solution = (double **) checkedMalloc (sizeof(double*) * simOutput->outputs);
   double *solution_time = (double *) checkedMalloc (sizeof(double) * num_steps);
   double **outvar = (double **) checkedMalloc (sizeof(double*) * simOutput->outputs);
@@ -120,9 +120,12 @@ DASSL_integrate (SIM_simulator simulate)
   liw = 60040;
   iwork = (int *) checkedMalloc (sizeof(int) * liw);
   // Save first step
-  CLC_save_step (simOutput, solution, solution_time, t,
-		 clcData->totalOutputSteps, x, clcData->d, clcData->alg);
-  clcData->totalOutputSteps++;
+	if (is_sampled)
+		{
+			CLC_save_step (simOutput, solution, solution_time, t,
+			 	clcData->totalOutputSteps, x, clcData->d, clcData->alg);
+			clcData->totalOutputSteps++;
+		}
   getTime (simulator->stats->sTime);
 
   CLC_integratorData integrator_data = CLC_IntegratorData (clcModel, clcData,
@@ -182,10 +185,10 @@ DASSL_integrate (SIM_simulator simulate)
 	}
       if (!is_sampled)
 	{
-	  CLC_save_step (simOutput, solution, solution_time, t,
-			 clcData->totalOutputSteps, x, clcData->d,
-			 clcData->alg);
-	  clcData->totalOutputSteps++;
+	  // CLC_save_step (simOutput, solution, solution_time, t,
+		// 	 clcData->totalOutputSteps, x, clcData->d,
+		// 	 clcData->alg);
+	  // clcData->totalOutputSteps++;
 	}
       else
 	{
@@ -248,8 +251,12 @@ DASSL_integrate (SIM_simulator simulate)
 #endif
   // CLC_write_output (simOutput, solution, solution_time, clcData->totalOutputSteps);
   // To avoid QSS output
-	SD_exportSolution(solution, clcData->totalOutputSteps, simOutput->outputs,
-			simOutput->solution);
+	if (is_sampled) {
+    SD_exportSolution(solution, clcData->totalOutputSteps, simOutput->outputs,
+      simOutput->solution);
+  } else {
+    (*simOutput->value) (0, x, clcData->d, clcData->alg, 0, simOutput->solution);
+  }
   free (x);
   free (dx);
   free (outvar);
