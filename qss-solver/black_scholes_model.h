@@ -36,7 +36,6 @@ class BlackScholesModel {
     void output(int i, double *x, double *d, double *alg, double t, double *out);
     void outputAll(int i, double *x, double *d, double *alg, double t, double *out);
 
-    void validate_index(int*);
     double get_value(double*, int);
 
     SD_Solver _solver;

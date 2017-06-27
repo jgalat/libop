@@ -97,13 +97,8 @@ BlackScholesModel::~BlackScholesModel() {
   delete [] _discdiv_ammo;
 }
 
-// FIXME make static non-member version?
-void BlackScholesModel::validate_index(int *i) {
-  *i = MIN(MAX(*i, 0), _N);
-}
-
 double BlackScholesModel::get_value(double *vals, int i) {
-  validate_index(&i);
+  i = MIN(MAX(i, 0), _N);
 
   if (i == 0) {
     return _u0;
