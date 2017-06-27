@@ -56,7 +56,7 @@ class BlackScholesModel {
           _discdiv_i; //discrete dividend index
 
     double *_solution;
-    double *_v, *_delta, *_gamma, *_m_theta;
+    double *_v, *_delta, *_gamma, *_theta;
 
     /* binds for the engine */
     MOD_settings bsms;

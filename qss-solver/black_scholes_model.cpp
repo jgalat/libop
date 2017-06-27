@@ -88,7 +88,7 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   _v = _solution;
   _delta = &_solution[_N];
   _gamma = &_solution[_N*2];
-  _m_theta = &_solution[_N*3];
+  _theta = &_solution[_N*3];
 }
 
 BlackScholesModel::~BlackScholesModel() {
@@ -125,12 +125,7 @@ double BlackScholesModel::gamma(int i) {
 }
 
 double BlackScholesModel::theta(int i) {
-  double result = get_value(_m_theta, i);
-  // avoid negative 0
-  if (result == 0) {
-    return 0;
-  }
-  return -result;
+  return get_value(_theta, i);
 }
 
 void BlackScholesModel::settings(SD_simulationSettings settings) {
@@ -250,7 +245,7 @@ void BlackScholesModel::output(int i, double *x, double *d, double *alg,
       alg[j+_N*3] = d[j]*alg[j+_N*2];
     }
     alg[_N*4-1] = d[_N-1]*alg[_N*3-1];
-    out[0] = alg[j+_N*3];
+    out[0] = -alg[j+_N*3];
   }
 }
 
@@ -306,15 +301,15 @@ void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
   */
 
   alg[_N*3] = d[0]*alg[_N*2];
-  out[_N*3] = alg[_N*3];
+  out[_N*3] = -alg[_N*3];
 
   for (j = 1; j < _N-1; j++) {
     alg[j+_N*3] = d[j]*alg[j+_N*2];
-    out[_N*3+j] = alg[_N*3+j];
+    out[_N*3+j] = -alg[_N*3+j];
   }
 
   alg[_N*4-1] = d[_N-1]*alg[_N*3-1];
-  out[_N*4-1] = alg[_N*4-1];
+  out[_N*4-1] = -alg[_N*4-1];
 }
 
 void BlackScholesModel::initializeDataStructs(void *simulator_) {
