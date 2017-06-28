@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]) {
   }
 
   // pm_settings pms = new_pm_settings();
-  // pm_settings_set_N(pms, 50);
+  // pm_settings_set_grid_size(pms, 50);
   // pm_set_settings(pm, pms);
 
   option_set_pricing_method(opt, pm);

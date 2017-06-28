@@ -44,7 +44,7 @@ class BlackScholesModel {
     double _period;
     // CLC_data modelData;
 
-    int _N;
+    int _g_size;
     BSM_OT _op_type;
     double _Smax, _sigma, _r, _K,
           _u0, _uN1, _ds, _ds2,

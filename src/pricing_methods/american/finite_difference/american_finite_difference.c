@@ -75,7 +75,7 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
     f = 1;
   }
 
-  int N = pm_settings_get_N(pms);
+  int N = pm_settings_get_grid_size(pms);
   double tol = pm_settings_get_tol(pms);
   double abstol = pm_settings_get_abstol(pms);
 

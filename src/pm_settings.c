@@ -33,7 +33,7 @@ void delete_pm_settings(pm_settings pms) {
   free(pms);
 }
 
-int pm_settings_set_N(pm_settings pms, int N) {
+int pm_settings_set_grid_size(pm_settings pms, int N) {
   if (!pms)
     return -1;
   pms->N = N;
@@ -83,7 +83,7 @@ int pm_settings_set_iv_init(pm_settings pms, double x0, double x1) {
   return 0;
 }
 
-int pm_settings_get_N(pm_settings pms) {
+int pm_settings_get_grid_size(pm_settings pms) {
   return pms->N;
 }
 
