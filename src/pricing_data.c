@@ -12,6 +12,12 @@ pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
   return pd;
 }
 
+pricing_data new_pricing_data_(pricing_data pd) {
+  if (!pd)
+    return NULL;
+  return new_pricing_data(pd->vol, pd->r, pd->d);
+}
+
 void delete_pricing_data(pricing_data pd) {
   free(pd);
 }

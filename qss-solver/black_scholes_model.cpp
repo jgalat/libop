@@ -17,7 +17,7 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
 
   _solver = SD_DOPRI;
   /* Possible CI_Step only for DOPRI */
-  _comm_interval = CI_Sampled;
+  _comm_interval = CI_Step;
   _ft = end_time < 0.0 ? 0.0 : end_time;
 
   _dqrel = fabs(tol);

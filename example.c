@@ -29,9 +29,9 @@ int main(int argc, char const *argv[]) {
     pm = new_pricing_method(AM_FD, sigma, r, d);
   }
 
-  // pm_settings pms = new_pm_settings();
-  // pm_settings_set_grid_size(pms, 50);
-  // pm_set_settings(pm, pms);
+  pm_settings pms = new_pm_settings();
+  pm_settings_set_grid_size(pms, 50);
+  pm_set_settings(pm, pms);
 
   option_set_pricing_method(opt, pm);
 

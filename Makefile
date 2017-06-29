@@ -9,7 +9,7 @@ SRCDIR := src
 BUILDDIR := build
 
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
-LDFLAGS   := -lop -lm -lstdc++ -lgfortran
+LDFLAGS   := -lop -lstdc++ -lgfortran
 LIB				:= -L$(BUILDDIR)
 INC				:= -I$(SRCDIR)
 

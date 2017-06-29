@@ -213,17 +213,19 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   /* check if it is ame... etcccc */
   static const double delta = 0.0001;
 
-  risk_free_rate r = pd->r;
+  pricing_data pd0 = new_pricing_data_(pd);
 
-  pd->r = r - delta;
-  double f1 = calculate_bsmf(BSM_v, od, pd, S, pms);
+  risk_free_rate r = pd0->r;
 
-  pd->r = r + delta;
-  double f2 = calculate_bsmf(BSM_v, od, pd, S, pms);
+  pd0->r = r - delta;
+  double f1 = calculate_bsmf(BSM_v, od, pd0, S, pms);
 
-  pd->r = r;
+  pd0->r = r + delta;
+  double f2 = calculate_bsmf(BSM_v, od, pd0, S, pms);
+
   double result =  (f2 - f1) / (2 * delta);
 
+  delete_pricing_data(pd0);
   result_set_rho(ret, result);
   return 0;
 }
@@ -235,17 +237,19 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   /* check if it is ame... etcccc */
   static const double delta = 0.0001;
 
-  volatility vol = pd->vol;
+  pricing_data pd0 = new_pricing_data_(pd);
 
-  pd->vol = vol - delta;
-  double f1 = calculate_bsmf(BSM_v, od, pd, S, pms);
+  volatility vol = pd0->vol;
 
-  pd->vol = vol + delta;
-  double f2 = calculate_bsmf(BSM_v, od, pd, S, pms);
+  pd0->vol = vol - delta;
+  double f1 = calculate_bsmf(BSM_v, od, pd0, S, pms);
 
-  pd->vol = vol;
+  pd0->vol = vol + delta;
+  double f2 = calculate_bsmf(BSM_v, od, pd0, S, pms);
+
   double result =  (f2 - f1) / (2 * delta);
 
+  delete_pricing_data(pd0);
   result_set_vega(ret, result);
   return 0;
 }
