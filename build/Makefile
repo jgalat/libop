@@ -1,3 +1,5 @@
+OS ?= unix
+
 #compiler and linker
 CC 	:= gcc
 CPPC := g++
@@ -7,6 +9,9 @@ MKDIR := mkdir
 CP := cp
 
 TARGET := libop.so
+ifeq ($(OS),win32)
+TARGET := libop.dll
+endif
 
 #Directories
 SRCDIR   := ../src
