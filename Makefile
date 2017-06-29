@@ -1,3 +1,5 @@
+OS ?= unix
+
 #compiler
 CC	:= gcc
 MAKE := make
@@ -18,10 +20,10 @@ default: $(TARGET)
 SRC := example.c
 
 libop:
-	$(MAKE) -C $(BUILDDIR)
+	$(MAKE) -C $(BUILDDIR) OS=$(OS)
 
 $(TARGET): libop
-	$(CC) $(INC) $(SRC) $(CFLAGS) $(LIB) $(LDFLAGS) -o $(@)
+	$(CC) $(SRC) -o $(@) $(CFLAGS) $(INC) $(LIB) $(LDFLAGS) 
 
 export_all: $(TARGET)
 	$(MAKE) -C $(BUILDDIR) $(@)

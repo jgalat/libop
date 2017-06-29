@@ -1,3 +1,5 @@
+OS ?= unix
+
 #compiler and linker
 CC 	:= gcc
 CPPC := g++
@@ -7,6 +9,9 @@ MKDIR := mkdir
 CP := cp
 
 TARGET := libop.so
+ifeq ($(OS),win32)
+TARGET := libop.dll
+endif
 
 #Directories
 SRCDIR   := ../src
@@ -23,7 +28,7 @@ EXPORTDIR := ../export
 #Flags, Libraries and Includes
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2 -fPIC
 CPPFLAGS  := -std=gnu++11
-LDFLAGS  	:=
+LDFLAGS  	:= -lstdc++ -lgfortran
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
 .SUFFIXES: .c
 
@@ -54,10 +59,10 @@ EXTRAOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(CPPSRC:.cpp=.o))) $(QSSOBJ)
 default: $(TARGET)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
 $(BUILDDIR)/%.o: $(PMEUR)/%.c
-	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
 $(QSSOBJ): QSSSOLVER
 
@@ -65,16 +70,16 @@ QSSSOLVER:
 	$(MAKE) -C $(QSSLIBSDIR)
 
 $(BUILDDIR)/%.o: $(QSSDIR)/%.cpp
-	$(CPPC) $(INC) -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+	$(CPPC) -c $< -o $(@)  $(INC) $(CFLAGS) $(CPPFLAGS)
 
 $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
-	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
 $(BUILDDIR)/%.o: $(IVMDIR)/%.c
-	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
 $(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
-	$(CC) $(CFLAGS) -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
+	$(CC) -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ) $(CFLAGS) $(LDFLAGS)
 
 $(COMMONOBJ): | $(BUILDDIR)
 

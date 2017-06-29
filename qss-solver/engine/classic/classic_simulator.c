@@ -18,6 +18,7 @@
  ******************************************************************************/
 
 #include <functional>
+#include <stdlib.h>
 
 #include <classic/classic_simulator.h>
 #include <common/integrator.h>

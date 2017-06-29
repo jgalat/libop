@@ -30,6 +30,9 @@
 #include <stdint.h>
 #include <math.h>
 #include <string.h>
+#ifdef __MINGW32__
+#define ffs __builtin_ffs
+#endif
 #ifdef __linux__
 #include <pthread.h>
 #endif
