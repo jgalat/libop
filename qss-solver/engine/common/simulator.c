@@ -22,8 +22,6 @@
 #include <stdlib.h>
 
 #include "../classic/classic_simulator.h"
-//#include "../qss/qss_simulator.h"
-//#include "commands.h"
 #include "model.h"
 #include "utils.h"
 

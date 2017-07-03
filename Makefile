@@ -11,7 +11,7 @@ SRCDIR := src
 BUILDDIR := build
 
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
-LDFLAGS   := -lop -lstdc++ -lgfortran
+LDFLAGS   := -lop
 LIB				:= -L$(BUILDDIR)
 INC				:= -I$(SRCDIR)
 
@@ -23,7 +23,7 @@ libop:
 	$(MAKE) -C $(BUILDDIR) OS=$(OS)
 
 $(TARGET): libop
-	$(CC) $(SRC) -o $(@) $(CFLAGS) $(INC) $(LIB) $(LDFLAGS) 
+	$(CC) $(SRC) -o $(@) $(CFLAGS) $(INC) $(LIB) $(LDFLAGS)
 
 export_all: $(TARGET)
 	$(MAKE) -C $(BUILDDIR) $(@)

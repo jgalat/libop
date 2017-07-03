@@ -21,12 +21,9 @@
 
 #include <stdlib.h>
 
-#include "../classic/classic_dassl_integrator.h"
+// #include "../classic/classic_dassl_integrator.h"
 #include "../classic/classic_dopri_integrator.h"
 #include "../classic/classic_integrator.h"
-//#include "../qss/qss_integrator.h"
-//#include "../qss/qss_par_integrator.h"
-//#include "../qss/qss_seq_integrator.h"
 #include "data.h"
 #include "utils.h"
 
@@ -43,25 +40,9 @@ INT_Integrator (SIM_simulator simulator)
 	p->ops->integrate = DOPRI_integrate;
       }
       break;
-    case SD_DASSL:
-      {
-	p->ops->initiliaze = CLC_initialize;
-	p->ops->integrate = DASSL_integrate;
-      }
-      break;
     default:
-      {
-	// if (simulator->state->settings->parallel == TRUE)
-	//   {
-	//     p->ops->initiliaze = QSS_PAR_initialize;
-	//     p->ops->integrate = QSS_PAR_integrate;
-	//   }
-	// else
-	//   {
-	//     p->ops->initiliaze = QSS_SEQ_initialize;
-	//     p->ops->integrate = QSS_SEQ_integrate;
-	//   }
-      }
+      abort();
+      break;
     }
   return (p);
 }

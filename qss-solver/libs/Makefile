@@ -4,7 +4,6 @@ DEBUG ?= False
 
 #Compiler and Linker
 CC          := g++
-FC 			:= gfortran
 
 #The Directories, Source, Includes, Objects, Binary
 SRCDIR      := ../../qss-solver
@@ -18,7 +17,6 @@ BUILDDIR    := $(ENGINEDIR)/$(OBJDIR)/release
 ifeq ($(DEBUG),True)
 BUILDDIR    := $(ENGINEDIR)/$(OBJDIR)/debug
 endif
-#GRAPHDIR    := $(SRCDIR)/graph
 TARGETDIR   := ./
 SRCEXT      := c
 DEPEXT      := d
@@ -43,8 +41,6 @@ COMMONSRC = $(COMMONDIR)/data.c $(COMMONDIR)/utils.c $(COMMONDIR)/settings.c $(C
 
 CLASSICSRC = $(CLASSICDIR)/classic_data.c $(CLASSICDIR)/classic_integrator.c $(CLASSICDIR)/classic_dopri_integrator.c $(CLASSICDIR)/classic_dassl_integrator.c $(CLASSICDIR)/classic_simulator.c
 
-DASSLSRC = $(DASSLDIR)/daux.f $(DASSLDIR)/ddaskr.f $(DASSLDIR)/dlinpk.f
-
 DOPRISRC = $(DOPRIDIR)/dopri5.cpp
 
 # Objects
@@ -52,14 +48,12 @@ COMMONOBJ=$(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
 
 CLASSICOBJ=$(addprefix $(BUILDDIR)/, $(notdir $(CLASSICSRC:.c=.o)))
 
-DASSLOBJ=$(addprefix $(BUILDDIR)/, $(notdir $(DASSLSRC:.f=.o)))
-
 DOPRIOBJ=$(addprefix $(BUILDDIR)/, $(notdir $(DOPRISRC:.cpp=.o)))
 
 # Make dependencies
 DEPS = $(COMMONOBJ:.o=.d) $(CLASSICOBJ:.o=.d) $(DOPRIOBJ:.o=.d)
 
-default: $(COMMONOBJ) $(CLASSICOBJ)  $(DASSLOBJ) $(DOPRIOBJ)
+default: $(COMMONOBJ) $(CLASSICOBJ) $(DASSLOBJ) $(DOPRIOBJ)
 
 $(BUILDDIR)/%.o : $(COMMONDIR)/%.c
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
@@ -74,9 +68,6 @@ $(BUILDDIR)/%.o : $(DOPRIDIR)/%.cpp
 	$(CC) $(INC) $(CFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(CC) $(INC) -c $< -o $@ $(CFLAGS)
 
-$(BUILDDIR)/%.o : $(DASSLDIR)/%.f
-	$(FC) $(INC) -c $< -o $@ $(CFLAGS)
-
 $(COMMONOBJ): | $(BUILDDIR)
 
 $(CLASSICOBJ): | $(BUILDDIR)
@@ -89,7 +80,7 @@ $(BUILDDIR):
 .PHONY: clean
 
 clean:
-	$(RMS) $(DEPS) $(TARGET) $(LIBTIMESTEP) $(COMMONOBJ) $(CLASSICOBJ) $(DASSLOBJ) $(DOPRIOBJ)
+	$(RMS) $(DEPS) $(COMMONOBJ) $(CLASSICOBJ) $(DOPRIOBJ)
 
 help:
 	@echo "make DEBUG=<True|False> OS=<unix|win32|mac>"

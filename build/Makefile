@@ -28,7 +28,7 @@ EXPORTDIR := ../export
 #Flags, Libraries and Includes
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2 -fPIC
 CPPFLAGS  := -std=gnu++11
-LDFLAGS  	:= -lstdc++ -lgfortran
+LDFLAGS  	:= -lstdc++
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
 .SUFFIXES: .c
 
