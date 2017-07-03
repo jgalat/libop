@@ -61,7 +61,6 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   }
 
   _ds = _Smax/(_g_size + 1);
-  _ds2 = _square(_ds);
 
   _solution = new double[_g_size*4];
 
@@ -137,22 +136,23 @@ void BlackScholesModel::definition(double *x, double *d, double *alg, double t, 
   int i = 0;
 
   const double sigma2 = _square(_sigma);
+  const double ds2 = _square(_ds);
 
-  alg[_g_size*2] = 0.5*sigma2*_square(d[_g_size])*(x[1]-2.0*x[0]+_u0)/_ds2
+  alg[_g_size*2] = 0.5*sigma2*_square(d[_g_size])*(x[1]-2.0*x[0]+_u0)/ds2
             + (_r-_cd)*d[_g_size]*0.5*(x[1]-_u0)/_ds
             - _r*x[0];
   alg[_g_size*3] = d[0] * alg[_g_size*2];
   dx[0] = alg[_g_size*3];
 
   alg[_g_size*3-1] =
-            0.5*sigma2*_square(d[_g_size*2-1])*(_uN1-2.0*x[_g_size-1]+x[_g_size-2])/_ds2
+            0.5*sigma2*_square(d[_g_size*2-1])*(_uN1-2.0*x[_g_size-1]+x[_g_size-2])/ds2
             + (_r-_cd)*d[_g_size*2-1]*0.5*(_uN1-x[_g_size-2])/_ds
             - _r*x[_g_size-1];
   alg[_g_size*4-1] = d[_g_size-1]*alg[_g_size*3-1];
   dx[_g_size-1] = alg[_g_size*4-1];
 
   for(i = 1; i < _g_size-1; i++) {
-    alg[i+_g_size*2] = 0.5*sigma2*_square(d[i+_g_size])*(x[i+1]-2.0*x[i]+x[i-1])/_ds2
+    alg[i+_g_size*2] = 0.5*sigma2*_square(d[i+_g_size])*(x[i+1]-2.0*x[i]+x[i-1])/ds2
                 + (_r-_cd)*d[i+_g_size]*0.5*(x[i+1]-x[i-1])/_ds
                 - _r*x[i];
     alg[i+_g_size*3] = d[i]*alg[i+_g_size*2];
@@ -162,23 +162,24 @@ void BlackScholesModel::definition(double *x, double *d, double *alg, double t, 
 
 void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {
   const double sigma2 = _square(_sigma);
+  const double ds2 = _square(_ds);
   switch(i) {
     case 0:
       zc[0] = t-(_discdiv_date[_discdiv_i]);
       return;
     default:
       if(i >= 1 && i <= _g_size) {
-        alg[_g_size*2] = 0.5*sigma2*_square(d[_g_size])*(x[1]-2.0*x[0]+_u0)/_ds2
+        alg[_g_size*2] = 0.5*sigma2*_square(d[_g_size])*(x[1]-2.0*x[0]+_u0)/ds2
                   +(_r-_cd)*d[_g_size]*0.5*(x[1]-_u0)/_ds
                   - _r*x[0];
 
         if (i >= 2 && i <= _g_size-2) {
-          alg[i+(_g_size*2-1)] = 0.5*sigma2*_square(d[i+_g_size-1])*(x[i]-2.0*x[i-1]+x[i-2])/_ds2
+          alg[i+(_g_size*2-1)] = 0.5*sigma2*_square(d[i+_g_size-1])*(x[i]-2.0*x[i-1]+x[i-2])/ds2
             + (_r-_cd)*d[i+_g_size-1]*0.5*(x[i]-x[i-2])/_ds
             - _r*x[i-1];
         }
 
-        alg[_g_size*3-1] = 0.5*sigma2*_square(d[_g_size*2-1])*(_uN1-2.0*x[_g_size-1]+x[_g_size-2])/_ds2
+        alg[_g_size*3-1] = 0.5*sigma2*_square(d[_g_size*2-1])*(_uN1-2.0*x[_g_size-1]+x[_g_size-2])/ds2
                     + (_r-_cd)*d[_g_size*2-1]*0.5*(_uN1-x[_g_size-2])/_ds
                     - _r*x[_g_size-1];
         zc[0] = alg[i+(_g_size*2-1)];
@@ -187,11 +188,11 @@ void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, d
 }
 
 void BlackScholesModel::handlerPos(int i, double *x, double *d, double *alg, double t) {
-  int i2;
+  int j;
   switch(i) {
     case 0:
-      for(i2 = 0; i2 < _g_size; i2++) {
-        d[i2+_g_size] = d[i2+_g_size]+_discdiv_ammo[_discdiv_i];
+      for(j = 0; j < _g_size; j++) {
+        d[j+_g_size] = d[j+_g_size]+_discdiv_ammo[_discdiv_i];
       }
       _discdiv_i++;
       return;
@@ -210,9 +211,8 @@ void BlackScholesModel::handlerNeg(int i, double *x, double *d, double *alg, dou
 
 void BlackScholesModel::output(int i, double *x, double *d, double *alg,
   double t, double *out) {
-  int j;
-
-  j = i;
+  const double ds2 = _square(_ds);
+  int j = i;
   if(j >=0 && j < _g_size) {
     out[0] = x[j];
   }
@@ -229,11 +229,11 @@ void BlackScholesModel::output(int i, double *x, double *d, double *alg,
 
   j = i-_g_size*2;
   if(j >=0 && j < _g_size) {
-    alg[_g_size] = (x[1]-2.0*x[0]+_u0)/_ds2;
+    alg[_g_size] = (x[1]-2.0*x[0]+_u0)/ds2;
     if (j >= 1 && j < _g_size-1) {
-      alg[j+_g_size] = (x[j+1]-2.0*x[j]+x[j-1])/_ds2;
+      alg[j+_g_size] = (x[j+1]-2.0*x[j]+x[j-1])/ds2;
     }
-    alg[_g_size*2-1] = (_uN1-2.0*x[_g_size-1]+x[_g_size-2])/_ds2;
+    alg[_g_size*2-1] = (_uN1-2.0*x[_g_size-1]+x[_g_size-2])/ds2;
     out[0] = alg[j+_g_size];
   }
 
@@ -252,6 +252,8 @@ void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
   double t, double *out) {
 
   int j;
+  const double ds2 = _square(_ds);
+
 
   /*
     out: 0 -> _g_size-1
@@ -283,15 +285,15 @@ void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
     alg: _g_size -> _g_size*2-1
   */
 
-  alg[_g_size] = (x[1]-2.0*x[0]+_u0)/_ds2;
+  alg[_g_size] = (x[1]-2.0*x[0]+_u0)/ds2;
   out[_g_size*2] = alg[_g_size];
 
   for (j = 1; j < _g_size-1 ; j++) {
-    alg[j+_g_size] = (x[j+1]-2.0*x[j]+x[j-1])/_ds2;
+    alg[j+_g_size] = (x[j+1]-2.0*x[j]+x[j-1])/ds2;
     out[_g_size*2+j] = alg[_g_size+j];
   }
 
-  alg[_g_size*2-1] = (_uN1-2.0*x[_g_size-1]+x[_g_size-2])/_ds2;
+  alg[_g_size*2-1] = (_uN1-2.0*x[_g_size-1]+x[_g_size-2])/ds2;
   out[_g_size*3-1] = alg[_g_size*2-1];
 
   /*
@@ -314,37 +316,36 @@ void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
 void BlackScholesModel::initializeDataStructs(void *simulator_) {
   CLC_simulator simulator = (CLC_simulator) simulator_;
   int i = 0;
-  int i4;
-  int i5;
   int *outputs = new int[_g_size*4];
   int *states = new int[_g_size];
   simulator->data = CLC_Data(_g_size,_g_size*2,_g_size+1,0,_g_size*4,_solver,_ft,_dqmin,_dqrel);
   CLC_data modelData = simulator->data;
   double S;
   // Initialize model code.
-  for(i4 = 0; i4 < _g_size; i4++) {
-    S = (i4+1)*_ds;
-    modelData->x[i4] = MAX(_op_type == CALL ? S-_K : _K-S, 0.0);
-    modelData->d[i4+_g_size] = S;
+  for(i = 0; i < _g_size; i++) {
+    S = (i+1)*_ds;
+    modelData->x[i] = MAX(_op_type == CALL ? S-_K : _K-S, 0.0);
+    modelData->d[i+_g_size] = S;
   }
 
   const double sigma2 = _square(_sigma);
+  const double ds2 = _square(_ds);
 
-  if(0.5*sigma2*_square(modelData->d[_g_size])*(modelData->x[1]-2.0*modelData->x[0]+_u0)/_ds2
+  if(0.5*sigma2*_square(modelData->d[_g_size])*(modelData->x[1]-2.0*modelData->x[0]+_u0)/ds2
       + (_r-_cd)*modelData->d[_g_size]*0.5*(modelData->x[1]-_u0)/_ds
       - _r*modelData->x[0] >= 0.0) {
     modelData->d[0] = 1.0;
   }
 
-  for(i5 = 1; i5 < _g_size-1; i5++) {
-    if(0.5*sigma2*_square(modelData->d[i5+_g_size])*(modelData->x[i5+1]-2.0*modelData->x[i5]+modelData->x[i5-1])/_ds2
-        + (_r-_cd)*modelData->d[i5+_g_size]*0.5*(modelData->x[i5+1]-modelData->x[i5-1])/_ds
-        - _r*modelData->x[i5] >= 0.0) {
-      modelData->d[i5] = 1.0;
+  for(i = 1; i < _g_size-1; i++) {
+    if(0.5*sigma2*_square(modelData->d[i+_g_size])*(modelData->x[i+1]-2.0*modelData->x[i]+modelData->x[i-1])/ds2
+        + (_r-_cd)*modelData->d[i+_g_size]*0.5*(modelData->x[i+1]-modelData->x[i-1])/_ds
+        - _r*modelData->x[i] >= 0.0) {
+      modelData->d[i] = 1.0;
     }
   }
 
-  if(0.5*sigma2*_square(modelData->d[_g_size*2-1])*(_uN1-2.0*modelData->x[_g_size-1]+modelData->x[_g_size-2])/_ds2
+  if(0.5*sigma2*_square(modelData->d[_g_size*2-1])*(_uN1-2.0*modelData->x[_g_size-1]+modelData->x[_g_size-2])/ds2
       + (_r-_cd)*modelData->d[_g_size*2-1]*0.5*(_uN1-modelData->x[_g_size-2])/_ds
       - _r*modelData->x[_g_size-1] >= 0.0) {
     modelData->d[_g_size-1] = 1.0;
