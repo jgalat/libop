@@ -52,7 +52,7 @@ int main(int argc, char const *argv[]) {
   }
 
   delete_result(result);
-  // delete_pm_settings(pms);
+  delete_pm_settings(pms);
   delete_time_period(tp);
   delete_pricing_method(pm);
   delete_dividend(d);
