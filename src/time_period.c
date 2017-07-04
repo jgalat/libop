@@ -3,7 +3,7 @@
 #include "time_period.h"
 
 static const double _365 = 1 / 365.0;
-static const double _260 = 1 / 260.0;
+static const double _252 = 1 / 252.0;
 
 struct time_period_ {
   date t;
@@ -28,8 +28,8 @@ time_period new_time_period_365d() {
   return new_time_period_(_365);
 }
 
-time_period new_time_period_260d() {
-  return new_time_period_(_260);
+time_period new_time_period_252d() {
+  return new_time_period_(_252);
 }
 
 void delete_time_period(time_period tp) {
