@@ -14,7 +14,7 @@ MKDIR := mkdir
 CP := cp
 
 TARGET := libop.so
-ifeq ($(OS),win32)
+ifeq ($(OS), win32)
 TARGET := libop.dll
 endif
 

@@ -1,7 +1,10 @@
 OS ?= unix
 
 #compiler
-CC	:= gcc
+CC := gcc
+ifeq ($(OS), win32)
+CC := x86_64-w64-mingw32-gcc
+endif
 MAKE := make
 RMS := rm -rf
 
