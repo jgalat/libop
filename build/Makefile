@@ -3,6 +3,11 @@ OS ?= unix
 #compiler and linker
 CC 	:= gcc
 CPPC := g++
+ifeq ($(OS), win32)
+CC := x86_64-w64-mingw32-gcc
+CPPC := x86_64-w64-mingw32-g++
+endif
+
 MAKE := make
 RMS := rm -rf
 MKDIR := mkdir
@@ -30,7 +35,10 @@ BUILDDIR := obj
 EXPORTDIR := ../export
 
 #Flags, Libraries and Includes
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2 -fPIC
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
+ifeq ($(OS), unix)
+CFLAGS += -fPIC
+endif
 CPPFLAGS  := -std=gnu++11
 LDFLAGS  	:= -lstdc++
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
