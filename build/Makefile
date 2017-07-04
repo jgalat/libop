@@ -19,17 +19,22 @@ PMDIR		 := $(SRCDIR)/pricing_methods
 PMEUR  	 := $(PMDIR)/european
 PMAM     := $(PMDIR)/american
 IVMDIR   := $(SRCDIR)/impl_vol_methods
-QSSDIR   := ../qss-solver
-QSSLIBSDIR := $(QSSDIR)/libs
-BUILDDIR := $(SRCDIR)/obj
-EXPORTDIR := ../export
 
+QSSDIR   := ../qss-solver
+QSSENGINEDIR := $(QSSDIR)/engine
+QSSCOMMONDIR := $(QSSENGINEDIR)/common
+QSSCLASSICDIR := $(QSSENGINEDIR)/classic
+QSSDOPRIDIR := $(QSSENGINEDIR)/classic/dopri5
+
+BUILDDIR := obj
+EXPORTDIR := ../export
 
 #Flags, Libraries and Includes
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2 -fPIC
 CPPFLAGS  := -std=gnu++11
 LDFLAGS  	:= -lstdc++
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
+QSSINC    := -I$(QSSCOMMONDIR) -I$(QSSENGINEDIR)
 .SUFFIXES: .c
 
 #Source files
@@ -40,7 +45,7 @@ COMMONSRC := $(SRCDIR)/option_data.c $(SRCDIR)/pricing_data.c $(SRCDIR)/result.c
 PMSRC := $(PMEUR)/european_analytic.c \
 	$(PMAM)/finite_difference/american_finite_difference.c
 
-CPPSRC := $(QSSDIR)/black_scholes_model.cpp
+BSMSRC := $(QSSDIR)/black_scholes_model.cpp
 
 IVMSRC := $(IVMDIR)/impl_vol_mf.c $(IVMDIR)/secant_method.c
 
@@ -48,15 +53,36 @@ EXPORTH := $(SRCDIR)/libop.h $(SRCDIR)/option.h $(SRCDIR)/pricing_method.h \
 	$(SRCDIR)/option_data.h $(SRCDIR)/pm_settings.h $(SRCDIR)/dividend.h \
 	$(SRCDIR)/parameter.h $(SRCDIR)/result.h $(SRCDIR)/time_period.h
 
+QSSCOMMONSRC = $(QSSCOMMONDIR)/data.c $(QSSCOMMONDIR)/utils.c $(QSSCOMMONDIR)/settings.c \
+	$(QSSCOMMONDIR)/simulator.c $(QSSCOMMONDIR)/integrator.c $(QSSCOMMONDIR)/engine.c
+
+QSSCLASSICSRC = $(QSSCLASSICDIR)/classic_data.c $(QSSCLASSICDIR)/classic_integrator.c \
+	$(QSSCLASSICDIR)/classic_dopri_integrator.c $(QSSCLASSICDIR)/classic_simulator.c
+
+QSSDOPRISRC = $(QSSDOPRIDIR)/dopri5.cpp
+
 #Objects
 COMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(COMMONSRC:.c=.o)))
 PMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(PMSRC:.c=.o)))
 IVMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(IVMSRC:.c=.o)))
-QSSOBJ = $(QSSDIR)/engine/obj/release/*.o
-EXTRAOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(CPPSRC:.cpp=.o))) $(QSSOBJ)
 
+QSSCOMMONOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(QSSCOMMONSRC:.c=.o)))
+QSSCLASSICOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(QSSCLASSICSRC:.c=.o)))
+QSSDOPRIOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(QSSDOPRISRC:.cpp=.o)))
+QSSOBJ = $(QSSCOMMONOBJ) $(QSSCLASSICOBJ) $(QSSDOPRIOBJ)
+
+BSMOBJ = $(addprefix $(BUILDDIR)/, $(notdir $(BSMSRC:.cpp=.o)))
 
 default: $(TARGET)
+
+$(BUILDDIR)/%.o : $(QSSCOMMONDIR)/%.c
+	$(CPPC) -c $< -o $(@) $(QSSINC) $(CFLAGS) $(CPPFLAGS)
+
+$(BUILDDIR)/%.o : $(QSSCLASSICDIR)/%.c
+	$(CPPC) -c $< -o $(@) $(QSSINC) $(CFLAGS) $(CPPFLAGS)
+
+$(BUILDDIR)/%.o : $(QSSDOPRIDIR)/%.cpp
+	$(CPPC) -c $< -o $(@) $(QSSINC) $(CFLAGS) $(CPPFLAGS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
@@ -64,13 +90,8 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 $(BUILDDIR)/%.o: $(PMEUR)/%.c
 	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
-$(QSSOBJ): QSSSOLVER
-
-QSSSOLVER:
-	$(MAKE) -C $(QSSLIBSDIR)
-
 $(BUILDDIR)/%.o: $(QSSDIR)/%.cpp
-	$(CPPC) -c $< -o $(@)  $(INC) $(CFLAGS) $(CPPFLAGS)
+	$(CPPC) -c $< -o $(@) $(INC) $(CFLAGS) $(CPPFLAGS)
 
 $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
@@ -78,14 +99,14 @@ $(BUILDDIR)/%.o: $(PMAM)/finite_difference/%.c
 $(BUILDDIR)/%.o: $(IVMDIR)/%.c
 	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
-$(TARGET): $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
-	$(CC) -shared -o $(@) $(EXTRAOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ) $(CFLAGS) $(LDFLAGS)
+$(TARGET): $(QSSOBJ) $(BSMOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
+	$(CC) -shared -o $(@) $(QSSOBJ) $(BSMOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ) $(CFLAGS) $(LDFLAGS)
+
+$(QSSOBJ): | $(BUILDDIR)
 
 $(COMMONOBJ): | $(BUILDDIR)
 
 $(PMOBJ): | $(BUILDDIR)
-
-$(EXTRAOBJ): | $(BUILDDIR)
 
 $(BUILDDIR):
 	$(MKDIR) -p $(BUILDDIR)
@@ -98,5 +119,4 @@ export_all: $(TARGET)
 .PHONY : clean
 
 clean:
-	$(MAKE) -C $(QSSLIBSDIR) clean
 	$(RMS) $(EXPORTDIR) $(BUILDDIR) $(TARGET)
