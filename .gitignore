@@ -32,11 +32,8 @@
 *.dSYM/
 *.su
 
-
-*.d
-src/obj/
+build/obj/
 example
-qss-solver/engine/obj/
 test*
 *.log
 export/
