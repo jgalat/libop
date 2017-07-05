@@ -41,6 +41,9 @@ CFLAGS += -fPIC
 endif
 CPPFLAGS  := -std=gnu++11
 LDFLAGS  	:= -lstdc++
+ifeq ($(OS), win32)
+LDFLAGS   := -static-libgcc -Wl,-Bstatic -lstdc++ -lpthread
+endif
 INC       := -I$(SRCDIR) -I$(QSSDIR)/..
 QSSINC    := -I$(QSSCOMMONDIR) -I$(QSSENGINEDIR)
 .SUFFIXES: .c
