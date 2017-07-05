@@ -15,7 +15,7 @@ typedef enum {
 typedef struct dividend_ * dividend;
 struct dividend_;
 
-dividend new_continuous_dividend(double);
+dividend new_continuous_dividend(double continuous_dividend);
 dividend new_discrete_dividend();
 
 void delete_dividend(dividend);
@@ -28,11 +28,11 @@ int div_disc_get_n(dividend);
 date *div_disc_get_dates(dividend);
 double *div_disc_get_ammounts(dividend);
 
-int div_disc_set_dates(dividend, time_period, int, ...);
-int div_disc_set_ammounts(dividend, int, ...);
+int div_disc_set_dates(dividend, time_period, int size, ...);
+int div_disc_set_ammounts(dividend, int size, ...);
 
-int div_disc_set_dates_(dividend, time_period, int, int*);
-int div_disc_set_ammounts_(dividend, int, double*);
+int div_disc_set_dates_(dividend, time_period, int size, int*);
+int div_disc_set_ammounts_(dividend, int size, double*);
 
 #ifdef __cplusplus
 }

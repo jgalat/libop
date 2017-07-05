@@ -12,7 +12,7 @@ struct option_data_ {
   double        strike; /***/
 };
 
-option_data new_option_data(option_type, exercise_type, time_period, double);
+option_data new_option_data(option_type, exercise_type, time_period, double K);
 
 void delete_option_data(option_data);
 

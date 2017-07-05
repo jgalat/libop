@@ -13,13 +13,13 @@ struct result_;
 result new_result();
 void delete_result(result);
 
-double result_get_v(result r);
-double result_get_delta(result r);
-double result_get_gamma(result r);
-double result_get_theta(result r);
-double result_get_rho(result r);
-double result_get_vega(result r);
-volatility result_get_impl_vol(result r);
+double result_get_v(result);
+double result_get_delta(result);
+double result_get_gamma(result);
+double result_get_theta(result);
+double result_get_rho(result);
+double result_get_vega(result);
+volatility result_get_impl_vol(result);
 
 #ifdef __cplusplus
 }
