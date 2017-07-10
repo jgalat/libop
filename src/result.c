@@ -30,7 +30,7 @@ void delete_result(result r) {
   free(r);
 }
 
-int result_set_v(result r, double val) {
+int result_set_price(result r, double val) {
   if (!r)
     return -1;
   r->v = val;
@@ -80,7 +80,7 @@ int result_set_impl_vol(result r, volatility v) {
 }
 
 /* TODO null checks */
-double result_get_v(result r) {
+double result_get_price(result r) {
   return r->v;
 }
 double result_get_delta(result r) {

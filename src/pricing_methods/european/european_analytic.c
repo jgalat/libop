@@ -117,7 +117,7 @@ static int option_price(option_data od, pricing_data pd, double S,
   /* check if it is eur... etcccc */
 
   double result = option_price_(od, pd, S);
-  result_set_v(ret, result);
+  result_set_price(ret, result);
   return 0;
 }
 

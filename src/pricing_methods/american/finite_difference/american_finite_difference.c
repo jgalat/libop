@@ -166,7 +166,7 @@ static int option_price(option_data od, pricing_data pd, double S,
 
   double result = calculate_bsmf(BSM_v, od, pd, S, pms);
 
-  result_set_v(ret, result);
+  result_set_price(ret, result);
   return 0;
 }
 

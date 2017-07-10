@@ -4,7 +4,7 @@
 #include <parameter.h>
 #include "result.h"
 
-int result_set_v(result r, double val);
+int result_set_price(result r, double val);
 int result_set_delta(result r, double val);
 int result_set_gamma(result r, double val);
 int result_set_theta(result r, double val);

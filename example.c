@@ -43,7 +43,7 @@ int main(int argc, char const *argv[]) {
   } else {
     option_price_and_greeks(opt, S, result);
 
-    printf("V = %lf\n", result_get_v(result));
+    printf("V = %lf\n", result_get_price(result));
     printf("delta = %lf\n", result_get_delta(result));
     printf("gamma = %lf\n", result_get_gamma(result));
     printf("theta = %lf\n", result_get_theta(result));
