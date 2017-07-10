@@ -36,6 +36,5 @@ int secant_method(impl_vol_mf ivmf, impl_vol_mf_args ivmfa, result r) {
     y1 = y2;
   }
 
-  result_set_impl_vol(r, x2);
-  return 0;
+  return result_set_impl_vol(r, x2);
 }
