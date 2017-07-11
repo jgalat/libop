@@ -161,8 +161,8 @@ static int impl_vol(option_data od, pricing_data pd, double V, double S,
 static int option_price(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  // exercise_type et = option_get_et(o);
-  /* check if it is ame... etcccc */
+  if (od->exercise != AM_EXERCISE)
+    return -1;
 
   double result = calculate_bsmf(BSM_v, od, pd, S, pms);
 
@@ -172,8 +172,8 @@ static int option_price(option_data od, pricing_data pd, double S,
 static int greek_delta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  // exercise_type et = option_get_et(o);
-  /* check if it is ame... etcccc */
+  if (od->exercise != AM_EXERCISE)
+    return -1;
 
   double result = calculate_bsmf(BSM_delta, od, pd, S, pms);
 
@@ -183,8 +183,8 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 static int greek_gamma(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  // exercise_type et = option_get_et(o);
-  /* check if it is ame... etcccc */
+  if (od->exercise != AM_EXERCISE)
+    return -1;
 
   double result = calculate_bsmf(BSM_gamma, od, pd, S, pms);
 
@@ -194,8 +194,8 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 static int greek_theta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  // exercise_type et = option_get_et(o);
-  /* check if it is ame... etcccc */
+  if (od->exercise != AM_EXERCISE)
+    return -1;
 
   double result = calculate_bsmf(BSM_theta, od, pd, S, pms);
 
@@ -205,8 +205,9 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 static int greek_rho(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  // exercise_type et = option_get_et(o);
-  /* check if it is ame... etcccc */
+  if (od->exercise != AM_EXERCISE)
+    return -1;
+
   static const double delta = 0.0001;
 
   pricing_data pd0 = new_pricing_data_(pd);
@@ -228,8 +229,9 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 static int greek_vega(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  // exercise_type et = option_get_et(o);
-  /* check if it is ame... etcccc */
+  if (od->exercise != AM_EXERCISE)
+    return -1;
+
   static const double delta = 0.0001;
 
   pricing_data pd0 = new_pricing_data_(pd);

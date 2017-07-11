@@ -113,8 +113,9 @@ static int impl_vol(option_data od, pricing_data pd, double V, double S,
 
 static int option_price(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
 
   double result = option_price_(od, pd, S);
   return result_set_price(ret, result);
@@ -122,8 +123,9 @@ static int option_price(option_data od, pricing_data pd, double S,
 
 static int greek_delta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
 
   option_type type = od->opt_type;
   time_period tp = od->maturity;
@@ -158,8 +160,9 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 
 static int greek_gamma(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
 
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
@@ -185,8 +188,9 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 
 static int greek_theta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
 
   option_type type = od->opt_type;
   time_period tp = od->maturity;
@@ -223,8 +227,9 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 
 static int greek_rho(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
 
   option_type type = od->opt_type;
   time_period tp = od->maturity;
@@ -257,8 +262,9 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 
 static int greek_vega(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
-  // exercise_type et = option_get_et(o);
-  /* check if it is eur... etcccc */
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
 
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);

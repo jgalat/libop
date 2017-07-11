@@ -11,13 +11,12 @@ struct option_ {
 };
 
 option new_option(option_type ot, exercise_type et, time_period m, double k) {
+  option_data od = new_option_data(ot, et, m, k);
+  if (!od)
+    return NULL;
   option o = (option) malloc(sizeof(struct option_));
   if (o) {
-    o->option_data = new_option_data(ot, et, m, k);
-    if (!o->option_data) {
-      delete_option(o);
-      return NULL;
-    }
+    o->option_data = od;
     o->pm = NULL;
   }
   return o;
