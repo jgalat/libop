@@ -61,7 +61,7 @@ void delete_dividend(dividend d) {
 
 
 static int get_correct_size(struct disc_div *dd, int size) {
-  if (dd->size == -1) {
+  if (dd->size == 0) {
     dd->size = size;
     return size;
   } else {
