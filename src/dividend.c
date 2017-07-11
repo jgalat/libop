@@ -34,7 +34,7 @@ dividend new_discrete_dividend() {
   if (d) {
     d->div_type = DIV_DISCRETE;
     d->actual_div = (void *) dd;
-    dd->size = -1;
+    dd->size = 0;
     dd->dates = NULL;
     dd->ammounts = NULL;
   }
