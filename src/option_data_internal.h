@@ -2,6 +2,7 @@
 #define __OPTION_DATA_INTERNAL_H__
 
 #include <time_period.h>
+#include "option_data.h"
 
 typedef struct option_data_ * option_data;
 
