@@ -14,29 +14,26 @@ struct disc_div {
 };
 
 dividend new_continuous_dividend(double val) {
+  double *cd = (double *) malloc(sizeof(double));
+  if (!cd)
+    return NULL;
   dividend d = (dividend) malloc(sizeof(struct dividend_));
   if (d) {
     d->div_type = DIV_CONTINUOUS;
-    d->actual_div = malloc(sizeof(double));
-    if (!d->actual_div) {
-      delete_dividend(d);
-      return NULL;
-    }
-    *((double *) d->actual_div) = val;
+    d->actual_div = (void *) cd;
+    *cd = val;
   }
   return d;
 }
 
 dividend new_discrete_dividend() {
+  struct disc_div *dd = (struct disc_div *) malloc(sizeof(struct disc_div));
+  if (!dd)
+    return NULL;
   dividend d = (dividend) malloc(sizeof(struct dividend_));
   if (d) {
     d->div_type = DIV_DISCRETE;
-    struct disc_div *dd = (struct disc_div *) malloc(sizeof(struct disc_div));
     d->actual_div = (void *) dd;
-    if (!d->actual_div) {
-      delete_dividend(d);
-      return NULL;
-    }
     dd->size = -1;
     dd->dates = NULL;
     dd->ammounts = NULL;

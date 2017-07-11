@@ -21,9 +21,8 @@ struct pricing_method_ {
 pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
   dividend d) {
   pricing_data pd = new_pricing_data(v, r, d);
-  if (!pd) {
+  if (!pd)
     return NULL;
-  }
   switch (id) {
     case EU_ANALYTIC:
       return new_european_analytic(pd);
