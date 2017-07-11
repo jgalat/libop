@@ -7,16 +7,16 @@ int main(int argc, char const *argv[]) {
   double S = 21.0, strike = 20.0;
   volatility sigma = 0.4;
   risk_free_rate r = 0.09;
-  dividend d = new_continuous_dividend(0.1);
+  // dividend d = new_continuous_dividend(0.1);
   double option_value = 3.447474;
 
   time_period tp = new_time_period_365d();
 
   int iv = 0 , eur = 0;
 
-  // dividend d = new_discrete_dividend();
-  // div_disc_set_dates(d, tp, 1, 182);
-  // div_disc_set_ammounts(d, 1, 1.0);
+  dividend d = new_discrete_dividend();
+  div_disc_set_dates(d, tp, 1, 182);
+  div_disc_set_ammounts(d, 1, 0);
 
   option opt;
   pricing_method pm;

@@ -35,7 +35,7 @@ BUILDDIR := obj
 EXPORTDIR := ../export
 
 #Flags, Libraries and Includes
-CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
+CFLAGS 		:= -Wall -msse2 -mfpmath=sse -g
 ifeq ($(OS), unix)
 CFLAGS += -fPIC
 endif

@@ -337,7 +337,7 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
     modelOutput->OS[i][outputs[i]++] = i;
   }
 
-	simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,nullptr);
+	simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,&bsmhn);
   delete [] outputs;
   delete [] states;
 }
