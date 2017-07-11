@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+/**
+ * Type definitions for the volatility and risk free rate
+ */
 typedef double volatility;
 typedef double risk_free_rate;
 
