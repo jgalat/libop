@@ -8,7 +8,11 @@ int secant_method(impl_vol_mf ivmf, impl_vol_mf_args ivmfa, result r) {
 
   pm_settings pms = ivmfa->pms;
 
-  double *init = pm_settings_get_iv_init(pms);
+  double init_[2];
+  double *init = pm_settings_get_iv_init(pms, init_);
+
+  if (!init)
+    init = init_;
 
   double x0 = init[0],
          x1 = init[1],

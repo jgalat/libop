@@ -34,7 +34,7 @@ dividend new_discrete_dividend() {
   if (d) {
     d->div_type = DIV_DISCRETE;
     d->actual_div = (void *) dd;
-    dd->size = -1;
+    dd->size = 0;
     dd->dates = NULL;
     dd->ammounts = NULL;
   }
@@ -61,7 +61,9 @@ void delete_dividend(dividend d) {
 
 
 static int get_correct_size(struct disc_div *dd, int size) {
-  if (dd->size == -1) {
+  if (size < 0)
+    return -1;
+  if (dd->size == 0) {
     dd->size = size;
     return size;
   } else {
@@ -84,6 +86,9 @@ int div_disc_set_dates(dividend d, time_period tp, int size, ...) {
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
   int n = get_correct_size(dd, size);
+
+  if (n < 0)
+    return -1;
 
   if (dd->dates)
     free(dd->dates);
@@ -117,6 +122,9 @@ int div_disc_set_ammounts(dividend d, int size, ...) {
 
   int n = get_correct_size(dd, size);
 
+  if (n < 0)
+    return -1;
+
   if (dd->ammounts)
     free(dd->ammounts);
 
@@ -148,6 +156,9 @@ int div_disc_set_dates_(dividend d, time_period tp, int size, int *days) {
 
   int n = get_correct_size(dd, size);
 
+  if (n < 0)
+    return -1;
+
   if (dd->dates)
     free(dd->dates);
 
@@ -174,6 +185,9 @@ int div_disc_set_ammounts_(dividend d, int size, double *ammounts) {
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
   int n = get_correct_size(dd, size);
+
+  if (n < 0)
+    return -1;
 
   if (dd->ammounts)
     free(dd->ammounts);

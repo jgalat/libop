@@ -9,25 +9,87 @@
 extern "C" {
 #endif
 
-struct option_;
+/**
+ * Option structure data type.
+ */
 typedef struct option_ * option;
+struct option_;
 
+/**
+ * Creates a new option.
+ * On error returns NULL.
+ */
 option new_option(option_type, exercise_type, time_period, double strike);
 
+/**
+ * Deletes an option structure.
+ */
 void delete_option(option);
 
+/**
+ * Sets a given pricing method to a specified option.
+ * Option structures require pricing methods to valuate prices and greeks.
+ * On error returns -1.
+ * More on pricing methods in pricing_method.h.
+ */
 int option_set_pricing_method(option, pricing_method);
 
+/**
+ * Calculates the price of an option for a given underlying.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
 int option_price(option, double underlying, result);
-int option_delta(option, double underlying, result);
-int option_gamma(option, double underlying, result);
-int option_theta(option, double underlying, result);
-int option_rho(option, double underlying, result);
-int option_vega(option, double underlying, result);
-int option_impl_vol(option, double price, double underlying, result);
 
-/* TODO better name? */
+/**
+ * Calculates the delta of an option for a given underlying.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
+int option_delta(option, double underlying, result);
+
+/**
+ * Calculates the gamma of an option for a given underlying.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
+int option_gamma(option, double underlying, result);
+
+/**
+ * Calculates the theta of an option for a given underlying.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
+int option_theta(option, double underlying, result);
+
+/**
+ * Calculates the rho of an option for a given underlying.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
+int option_rho(option, double underlying, result);
+
+/**
+ * Calculates the vega of an option for a given underlying.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
+int option_vega(option, double underlying, result);
+
+/**
+ * Calculates the price and the greeks of a given option.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ * Equivalent to run the functions described above.
+ */
 int option_price_and_greeks(option, double underlying, result);
+
+/**
+ * Given an option price and underlying, calculates the implied volatilty.
+ * It requires a 'result' structure to store the result.
+ * On error returns -1.
+ */
+int option_impl_vol(option, double price, double underlying, result);
 
 #ifdef __cplusplus
 }

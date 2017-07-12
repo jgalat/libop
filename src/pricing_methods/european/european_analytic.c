@@ -92,21 +92,11 @@ static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
 static int impl_vol(option_data od, pricing_data pd, double V, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  int f = 0;
-  if (!pms) {
-    pms = new_pm_settings(pms);
-    f = 1;
-  }
-
   impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, V, S, pms, pm_data);
 
   int res = secant_method(iv_f, ivmfa, ret);
 
   delete_impl_vol_mf_args(ivmfa);
-
-  if (f) {
-    delete_pm_settings(pms);
-  }
 
   return res;
 }

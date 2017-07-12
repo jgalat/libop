@@ -40,6 +40,10 @@ date tp_int_to_date(time_period tp, int days) {
   return (date) ((double) days * tp->period);
 }
 
+int tp_date_to_int(time_period tp, date date) {
+  return (int) (date / tp->period);
+}
+
 int tp_set_days(time_period tp, int d) {
   if (!tp)
     return -1;

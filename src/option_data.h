@@ -5,11 +5,17 @@
 extern "C" {
 #endif
 
+/**
+ * Enum of types of options available
+ */
 typedef enum {
   OPTION_CALL,
   OPTION_PUT
 } option_type;
 
+/**
+ * Enum of types of exercises available
+ */
 typedef enum {
   AM_EXERCISE,
   EU_EXERCISE
