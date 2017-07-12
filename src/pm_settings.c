@@ -11,6 +11,8 @@ struct pm_settings_ {
   int max_it;
   double eps;
   double init[2];
+  /* custom */
+  void *extra_data;
 };
 
 pm_settings new_pm_settings() {
@@ -83,6 +85,13 @@ int pm_settings_set_iv_init(pm_settings pms, double x0, double x1) {
   return 0;
 }
 
+int pm_settings_set_extra_data(pm_settings pms, void *extra_data) {
+  if (!pms)
+    return -1;
+  pms->extra_data = extra_data;
+  return 0;
+}
+
 int pm_settings_get_grid_size(pm_settings pms) {
   return pms->N;
 }
@@ -109,4 +118,8 @@ double pm_settings_get_iv_eps(pm_settings pms) {
 
 double *pm_settings_get_iv_init(pm_settings pms) {
   return pms->init;
+}
+
+void *pm_settings_get_extra_data(pm_settings pms) {
+  return pms->extra_data;
 }
