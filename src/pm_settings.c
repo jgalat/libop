@@ -3,7 +3,7 @@
 #include "pm_settings.h"
 
 struct pm_settings_ {
-  int N;
+  int grid_size;
   double Smax;
   double tol;
   double abstol;
@@ -18,7 +18,7 @@ struct pm_settings_ {
 pm_settings new_pm_settings() {
   pm_settings pms = (pm_settings) malloc(sizeof(struct pm_settings_));
   if (pms) {
-    pms->N = 50;
+    pms->grid_size = 50;
     pms->Smax = -1;
     pms->tol = 1e-09;
     pms->abstol = 1e-12;
@@ -38,7 +38,7 @@ void delete_pm_settings(pm_settings pms) {
 int pm_settings_set_grid_size(pm_settings pms, int N) {
   if (!pms)
     return -1;
-  pms->N = N;
+  pms->grid_size = N;
   return 0;
 }
 
@@ -93,7 +93,7 @@ int pm_settings_set_extra_data(pm_settings pms, void *extra_data) {
 }
 
 int pm_settings_get_grid_size(pm_settings pms) {
-  return pms->N;
+  return pms->grid_size;
 }
 
 double pm_settings_get_Smax(pm_settings pms) {
