@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 /**
- * Option structure data type
+ * Option structure data type.
  */
 typedef struct option_ * option;
 struct option_;
@@ -36,49 +36,49 @@ int option_set_pricing_method(option, pricing_method);
 
 /**
  * Calculates the price of an option for a given underlying.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
 int option_price(option, double underlying, result);
 
 /**
  * Calculates the delta of an option for a given underlying.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
 int option_delta(option, double underlying, result);
 
 /**
  * Calculates the gamma of an option for a given underlying.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
 int option_gamma(option, double underlying, result);
 
 /**
  * Calculates the theta of an option for a given underlying.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
 int option_theta(option, double underlying, result);
 
 /**
  * Calculates the rho of an option for a given underlying.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
 int option_rho(option, double underlying, result);
 
 /**
  * Calculates the vega of an option for a given underlying.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
 int option_vega(option, double underlying, result);
 
 /**
  * Calculates the price and the greeks of a given option.
- * It requires a 'result' structure to store the result.
+ * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  * Equivalent to run the functions described above.
  */

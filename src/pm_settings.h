@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 /**
- * Pricing method settings structure data type
+ * Pricing method settings structure data type.
  */
 typedef struct pm_settings_ * pm_settings;
 struct pm_settings_;
@@ -71,7 +71,7 @@ int pm_settings_set_iv_init(pm_settings, double guess_vol0, double guess_vol1);
 
 /**
  * Sets a custom field with extra_data that wasn't covered by the fields
- * described avobe.
+ * described above.
  * On error returns -1.
  */
 int pm_settings_set_extra_data(pm_settings, void *extra_data);

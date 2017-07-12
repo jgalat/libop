@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 /**
- * Enum of types of dividends
+ * Enum of types of dividends.
  */
 typedef enum {
   DIV_DISCRETE,
@@ -16,7 +16,7 @@ typedef enum {
 } dividend_type;
 
 /**
- * Dividend structure data type
+ * Dividend structure data type.
  */
 typedef struct dividend_ * dividend;
 struct dividend_;
@@ -45,26 +45,27 @@ void delete_dividend(dividend);
 dividend_type div_get_type(dividend);
 
 /**
- * Gets the value of a continuous dividend. -1 if a discrete dividend is given.
+ * Gets the value of a continuous dividend.
+ * Returns -1 if a discrete dividend is given.
  */
 double div_cont_get_val(dividend);
 
 /**
  * Gets the number of dividend payments in the structure.
- * -1 if a continuous dividend is given.
+ * Returns -1 if a continuous dividend is given.
  */
 int div_disc_get_n(dividend);
 
 /**
  * Gets the array of dates (in double format) in the dividend structure.
- * Every value can be transformed into days with the original time_period
- * NULL if a continuous dividend is given, or if it is empty.
+ * Every value can be transformed into days with the original time_period.
+ * Returns NULL if a continuous dividend is given, or if it is empty.
  */
 date *div_disc_get_dates(dividend);
 
 /**
  * Gets the array of ammounts in the dividend structure.
- * NULL if a continuous dividend is given, or if it is empty.
+ * Returns NULL if a continuous dividend is given, or if it is empty.
  */
 double *div_disc_get_ammounts(dividend);
 
@@ -87,13 +88,14 @@ int div_disc_set_dates(dividend, time_period, int size, ...);
  * i.e.:
  *  For a unique payment of $3
  *  div_disc_set_ammounts(d, tp, 1, 3);
- * Returns -1 on error
+ * On error returns -1.
  */
 int div_disc_set_ammounts(dividend, int size, ...);
 
 /**
  * Non-variadic versions of the functions described above.
- * Size of the array must be specied. Returns -1 on error
+ * Size of the array must be specied.
+ * On error returns -1.
  * A setting of data overrides the currently existing one.
  */
 int div_disc_set_dates_(dividend, time_period, int size, int*);
