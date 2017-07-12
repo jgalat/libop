@@ -2,6 +2,16 @@
 
 #include "pm_settings.h"
 
+#define DEFAULT_GRID_SIZE (50)
+#define DEFAULT_S_MAX (-1)
+#define DEFAULT_TOL (1e-09)
+#define DEFAULT_ABS_TOL (1e-12)
+#define DEFAULT_IV_MAX_IT (5)
+#define DEFAULT_IV_EPS (1e-4)
+#define DEFAULT_IV_INIT0 (0.25)
+#define DEFAULT_IV_INIT1 (0.75)
+#define DEFAULT_EXTRA_DATA (NULL)
+
 struct pm_settings_ {
   int grid_size;
   double Smax;
@@ -18,15 +28,17 @@ struct pm_settings_ {
 pm_settings new_pm_settings() {
   pm_settings pms = (pm_settings) malloc(sizeof(struct pm_settings_));
   if (pms) {
-    pms->grid_size = 50;
-    pms->Smax = -1;
-    pms->tol = 1e-09;
-    pms->abstol = 1e-12;
+    pms->grid_size = DEFAULT_GRID_SIZE;
+    pms->Smax = DEFAULT_S_MAX;
+    pms->tol = DEFAULT_TOL;
+    pms->abstol = DEFAULT_ABS_TOL;
 
-    pms->max_it = 5;
-    pms->eps = 1e-4;
-    pms->init[0] = 0.25;
-    pms->init[1] = 0.75;
+    pms->max_it = DEFAULT_IV_MAX_IT;
+    pms->eps = DEFAULT_IV_EPS;
+    pms->init[0] = DEFAULT_IV_INIT0;
+    pms->init[1] = DEFAULT_IV_INIT1;
+
+    pms->extra_data = DEFAULT_EXTRA_DATA;
   }
   return pms;
 }
@@ -93,33 +105,62 @@ int pm_settings_set_extra_data(pm_settings pms, void *extra_data) {
 }
 
 int pm_settings_get_grid_size(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_GRID_SIZE;
   return pms->grid_size;
 }
 
 double pm_settings_get_Smax(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_S_MAX;
   return pms->Smax;
 }
 
 double pm_settings_get_tol(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_TOL;
   return pms->tol;
 }
 
 double pm_settings_get_abstol(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_ABS_TOL;
   return pms->abstol;
 }
 
 int pm_settings_get_iv_max_it(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_IV_MAX_IT;
   return pms->max_it;
 }
 
 double pm_settings_get_iv_eps(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_IV_EPS;
   return pms->eps;
 }
 
-double *pm_settings_get_iv_init(pm_settings pms) {
+double *pm_settings_get_iv_init(pm_settings pms, double *init) {
+  if (!pms) {
+    init[0] = DEFAULT_IV_INIT0;
+    init[1] = DEFAULT_IV_INIT1;
+    return NULL;
+  }
   return pms->init;
 }
 
 void *pm_settings_get_extra_data(pm_settings pms) {
+  if (!pms)
+    return DEFAULT_EXTRA_DATA;
   return pms->extra_data;
 }
+
+#undef DEFAULT_GRID_SIZE
+#undef DEFAULT_S_MAX
+#undef DEFAULT_TOL
+#undef DEFAULT_ABS_TOL
+#undef DEFAULT_IV_MAX_IT
+#undef DEFAULT_IV_EPS
+#undef DEFAULT_IV_INIT0
+#undef DEFAULT_IV_INIT1
+#undef DEFAULT_EXTRA_DATA

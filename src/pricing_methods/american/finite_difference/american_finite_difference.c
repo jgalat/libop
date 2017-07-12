@@ -69,12 +69,6 @@ static BSM BSM_(int grid_size, double Smax, double tol, double abstol,
 static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   double S, pm_settings pms) {
 
-  int f = 0;
-  if (!pms) {
-    pms = new_pm_settings();
-    f = 1;
-  }
-
   int N = pm_settings_get_grid_size(pms);
   double tol = pm_settings_get_tol(pms);
   double abstol = pm_settings_get_abstol(pms);
@@ -123,10 +117,6 @@ static double calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   delete_BSM(bsm[0]);
   delete_BSM(bsm[1]);
 
-  if (f) {
-    delete_pm_settings(pms);
-  }
-
   return lagrange_interpolation(S, s, y, np);
 }
 
@@ -139,21 +129,11 @@ static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
 static int impl_vol(option_data od, pricing_data pd, double V, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  int f = 0;
-  if (!pms) {
-    pms = new_pm_settings();
-    f = 1;
-  }
-
   impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, V, S, pms, pm_data);
 
   int res = secant_method(iv_f, ivmfa, ret);
 
   delete_impl_vol_mf_args(ivmfa);
-
-  if (f) {
-    delete_pm_settings(pms);
-  }
 
   return res;
 }
