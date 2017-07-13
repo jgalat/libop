@@ -94,11 +94,12 @@ int div_disc_set_ammounts(dividend, int size, ...);
 
 /**
  * Non-variadic versions of the functions described above.
+ * Size of the array must be specied.
  * On error returns -1.
  * A setting of data overrides the currently existing one.
  */
-int div_disc_set_dates_(dividend, time_period, int*);
-int div_disc_set_ammounts_(dividend, double*);
+int div_disc_set_dates_(dividend, time_period, int size, int*);
+int div_disc_set_ammounts_(dividend, int size, double*);
 
 #ifdef __cplusplus
 }
