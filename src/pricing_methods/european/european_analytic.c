@@ -111,6 +111,26 @@ static int option_price(option_data od, pricing_data pd, double S,
   return result_set_price(ret, result);
 }
 
+static int option_prices(option_data od, pricing_data pd, double *Ss,
+  result ret, pm_settings pms, void *pm_data) {
+
+  if (od->exercise != EU_EXERCISE)
+    return -1;
+
+  if (!Ss)
+    return -1;
+
+  int size = sizeof(Ss) / sizeof(double);
+
+  double *values = (double *) malloc(sizeof(double) * size);
+
+  int i;
+  for (i = 0; i < size; i++)
+    values[i] = option_price_(od, pd, Ss[i]);
+
+  return result_set_prices(ret, values);
+}
+
 static int greek_delta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
@@ -279,6 +299,6 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_european_analytic(pricing_data pd) {
-  return new_pricing_method_(option_price, NULL, greek_delta, greek_gamma, greek_theta,
-    greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
+  return new_pricing_method_(option_price, option_prices, greek_delta,
+    greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }
