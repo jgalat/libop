@@ -42,9 +42,9 @@ int option_price(option o, double S, result r) {
   return -1;
 }
 
-int option_prices(option o, double *Ss, result r) {
+int option_prices(option o, int size, double *Ss, result r) {
   if (o)
-    return pm_option_prices(o->pm, o->option_data, Ss, r);
+    return pm_option_prices(o->pm, o->option_data, size, Ss, r);
   return -1;
 }
 

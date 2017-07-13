@@ -24,8 +24,8 @@ typedef common_f rho_f;
 typedef common_f vega_f;
 
 
-typedef int (*common_f_) (option_data, pricing_data, double *Ss, result,
-  pm_settings, void*);
+typedef int (*common_f_) (option_data, pricing_data, int size, double *Ss,
+  result, pm_settings, void*);
 
 typedef common_f_ prices_f;
 

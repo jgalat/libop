@@ -80,10 +80,12 @@ int pm_option_price(pricing_method pm, option_data od, double S, result r) {
   return -1;
 }
 
-int pm_option_prices(pricing_method pm, option_data od, double *Ss, result r) {
+int pm_option_prices(pricing_method pm, option_data od, int size,
+  double *Ss, result r) {
 
   if (pm && pm->option_prices)
-    return pm->option_prices(od, pm->pricing_data, Ss, r, pm->pm_settings, pm->pm_data);
+    return pm->option_prices(od, pm->pricing_data, size, Ss, r, pm->pm_settings,
+      pm->pm_data);
 
   return -1;
 }

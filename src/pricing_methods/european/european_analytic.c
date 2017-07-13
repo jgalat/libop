@@ -111,7 +111,7 @@ static int option_price(option_data od, pricing_data pd, double S,
   return result_set_price(ret, result);
 }
 
-static int option_prices(option_data od, pricing_data pd, double *Ss,
+static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
   result ret, pm_settings pms, void *pm_data) {
 
   if (od->exercise != EU_EXERCISE)
@@ -119,8 +119,6 @@ static int option_prices(option_data od, pricing_data pd, double *Ss,
 
   if (!Ss)
     return 0;
-
-  int size = sizeof(Ss) / sizeof(double);
 
   double *values = (double *) malloc(sizeof(double) * size);
 

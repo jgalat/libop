@@ -43,10 +43,11 @@ int option_price(option, double underlying, result);
 
 /**
  * Calculates the prices of an option for each value of the underlying given.
+ * Size of the underlying array must be specified.
  * It requires a result structure (result.h) to store the result.
  * On error returns -1.
  */
-int option_prices(option, double *underlyngs, result);
+int option_prices(option, int size, double *underlyng, result);
 
 /**
  * Calculates the delta of an option for a given underlying.
