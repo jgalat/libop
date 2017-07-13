@@ -118,7 +118,7 @@ static int option_prices(option_data od, pricing_data pd, double *Ss,
     return -1;
 
   if (!Ss)
-    return -1;
+    return 0;
 
   int size = sizeof(Ss) / sizeof(double);
 
