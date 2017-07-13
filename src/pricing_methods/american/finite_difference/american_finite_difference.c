@@ -231,6 +231,6 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_american_finite_difference(pricing_data pd) {
-  return new_pricing_method_(option_price, greek_delta, greek_gamma, greek_theta,
+  return new_pricing_method_(option_price, NULL, greek_delta, greek_gamma, greek_theta,
     greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }

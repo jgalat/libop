@@ -42,6 +42,13 @@ int option_set_pricing_method(option, pricing_method);
 int option_price(option, double underlying, result);
 
 /**
+ * Calculates the prices of an option for each value of the underlying given.
+ * It requires a result structure (result.h) to store the result.
+ * On error returns -1.
+ */
+int option_prices(option, double *underlyngs, result);
+
+/**
  * Calculates the delta of an option for a given underlying.
  * It requires a result structure (result.h) to store the result.
  * On error returns -1.

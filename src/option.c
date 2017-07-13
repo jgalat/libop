@@ -42,6 +42,12 @@ int option_price(option o, double S, result r) {
   return -1;
 }
 
+int option_prices(option o, double *Ss, result r) {
+  if (o)
+    return pm_option_prices(o->pm, o->option_data, Ss, r);
+  return -1;
+}
+
 int option_delta(option o, double S, result r) {
   if (o)
     return pm_delta(o->pm, o->option_data, S, r);

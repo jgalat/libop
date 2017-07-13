@@ -7,10 +7,11 @@
 #include <common.h>
 #include "pricing_method.h"
 
-pricing_method new_pricing_method_(price_f, delta_f, gamma_f,
+pricing_method new_pricing_method_(price_f, prices_f, delta_f, gamma_f,
   theta_f, rho_f, vega_f, impl_vol_f, delete_f, pricing_data, void*);
 
 int pm_option_price(pricing_method, option_data, double S, result);
+int pm_option_prices(pricing_method, option_data, double *Ss, result);
 int pm_delta(pricing_method, option_data, double S, result);
 int pm_gamma(pricing_method, option_data, double S, result);
 int pm_theta(pricing_method, option_data, double S, result);
