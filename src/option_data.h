@@ -17,8 +17,8 @@ typedef enum {
  * Enum of types of exercises available
  */
 typedef enum {
-  AM_EXERCISE,
-  EU_EXERCISE
+  EU_EXERCISE,
+  AM_EXERCISE
 } exercise_type;
 
 #ifdef __cplusplus
