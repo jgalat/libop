@@ -5,6 +5,7 @@
 
 struct result_ {
   double price;
+  double *prices;
   double delta;
   double gamma;
   double theta;
@@ -16,18 +17,20 @@ struct result_ {
 
 enum {
   PRICE_FLAG = 1,
-  DELTA_FLAG = 2,
-  GAMMA_FLAG = 4,
-  THETA_FLAG = 8,
-  RHO_FLAG = 16,
-  VEGA_FLAG = 32,
-  IMPL_VOL_FLAG = 64
+  PRICES_FLAG = 2,
+  DELTA_FLAG = 4,
+  GAMMA_FLAG = 8,
+  THETA_FLAG = 16,
+  RHO_FLAG = 32,
+  VEGA_FLAG = 64,
+  IMPL_VOL_FLAG = 128
 };
 
 result new_result() {
   result r = (result) malloc(sizeof(struct result_));
   if (r) {
     r->price = 0;
+    r->prices = NULL;
     r->delta = 0;
     r->gamma = 0;
     r->theta = 0;
@@ -40,6 +43,8 @@ result new_result() {
 }
 
 void delete_result(result r) {
+  if (r && (r->flag & PRICES_FLAG))
+    free(r->prices);
   free(r);
 }
 
@@ -48,6 +53,16 @@ int result_set_price(result r, double val) {
     return -1;
   r->flag |= PRICE_FLAG;
   r->price = val;
+  return 0;
+}
+
+int result_set_prices(result r, double *values) {
+  if (!r)
+    return -1;
+  if (r->flag & PRICES_FLAG)
+    free(r->prices);
+  r->flag |= PRICES_FLAG;
+  r->prices = values;
   return 0;
 }
 
@@ -109,6 +124,14 @@ double result_get_price(result r) {
     return 0.0;
   }
   return r->price;
+}
+
+double *result_get_prices(result r) {
+  if (!(r && (r->flag & PRICES_FLAG))) {
+    _warning("prices");
+    return NULL;
+  }
+  return r->prices;
 }
 
 double result_get_delta(result r) {

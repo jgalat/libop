@@ -28,6 +28,7 @@ void delete_result(result);
  * Get functions to access the data stored by pricing methods.
  */
 double result_get_price(result);
+double *result_get_prices(result);
 double result_get_delta(result);
 double result_get_gamma(result);
 double result_get_theta(result);
