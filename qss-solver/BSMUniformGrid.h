@@ -1,24 +1,17 @@
-#ifndef __BLACK_SCHOLES_H__
-#define __BLACK_SCHOLES_H__
+#ifndef __BSM_UNIFORM_GRID_H__
+#define __BSM_UNIFORM_GRID_H__
 
-typedef enum {
-  CALL,
-  PUT
-} BSM_OT;
+#include "BlackScholesModel.h"
 
 #ifdef __cplusplus
-#include <qss-solver/engine/common/model.h>
-#include <qss-solver/engine/common/data.h>
-#include <qss-solver/engine/classic/classic_data.h>
-#include <qss-solver/engine/classic/classic_simulator.h>
 
-class BlackScholesModel {
+class BSMUniformGrid : public BlackScholesModel {
   public:
-    BlackScholesModel(int grid_size, BSM_OT ot, double smax,
+    BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
       double vol, double rfr, double strike, double cont_div, int discdiv_n,
       double *discdiv_date, double *discdiv_ammo, double period,
       double end_time, double tol, double abs_tol);
-    ~BlackScholesModel();
+    ~BSMUniformGrid();
 
     /* TODO errors (index, etc) */
     double v(int i);
@@ -26,7 +19,7 @@ class BlackScholesModel {
     double gamma(int i);
     double theta(int i);
 
-  private:
+  protected:
     void initializeDataStructs(void *CLC_simulator);
     void settings(SD_simulationSettings);
     void definition(double *x, double *d, double *alg, double t, double *dx);
@@ -36,13 +29,13 @@ class BlackScholesModel {
     void output(int i, double *x, double *d, double *alg, double t, double *out);
     void outputAll(int i, double *x, double *d, double *alg, double t, double *out);
 
+  private:
     double get_value(double*, int);
 
     SD_Solver _solver;
     SD_CommInterval _comm_interval;
     double _ft, _dqmin, _dqrel;
     double _period;
-    // CLC_data modelData;
 
     int _g_size;
     BSM_OT _op_type;
@@ -72,26 +65,26 @@ class BlackScholesModel {
 extern "C" {
 #endif
 
-  typedef struct BSM_ *BSM;
+  typedef struct BSM_UG_ *BSM_UG;
 
-  struct BSM_;
+  struct BSM_UG_;
 
-  BSM new_BSM(int grid_size, BSM_OT ot, double smax,
+  BSM_UG new_BSM_UG(int grid_size, BSM_OT ot, double smax,
     double vol, double rfr, double strike, double cont_div, int discdiv_n,
     double *discdiv_date, double *discdiv_ammo, double period,
     double end_time, double tol, double abs_tol);
 
-  void delete_BSM(BSM);
+  void delete_BSM_UG(BSM_UG);
 
-  typedef double (*BSM_F) (BSM, int);
+  typedef double (*BSM_UG_F) (BSM_UG, int);
 
-  double BSM_v(BSM, int);
-  double BSM_delta(BSM, int);
-  double BSM_gamma(BSM, int);
-  double BSM_theta(BSM, int);
+  double BSM_UG_v(BSM_UG, int);
+  double BSM_UG_delta(BSM_UG, int);
+  double BSM_UG_gamma(BSM_UG, int);
+  double BSM_UG_theta(BSM_UG, int);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BLACK_SCHOLES_H__ */
+#endif /* __BSM_UNIFORM_GRID_H__ */

@@ -1,19 +1,16 @@
 #include <functional>
 
 #include <qss-solver/engine/common/utils.h>
-#include <qss-solver/engine/common/model.h>
-#include <qss-solver/engine/common/data.h>
 #include <qss-solver/engine/classic/classic_data.h>
-
 #include <qss-solver/engine/common/engine.h>
 
-#include "black_scholes_model.h"
+#include "BSMUniformGrid.h"
 
 static inline double _square(double a) {
   return a*a;
 }
 
-BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
+BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   double vol, double rfr, double strike, double cont_div, int discdiv_n,
   double *discdiv_date, double *discdiv_ammo, double period,
   double end_time, double tol, double abs_tol) {
@@ -67,23 +64,23 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   using namespace std::placeholders;
   switch (_comm_interval) {
     case CI_Sampled:
-      bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
+      bsmo = std::bind(&BSMUniformGrid::output, this, _1, _2, _3, _4, _5, _6);
       break;
     case CI_Step:
-      bsmo = std::bind(&BlackScholesModel::outputAll, this, _1, _2, _3, _4, _5, _6);
+      bsmo = std::bind(&BSMUniformGrid::outputAll, this, _1, _2, _3, _4, _5, _6);
       break;
     default:
-      bsmo = std::bind(&BlackScholesModel::output, this, _1, _2, _3, _4, _5, _6);
+      bsmo = std::bind(&BSMUniformGrid::output, this, _1, _2, _3, _4, _5, _6);
       break;
   }
 
-  bsmf = std::bind(&BlackScholesModel::definition, this, _1, _2, _3, _4, _5);
-  bsmzc = std::bind(&BlackScholesModel::zeroCrossing, this, _1, _2, _3, _4, _5, _6);
-  bsmhp = std::bind(&BlackScholesModel::handlerPos, this, _1, _2, _3, _4, _5);
-  bsmhn = std::bind(&BlackScholesModel::handlerNeg, this, _1, _2, _3, _4, _5);
+  bsmf = std::bind(&BSMUniformGrid::definition, this, _1, _2, _3, _4, _5);
+  bsmzc = std::bind(&BSMUniformGrid::zeroCrossing, this, _1, _2, _3, _4, _5, _6);
+  bsmhp = std::bind(&BSMUniformGrid::handlerPos, this, _1, _2, _3, _4, _5);
+  bsmhn = std::bind(&BSMUniformGrid::handlerNeg, this, _1, _2, _3, _4, _5);
 
-  bsms = std::bind(&BlackScholesModel::settings, this, _1);
-  bsmids = std::bind(&BlackScholesModel::initializeDataStructs,this, _1);
+  bsms = std::bind(&BSMUniformGrid::settings, this, _1);
+  bsmids = std::bind(&BSMUniformGrid::initializeDataStructs,this, _1);
 
   engine(&bsms, &bsmids);
 
@@ -93,13 +90,13 @@ BlackScholesModel::BlackScholesModel(int grid_size, BSM_OT ot, double smax,
   _theta = &_solution[_g_size*3];
 }
 
-BlackScholesModel::~BlackScholesModel() {
+BSMUniformGrid::~BSMUniformGrid() {
   delete [] _solution;
   delete [] _discdiv_date;
   delete [] _discdiv_ammo;
 }
 
-double BlackScholesModel::get_value(double *vals, int i) {
+double BSMUniformGrid::get_value(double *vals, int i) {
   i = MIN(MAX(i, 0), _g_size);
 
   if (i == 0) {
@@ -109,30 +106,30 @@ double BlackScholesModel::get_value(double *vals, int i) {
   return vals[i-1];
 }
 
-double BlackScholesModel::v(int i) {
+double BSMUniformGrid::v(int i) {
   return get_value(_v, i);
 }
 
-double BlackScholesModel::delta(int i) {
+double BSMUniformGrid::delta(int i) {
   return get_value(_delta, i);
 }
 
-double BlackScholesModel::gamma(int i) {
+double BSMUniformGrid::gamma(int i) {
   return get_value(_gamma, i);
 }
 
-double BlackScholesModel::theta(int i) {
+double BSMUniformGrid::theta(int i) {
   return get_value(_theta, i);
 }
 
-void BlackScholesModel::settings(SD_simulationSettings settings) {
+void BSMUniformGrid::settings(SD_simulationSettings settings) {
   settings->debug = SD_DBG_NoDebug;
   settings->parallel = FALSE;
   settings->hybrid = TRUE;
   settings->method = _solver;
 }
 
-void BlackScholesModel::definition(double *x, double *d, double *alg, double t, double *dx) {
+void BSMUniformGrid::definition(double *x, double *d, double *alg, double t, double *dx) {
   int i = 0;
 
   const double sigma2 = _square(_sigma);
@@ -160,7 +157,7 @@ void BlackScholesModel::definition(double *x, double *d, double *alg, double t, 
   }
 }
 
-void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {
+void BSMUniformGrid::zeroCrossing(int i, double *x, double *d, double *alg, double t, double *zc) {
   const double sigma2 = _square(_sigma);
   const double ds2 = _square(_ds);
   switch(i) {
@@ -187,7 +184,7 @@ void BlackScholesModel::zeroCrossing(int i, double *x, double *d, double *alg, d
   }
 }
 
-void BlackScholesModel::handlerPos(int i, double *x, double *d, double *alg, double t) {
+void BSMUniformGrid::handlerPos(int i, double *x, double *d, double *alg, double t) {
   int j;
   switch(i) {
     case 0:
@@ -203,13 +200,13 @@ void BlackScholesModel::handlerPos(int i, double *x, double *d, double *alg, dou
   }
 }
 
-void BlackScholesModel::handlerNeg(int i, double *x, double *d, double *alg, double t) {
+void BSMUniformGrid::handlerNeg(int i, double *x, double *d, double *alg, double t) {
   if(i >= 1 && i <= _g_size) {
     d[i-1] = 0.0;
   }
 }
 
-void BlackScholesModel::output(int i, double *x, double *d, double *alg,
+void BSMUniformGrid::output(int i, double *x, double *d, double *alg,
   double t, double *out) {
   const double ds2 = _square(_ds);
   int j = i;
@@ -248,7 +245,7 @@ void BlackScholesModel::output(int i, double *x, double *d, double *alg,
   }
 }
 
-void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
+void BSMUniformGrid::outputAll(int i, double *x, double *d, double *alg,
   double t, double *out) {
 
   int j;
@@ -313,7 +310,7 @@ void BlackScholesModel::outputAll(int i, double *x, double *d, double *alg,
   out[_g_size*4-1] = -alg[_g_size*4-1];
 }
 
-void BlackScholesModel::initializeDataStructs(void *simulator_) {
+void BSMUniformGrid::initializeDataStructs(void *simulator_) {
   CLC_simulator simulator = (CLC_simulator) simulator_;
   int i = 0;
   int *outputs = new int[_g_size*4];
@@ -395,31 +392,31 @@ void BlackScholesModel::initializeDataStructs(void *simulator_) {
 
 /* C */
 
-BSM new_BSM(int grid_size, BSM_OT ot, double smax,
+BSM_UG new_BSM_UG(int grid_size, BSM_OT ot, double smax,
   double vol, double rfr, double strike, double cont_div, int discdiv_n,
   double *discdiv_date, double *discdiv_ammo, double period,
   double end_time, double tol, double abs_tol) {
-  return reinterpret_cast<BSM>(new BlackScholesModel(grid_size,ot,
+  return reinterpret_cast<BSM_UG>(new BSMUniformGrid(grid_size,ot,
     smax,vol,rfr,strike,cont_div,discdiv_n,discdiv_date,discdiv_ammo,
     period,end_time,tol,abs_tol));
 }
 
-void delete_BSM(BSM bsm) {
-  delete reinterpret_cast<BlackScholesModel*>(bsm);
+void delete_BSM_UG(BSM_UG bsm) {
+  delete reinterpret_cast<BSMUniformGrid*>(bsm);
 }
 
-double BSM_v(BSM bsm, int i) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->v(i);
+double BSM_UG_v(BSM_UG bsm, int i) {
+  return reinterpret_cast<BSMUniformGrid*>(bsm)->v(i);
 }
 
-double BSM_delta(BSM bsm, int i) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->delta(i);
+double BSM_UG_delta(BSM_UG bsm, int i) {
+  return reinterpret_cast<BSMUniformGrid*>(bsm)->delta(i);
 }
 
-double BSM_gamma(BSM bsm, int i) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->gamma(i);
+double BSM_UG_gamma(BSM_UG bsm, int i) {
+  return reinterpret_cast<BSMUniformGrid*>(bsm)->gamma(i);
 }
 
-double BSM_theta(BSM bsm, int i) {
-  return reinterpret_cast<BlackScholesModel*>(bsm)->theta(i);
+double BSM_UG_theta(BSM_UG bsm, int i) {
+  return reinterpret_cast<BSMUniformGrid*>(bsm)->theta(i);
 }

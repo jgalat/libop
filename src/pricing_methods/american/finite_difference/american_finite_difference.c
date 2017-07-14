@@ -4,7 +4,7 @@
 #include <option_data.h>
 #include <option_data_internal.h>
 #include <pricing_method_internal.h>
-#include <qss-solver/black_scholes_model.h>
+#include <qss-solver/BSMUniformGrid.h>
 #include <impl_vol_methods/impl_vol_methods.h>
 #include "american_finite_difference.h"
 
@@ -34,7 +34,7 @@ static BSM_OT option_type_BSM_OT(option_type ot) {
   return CALL;
 }
 
-static BSM BSM_(int grid_size, double Smax, double tol, double abstol,
+static BSM_UG BSM_UG_(int grid_size, double Smax, double tol, double abstol,
   option_data od, pricing_data pd) {
 
   option_type type = od->opt_type;
@@ -63,7 +63,7 @@ static BSM BSM_(int grid_size, double Smax, double tol, double abstol,
     dd_a = div_disc_get_ammounts(divi);
   }
 
-  return new_BSM(grid_size, ot, Smax, sigma, r, K, d, dd_n, dd_d, dd_a, period,
+  return new_BSM_UG(grid_size, ot, Smax, sigma, r, K, d, dd_n, dd_d, dd_a, period,
     maturity, tol, abstol);
 }
 
@@ -80,7 +80,7 @@ static void apply_div(dividend d, double *S) {
   }
 }
 
-static double query_value(BSM *bsm, BSM_F bsmf, double S, int N, double Smax) {
+static double query_value(BSM_UG *bsm, BSM_UG_F bsmf, double S, int N, double Smax) {
   int i;
   static const int np = 4;
   double y50[np], y100[np], s[np], y[np];
@@ -101,7 +101,7 @@ static double query_value(BSM *bsm, BSM_F bsmf, double S, int N, double Smax) {
   return lagrange_interpolation(S, s, y, np);
 }
 
-static void calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
+static void calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
   int size, double *Ss, pm_settings pms, double *output) {
 
   int N = pm_settings_get_grid_size(pms);
@@ -115,11 +115,11 @@ static void calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
   if (Smax < 0)
     Smax = 5 * K;
 
-  BSM bsm[2];
+  BSM_UG bsm[2];
 
   //#pragma omp parallel for
   for (i = 0; i < 2; i++) {
-    bsm[i] = BSM_(N + (N * i), Smax, tol, abstol, od, pd);
+    bsm[i] = BSM_UG_(N + (N * i), Smax, tol, abstol, od, pd);
   }
 
   double *Ss_ = (double *) malloc(sizeof(double) * size);
@@ -131,15 +131,15 @@ static void calculate_bsmf(BSM_F bsmf, option_data od, pricing_data pd,
     output[i] = query_value(bsm, bsmf, Ss_[i], N, Smax);
 
   free(Ss_);
-  delete_BSM(bsm[0]);
-  delete_BSM(bsm[1]);
+  delete_BSM_UG(bsm[0]);
+  delete_BSM_UG(bsm[1]);
 }
 
 static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
   pricing_data pd = ivmfa->pd;
   pd->vol = vol;
   double price;
-  calculate_bsmf(BSM_v, ivmfa->od, pd, 1, &ivmfa->S, ivmfa->pms, &price);
+  calculate_bsmf(BSM_UG_v, ivmfa->od, pd, 1, &ivmfa->S, ivmfa->pms, &price);
   return price - ivmfa->V;
 }
 
@@ -162,7 +162,7 @@ static int option_price(option_data od, pricing_data pd, double S,
     return -1;
 
   double price;
-  calculate_bsmf(BSM_v, od, pd, 1, &S, pms, &price);
+  calculate_bsmf(BSM_UG_v, od, pd, 1, &S, pms, &price);
 
   return result_set_price(ret, price);
 }
@@ -178,7 +178,7 @@ static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
 
   double *prices = (double *) malloc(sizeof(double) * size);
 
-  calculate_bsmf(BSM_v, od, pd, size, Ss, pms, prices);
+  calculate_bsmf(BSM_UG_v, od, pd, size, Ss, pms, prices);
 
   return result_set_prices(ret, prices);
 }
@@ -190,7 +190,7 @@ static int greek_delta(option_data od, pricing_data pd, double S,
     return -1;
 
   double delta;
-  calculate_bsmf(BSM_delta, od, pd, 1, &S, pms, &delta);
+  calculate_bsmf(BSM_UG_delta, od, pd, 1, &S, pms, &delta);
 
   return result_set_delta(ret, delta);
 }
@@ -202,7 +202,7 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
     return -1;
 
   double gamma;
-  calculate_bsmf(BSM_gamma, od, pd, 1, &S, pms, &gamma);
+  calculate_bsmf(BSM_UG_gamma, od, pd, 1, &S, pms, &gamma);
 
   return result_set_gamma(ret, gamma);
 }
@@ -214,7 +214,7 @@ static int greek_theta(option_data od, pricing_data pd, double S,
     return -1;
 
   double theta;
-  calculate_bsmf(BSM_theta, od, pd, 1, &S, pms, &theta);
+  calculate_bsmf(BSM_UG_theta, od, pd, 1, &S, pms, &theta);
 
   return result_set_theta(ret, theta);
 }
@@ -233,11 +233,11 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 
   pd0->r = r - delta;
   double f1;
-  calculate_bsmf(BSM_v, od, pd0, 1, &S, pms, &f1);
+  calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f1);
 
   pd0->r = r + delta;
   double f2;
-  calculate_bsmf(BSM_v, od, pd0, 1, &S, pms, &f2);
+  calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f2);
 
   double rho =  (f2 - f1) / (2 * delta);
 
@@ -259,11 +259,11 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
   pd0->vol = vol - delta;
   double f1;
-  calculate_bsmf(BSM_v, od, pd0, 1, &S, pms, &f1);
+  calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f1);
 
   pd0->vol = vol + delta;
   double f2;
-  calculate_bsmf(BSM_v, od, pd0, 1, &S, pms, &f2);
+  calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f2);
 
   double vega =  (f2 - f1) / (2 * delta);
 
