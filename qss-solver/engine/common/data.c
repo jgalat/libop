@@ -298,27 +298,27 @@ SD_Output (const char *name, int outputs, int discretes, int states, double *per
   p->solution = solution;
   if (outputs)
     {
-      if (discretes)
-	{
-	  p->nDO = (int*) malloc (discretes * sizeof(int));
-	  cleanVector (p->nDO, 0, discretes);
-	  p->DO = (int**) malloc (discretes * sizeof(int*));
-	}
-      if (states)
-	{
-	  p->nSO = (int*) malloc (states * sizeof(int));
-	  cleanVector (p->nSO, 0, states);
-	  p->SO = (int**) malloc (states * sizeof(int*));
-	}
-      if (outputs)
-	{
-	  p->nOS = (int*) malloc (outputs * sizeof(int));
-	  cleanVector (p->nOS, 0, outputs);
-	  p->OS = (int**) malloc (outputs * sizeof(int*));
-	  p->nOD = (int*) malloc (outputs * sizeof(int));
-	  cleanVector (p->nOD, 0, outputs);
-	  p->OD = (int**) malloc (outputs * sizeof(int*));
-	}
+  //     if (discretes)
+	// {
+	//   p->nDO = (int*) malloc (discretes * sizeof(int));
+	//   cleanVector (p->nDO, 0, discretes);
+	//   p->DO = (int**) malloc (discretes * sizeof(int*));
+	// }
+  //     if (states)
+	// {
+	//   p->nSO = (int*) malloc (states * sizeof(int));
+	//   cleanVector (p->nSO, 0, states);
+	//   p->SO = (int**) malloc (states * sizeof(int*));
+	// }
+  //     if (outputs)
+	// {
+	//   p->nOS = (int*) malloc (outputs * sizeof(int));
+	//   cleanVector (p->nOS, 0, outputs);
+	//   p->OS = (int**) malloc (outputs * sizeof(int*));
+	//   p->nOD = (int*) malloc (outputs * sizeof(int));
+	//   cleanVector (p->nOD, 0, outputs);
+	//   p->OD = (int**) malloc (outputs * sizeof(int*));
+	// }
       p->commInterval = commInterval;
       p->store = store;
       switch (commInterval)
@@ -369,60 +369,60 @@ SD_allocOutputMatrix (SD_output output, int states, int discretes)
 void
 SD_freeOutput (SD_output output, int states, int discretes)
 {
-  int i, outputs = output->outputs;
+  int /*i,*/ outputs = output->outputs;
   if (outputs)
     {
-      if (discretes)
-	{
-	  free (output->nDO);
-	}
-      if (states)
-	{
-	  free (output->nSO);
-	}
-      if (outputs)
-	{
-	  free (output->nOS);
-	  free (output->nOD);
-	}
-      for (i = 0; i < discretes; i++)
-	{
-	  if (output->DO[i] != NULL)
-	    {
-	      free (output->DO[i]);
-	    }
-	}
-      for (i = 0; i < states; i++)
-	{
-	  if (output->SO[i] != NULL)
-	    {
-	      free (output->SO[i]);
-	    }
-	}
-      for (i = 0; i < outputs; i++)
-	{
-	  if (output->OS[i] != NULL)
-	    {
-	      free (output->OS[i]);
-	    }
-	  if (output->OD[i] != NULL)
-	    {
-	      free (output->OD[i]);
-	    }
-	}
-      if (discretes)
-	{
-	  free (output->DO);
-	}
-      if (states)
-	{
-	  free (output->SO);
-	}
-      if (outputs)
-	{
-	  free (output->OS);
-	  free (output->OD);
-	}
+  //     if (discretes)
+	// {
+	//   free (output->nDO);
+	// }
+  //     if (states)
+	// {
+	//   free (output->nSO);
+	// }
+  //     if (outputs)
+	// {
+	//   free (output->nOS);
+	//   free (output->nOD);
+	// }
+  //     for (i = 0; i < discretes; i++)
+	// {
+	//   if (output->DO[i] != NULL)
+	//     {
+	//       free (output->DO[i]);
+	//     }
+	// }
+  //     for (i = 0; i < states; i++)
+	// {
+	//   if (output->SO[i] != NULL)
+	//     {
+	//       free (output->SO[i]);
+	//     }
+	// }
+  //     for (i = 0; i < outputs; i++)
+	// {
+	//   if (output->OS[i] != NULL)
+	//     {
+	//       free (output->OS[i]);
+	//     }
+	//   if (output->OD[i] != NULL)
+	//     {
+	//       free (output->OD[i]);
+	//     }
+	// }
+  //     if (discretes)
+	// {
+	//   free (output->DO);
+	// }
+  //     if (states)
+	// {
+	//   free (output->SO);
+	// }
+  //     if (outputs)
+	// {
+	//   free (output->OS);
+	//   free (output->OD);
+	// }
       if (output->sampled)
 	{
 	  SD_freeSampledOutput (output->sampled);

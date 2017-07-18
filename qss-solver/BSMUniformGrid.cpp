@@ -18,7 +18,7 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   _solver = SD_DOPRI;
   /* Possible CI_Step only for DOPRI */
   _comm_interval = CI_Step;
-  _ft = end_time < 0.0 ? 0.0 : end_time;
+  _ft = fabs(end_time);
 
   _dqrel = fabs(tol);
   _dqmin = fabs(abs_tol);
@@ -312,9 +312,9 @@ void BSMUniformGrid::outputAll(int i, double *x, double *d, double *alg,
 
 void BSMUniformGrid::initializeDataStructs(void *simulator_) {
   CLC_simulator simulator = (CLC_simulator) simulator_;
-  int i = 0;
-  int *outputs = new int[_g_size*4];
-  int *states = new int[_g_size];
+  int i;
+  // int *outputs = new int[_g_size*4];
+  // int *states = new int[_g_size];
   simulator->data = CLC_Data(_g_size,_g_size*2,_g_size+1,0,_g_size*4,_solver,_ft,_dqmin,_dqrel);
   CLC_data modelData = simulator->data;
   double S;
@@ -348,8 +348,9 @@ void BSMUniformGrid::initializeDataStructs(void *simulator_) {
     modelData->d[_g_size-1] = 1.0;
   }
 
+  modelData->event[0].direction = 1;
   for(i = 0; i < _g_size; i++) {
-    modelData->event[i].direction = 0;
+    modelData->event[i+1].direction = 0;
   }
 
   const char *modelname =  "bsm";
@@ -369,25 +370,25 @@ void BSMUniformGrid::initializeDataStructs(void *simulator_) {
       break;
   }
 
-	SD_output modelOutput = simulator->output;
-
-  for(i = 0; i < _g_size; i++) {
-    modelOutput->nOS[i] = 1;
-    modelOutput->nSO[i]++;
-  }
-
-  SD_allocOutputMatrix(modelOutput,_g_size,_g_size*2);
-  cleanVector(states,0,_g_size);
-  cleanVector(outputs,0,_g_size*4);
-
-  for(i = 0; i < _g_size; i++) {
-    modelOutput->SO[i][states[i]++] = i;
-    modelOutput->OS[i][outputs[i]++] = i;
-  }
+	// SD_output modelOutput = simulator->output;
+  //
+  // for(i = 0; i < _g_size; i++) {
+  //   modelOutput->nOS[i] = 1;
+  //   modelOutput->nSO[i]++;
+  // }
+  //
+  // SD_allocOutputMatrix(modelOutput,_g_size,_g_size*2);
+  // cleanVector(states,0,_g_size);
+  // cleanVector(outputs,0,_g_size*4);
+  //
+  // for(i = 0; i < _g_size; i++) {
+  //   modelOutput->SO[i][states[i]++] = i;
+  //   modelOutput->OS[i][outputs[i]++] = i;
+  // }
 
 	simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,&bsmhn);
-  delete [] outputs;
-  delete [] states;
+  // delete [] outputs;
+  // delete [] states;
 }
 
 /* C */

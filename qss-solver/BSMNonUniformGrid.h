@@ -5,13 +5,13 @@
 
 #ifdef __cplusplus
 
-class BSMUniformGrid : public BlackScholesModel {
+class BSMNonUniformGrid : public BlackScholesModel {
   public:
-    BSMUniformGrid(int grid_size, BSM_OT ot, double S, double vol, double rfr,
+    BSMNonUniformGrid(int grid_size, BSM_OT ot, double S, double vol, double rfr,
       double strike, double cont_div, int discdiv_n,
       double *discdiv_date, double *discdiv_ammo, double period,
       double end_time, double tol, double abs_tol);
-    ~BSMUniformGrid();
+    ~BSMNonUniformGrid();
 
     double v();
     double delta();
@@ -36,8 +36,9 @@ class BSMUniformGrid : public BlackScholesModel {
 
     int _g_size;
     BSM_OT _op_type;
+    double _S; //center
+    double _u0, _uN1, _gls;
     double _sigma, _r, _K,
-          _u0, _uN1, _ds,
           _cd,   //continuous dividend
           *_discdiv_date, //discrete dividend date
           *_discdiv_ammo; //discrete dividend ammount
