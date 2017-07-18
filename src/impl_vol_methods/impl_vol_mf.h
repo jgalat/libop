@@ -14,7 +14,7 @@ struct impl_vol_mf_args_ {
   void* pm_data;
 };
 
-typedef double (*impl_vol_mf) (volatility, impl_vol_mf_args);
+typedef double (*impl_vol_mf) (double vol, impl_vol_mf_args);
 
 impl_vol_mf_args new_impl_vol_mf_args(option_data od, pricing_data pd, double V,
   double S, pm_settings pms, void *pm_data);

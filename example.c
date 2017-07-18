@@ -5,8 +5,8 @@
 int main(int argc, char const *argv[]) {
 
   double S = 21.0, strike = 20.0;
-  volatility sigma = 0.4;
-  risk_free_rate r = 0.09;
+  volatility sigma = new_volatility(0.4);
+  risk_free_rate r = new_risk_free_rate(0.09);
   dividend d = new_continuous_dividend(0.1);
   double option_value = 3.447474;
 
@@ -55,6 +55,8 @@ int main(int argc, char const *argv[]) {
   delete_pm_settings(pms);
   delete_time_period(tp);
   delete_pricing_method(pm);
+  delete_risk_free_rate(r);
+  delete_volatility(sigma);
   delete_dividend(d);
   delete_option(opt);
   return 0;

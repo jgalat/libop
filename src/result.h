@@ -1,8 +1,6 @@
 #ifndef __RESULT_H__
 #define __RESULT_H__
 
-#include <parameter.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,7 +32,7 @@ double result_get_gamma(result);
 double result_get_theta(result);
 double result_get_rho(result);
 double result_get_vega(result);
-volatility result_get_impl_vol(result);
+double result_get_impl_vol(result);
 
 #ifdef __cplusplus
 }

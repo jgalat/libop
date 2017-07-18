@@ -43,8 +43,8 @@ static BSM_UG BSM_UG_(int grid_size, double Smax, double tol, double abstol,
   date maturity = tp_get_date(tp);
   double period = tp_get_period(tp);
 
-  volatility  sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double  sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
@@ -135,9 +135,9 @@ static void calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
   delete_BSM_UG(bsm[1]);
 }
 
-static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
+static double iv_f(double vol, impl_vol_mf_args ivmfa) {
   pricing_data pd = ivmfa->pd;
-  pd->vol = vol;
+  vol_set_value(pd->vol, vol);
   double price;
   calculate_bsmf(BSM_UG_v, ivmfa->od, pd, 1, &ivmfa->S, ivmfa->pms, &price);
   return price - ivmfa->V;
@@ -146,10 +146,13 @@ static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
 static int impl_vol(option_data od, pricing_data pd, double V, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, V, S, pms, pm_data);
+  pricing_data pd0 = new_pricing_data_(pd);
+
+  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd0, V, S, pms, pm_data);
 
   int res = secant_method(iv_f, ivmfa, ret);
 
+  delete_pricing_data_(pd0);
   delete_impl_vol_mf_args(ivmfa);
 
   return res;
@@ -229,19 +232,19 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 
   pricing_data pd0 = new_pricing_data_(pd);
 
-  risk_free_rate r = pd0->r;
+  double r = rfr_get_value(pd0->r);
 
-  pd0->r = r - delta;
+  rfr_set_value(pd0->r, r - delta);
   double f1;
   calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f1);
 
-  pd0->r = r + delta;
+  rfr_set_value(pd0->r, r + delta);
   double f2;
   calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f2);
 
   double rho =  (f2 - f1) / (2 * delta);
 
-  delete_pricing_data(pd0);
+  delete_pricing_data_(pd0);
   return result_set_rho(ret, rho);
 }
 
@@ -255,19 +258,19 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
   pricing_data pd0 = new_pricing_data_(pd);
 
-  volatility vol = pd0->vol;
+  double vol = vol_get_value(pd0->vol);
 
-  pd0->vol = vol - delta;
+  vol_set_value(pd0->vol, vol - delta);
   double f1;
   calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f1);
 
-  pd0->vol = vol + delta;
+  vol_set_value(pd0->vol, vol + delta);
   double f2;
   calculate_bsmf(BSM_UG_v, od, pd0, 1, &S, pms, &f2);
 
   double vega =  (f2 - f1) / (2 * delta);
 
-  delete_pricing_data(pd0);
+  delete_pricing_data_(pd0);
   return result_set_vega(ret, vega);
 }
 

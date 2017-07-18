@@ -49,9 +49,10 @@ QSSINC    := -I$(QSSCOMMONDIR) -I$(QSSENGINEDIR)
 .SUFFIXES: .c
 
 #Source files
-COMMONSRC := $(SRCDIR)/option_data.c $(SRCDIR)/pricing_data.c $(SRCDIR)/result.c \
-	$(SRCDIR)/pm_settings.c $(SRCDIR)/pricing_method.c $(SRCDIR)/option.c \
-	$(SRCDIR)/dividend.c $(SRCDIR)/time_period.c
+COMMONSRC := $(SRCDIR)/parameter.c $(SRCDIR)/risk_free_rate.c $(SRCDIR)/volatility.c \
+	$(SRCDIR)/dividend.c $(SRCDIR)/time_period.c $(SRCDIR)/option_data.c \
+	$(SRCDIR)/pricing_data.c $(SRCDIR)/result.c $(SRCDIR)/pm_settings.c \
+	$(SRCDIR)/pricing_method.c $(SRCDIR)/option.c
 
 PMSRC := $(PMEUR)/european_analytic.c \
 	$(PMAM)/finite_difference/american_finite_difference.c
@@ -61,8 +62,9 @@ BSMSRC := $(QSSDIR)/BSMUniformGrid.cpp $(QSSDIR)/BSMNonUniformGrid.cpp
 IVMSRC := $(IVMDIR)/impl_vol_mf.c $(IVMDIR)/secant_method.c
 
 EXPORTH := $(SRCDIR)/libop.h $(SRCDIR)/option.h $(SRCDIR)/pricing_method.h \
-	$(SRCDIR)/option_data.h $(SRCDIR)/pm_settings.h $(SRCDIR)/dividend.h \
-	$(SRCDIR)/parameter.h $(SRCDIR)/result.h $(SRCDIR)/time_period.h
+	$(SRCDIR)/option_data.h $(SRCDIR)/pm_settings.h \
+	$(SRCDIR)/result.h $(SRCDIR)/time_period.h \
+	$(SRCDIR)/dividend.h $(SRCDIR)/volatility.h $(SRCDIR)/risk_free_rate.h
 
 QSSCOMMONSRC = $(QSSCOMMONDIR)/data.c $(QSSCOMMONDIR)/utils.c $(QSSCOMMONDIR)/settings.c \
 	$(QSSCOMMONDIR)/simulator.c $(QSSCOMMONDIR)/integrator.c $(QSSCOMMONDIR)/engine.c
@@ -111,7 +113,7 @@ $(BUILDDIR)/%.o: $(IVMDIR)/%.c
 	$(CC) -c $< -o $(@) $(INC) $(CFLAGS)
 
 $(TARGET): $(QSSOBJ) $(BSMOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ)
-	$(CC) -shared -o $(@) $(QSSOBJ) $(BSMOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ) $(CFLAGS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -shared $(QSSOBJ) $(BSMOBJ) $(COMMONOBJ) $(PMOBJ) $(IVMOBJ) -o $(@) $(LDFLAGS)
 
 $(QSSOBJ): | $(BUILDDIR)
 

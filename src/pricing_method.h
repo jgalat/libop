@@ -1,7 +1,8 @@
 #ifndef __PRICING_METHOD_H__
 #define __PRICING_METHOD_H__
 
-#include <parameter.h>
+#include <risk_free_rate.h>
+#include <volatility.h>
 #include <dividend.h>
 #include <pm_settings.h>
 

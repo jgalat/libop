@@ -11,6 +11,6 @@ int result_set_gamma(result r, double val);
 int result_set_theta(result r, double val);
 int result_set_rho(result r, double val);
 int result_set_vega(result r, double val);
-int result_set_impl_vol(result r, volatility v);
+int result_set_impl_vol(result r, double val);
 
 #endif /* __RESULT_INTERNAL_H__ */

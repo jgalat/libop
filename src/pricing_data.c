@@ -3,10 +3,13 @@
 #include "pricing_data.h"
 
 pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
-  if (!d)
+  if (!d || !r)
     return NULL;
   pricing_data pd = (pricing_data) malloc(sizeof(struct pricing_data_));
   if (pd) {
+    if (!vol) {
+      vol = new_volatility(0.0);
+    }
     pd->vol = vol;
     pd->r = r;
     pd->d = d;
@@ -17,9 +20,19 @@ pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
 pricing_data new_pricing_data_(pricing_data pd) {
   if (!pd)
     return NULL;
-  return new_pricing_data(pd->vol, pd->r, pd->d);
+  risk_free_rate rfr = new_risk_free_rate_(pd->r);
+  volatility vol = new_volatility_(pd->vol);
+  return new_pricing_data(vol, rfr, pd->d);
 }
 
 void delete_pricing_data(pricing_data pd) {
+  free(pd);
+}
+
+void delete_pricing_data_(pricing_data pd) {
+  if (pd) {
+    delete_volatility(pd->vol);
+    delete_risk_free_rate(pd->r);
+  }
   free(pd);
 }

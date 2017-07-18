@@ -5,11 +5,14 @@
 extern "C" {
 #endif
 
-/**
- * Type definitions for the volatility and risk free rate
- */
-typedef double volatility;
-typedef double risk_free_rate;
+struct parameter;
+struct parameter *new_parameter(double val);
+struct parameter *new_parameter_(struct parameter *p);
+
+void delete_parameter(struct parameter *p);
+
+int param_set_value(struct parameter *p, double val);
+double param_get_value(struct parameter *p);
 
 #ifdef __cplusplus
 }

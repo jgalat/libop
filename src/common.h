@@ -1,11 +1,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#include <time_period.h>
 #include <result.h>
-#include <parameter.h>
-#include <dividend.h>
-#include <option_data.h>
 #include <option_data_internal.h>
 #include <pricing_data.h>
 #include <pm_settings.h>

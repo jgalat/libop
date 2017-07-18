@@ -11,7 +11,7 @@ struct result_ {
   double theta;
   double rho;
   double vega;
-  volatility impl_vol;
+  double impl_vol;
   int flag;
 };
 
@@ -106,7 +106,7 @@ int result_set_vega(result r, double val) {
   return 0;
 }
 
-int result_set_impl_vol(result r, volatility v) {
+int result_set_impl_vol(result r, double v) {
   if (!r)
     return -1;
   r->flag |= IMPL_VOL_FLAG;
@@ -174,7 +174,7 @@ double result_get_vega(result r) {
   return r->vega;
 }
 
-volatility result_get_impl_vol(result r) {
+double result_get_impl_vol(result r) {
   if (!(r && (r->flag & IMPL_VOL_FLAG))) {
     _warning("implied volatility");
     return 0.0;

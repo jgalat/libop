@@ -26,7 +26,7 @@ libop:
 	$(MAKE) -C $(BUILDDIR) OS=$(OS)
 
 $(TARGET): libop
-	$(CC) $(SRC) -o $(@) $(CFLAGS) $(INC) $(LIB) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(INC) $(LIB) $(SRC) -o $(@) $(LDFLAGS)
 
 export_all: $(TARGET)
 	$(MAKE) -C $(BUILDDIR) $(@)

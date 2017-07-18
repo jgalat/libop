@@ -30,11 +30,12 @@ static double cdf(double x) {
   return 0.5*(1.0 + sign*y);
 }
 
-static double calculate_dividend(risk_free_rate r, int size, double *dates,
+static double calculate_dividend(risk_free_rate rfr, int size, double *dates,
   double *ammounts) {
 
   int i;
   double dividend = 0.0;
+  double r = rfr_get_value(rfr);
 
   for (i = 0; i < size; i++)
     dividend += ammounts[i] * exp(-r * dates[i]);
@@ -42,12 +43,12 @@ static double calculate_dividend(risk_free_rate r, int size, double *dates,
   return dividend;
 }
 
-static void apply_div(risk_free_rate r, dividend divi, double *d, double *S) {
+static void apply_div(risk_free_rate rfr, dividend divi, double *cd, double *S) {
   if (div_get_type(divi) == DIV_CONTINUOUS) {
-    *d = div_cont_get_val(divi);
+    *cd = div_cont_get_val(divi);
   } else {
-    *d = 0.0;
-    *S -= calculate_dividend(r, div_disc_get_n(divi),
+    *cd = 0.0;
+    *S -= calculate_dividend(rfr, div_disc_get_n(divi),
             div_disc_get_dates(divi), div_disc_get_ammounts(divi));
   }
 }
@@ -58,13 +59,13 @@ static double option_price_(option_data od, pricing_data pd, double S) {
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 
-  volatility sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
   double d;
-  apply_div(r, divi, &d, &S);
+  apply_div(pd->r, divi, &d, &S);
 
   double d1, d2, result = 0;
 
@@ -83,19 +84,22 @@ static double option_price_(option_data od, pricing_data pd, double S) {
   return result;
 }
 
-static double iv_f(volatility vol, impl_vol_mf_args ivmfa) {
+static double iv_f(double vol, impl_vol_mf_args ivmfa) {
   pricing_data pd = ivmfa->pd;
-  pd->vol = vol;
+  vol_set_value(pd->vol, vol);
   return option_price_(ivmfa->od, pd, ivmfa->S) - ivmfa->V;
 }
 
 static int impl_vol(option_data od, pricing_data pd, double V, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd, V, S, pms, pm_data);
+  pricing_data pd0 = new_pricing_data_(pd);
+
+  impl_vol_mf_args ivmfa = new_impl_vol_mf_args(od, pd0, V, S, pms, pm_data);
 
   int res = secant_method(iv_f, ivmfa, ret);
 
+  delete_pricing_data_(pd0);
   delete_impl_vol_mf_args(ivmfa);
 
   return res;
@@ -139,13 +143,13 @@ static int greek_delta(option_data od, pricing_data pd, double S,
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 
-  volatility sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
   double d;
-  apply_div(r, divi, &d, &S);
+  apply_div(pd->r, divi, &d, &S);
 
   double d1, result = 0;
 
@@ -175,13 +179,13 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 
-  volatility sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
   double d;
-  apply_div(r, divi, &d, &S);
+  apply_div(pd->r, divi, &d, &S);
 
   double d1, snpd, result;
 
@@ -204,13 +208,13 @@ static int greek_theta(option_data od, pricing_data pd, double S,
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 
-  volatility sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
   double d;
-  apply_div(r, divi, &d, &S);
+  apply_div(pd->r, divi, &d, &S);
 
   double d1, d2, snpd, result = 0;
 
@@ -243,13 +247,13 @@ static int greek_rho(option_data od, pricing_data pd, double S,
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 
-  volatility sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
   double d;
-  apply_div(r, divi, &d, &S);
+  apply_div(pd->r, divi, &d, &S);
 
   double d1, d2, result = 0;
 
@@ -277,13 +281,13 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 
-  volatility sigma = pd->vol;
-  risk_free_rate r = pd->r;
+  double sigma = vol_get_value(pd->vol);
+  double r = rfr_get_value(pd->r);
   dividend divi = pd->d;
   double K = od->strike;
 
   double d;
-  apply_div(r, divi, &d, &S);
+  apply_div(pd->r, divi, &d, &S);
 
   double d1, snpd, result;
 
