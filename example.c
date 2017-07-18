@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]) {
     pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
   } else {
     opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 365), strike);
-    pm = new_pricing_method(AM_FD, sigma, r, d);
+    pm = new_pricing_method(AM_FD_UG, sigma, r, d);
   }
 
   pm_settings pms = new_pm_settings();

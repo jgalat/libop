@@ -55,7 +55,7 @@ COMMONSRC := $(SRCDIR)/parameter.c $(SRCDIR)/risk_free_rate.c $(SRCDIR)/volatili
 	$(SRCDIR)/pricing_method.c $(SRCDIR)/option.c
 
 PMSRC := $(PMEUR)/european_analytic.c \
-	$(PMAM)/finite_difference/american_finite_difference.c
+	$(PMAM)/finite_difference/american_finite_difference_uniform_grid.c
 
 BSMSRC := $(QSSDIR)/BSMUniformGrid.cpp $(QSSDIR)/BSMNonUniformGrid.cpp
 

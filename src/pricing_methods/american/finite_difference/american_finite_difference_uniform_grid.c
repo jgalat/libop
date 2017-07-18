@@ -6,7 +6,7 @@
 #include <pricing_method_internal.h>
 #include <qss-solver/BSMUniformGrid.h>
 #include <impl_vol_methods/impl_vol_methods.h>
-#include "american_finite_difference.h"
+#include "american_finite_difference_uniform_grid.h"
 
 static double lagrange_interpolation(double X, double *x, double *y, int N) {
   double result = 0, temp;
@@ -274,7 +274,7 @@ static int greek_vega(option_data od, pricing_data pd, double S,
   return result_set_vega(ret, vega);
 }
 
-pricing_method new_american_finite_difference(pricing_data pd) {
+pricing_method new_american_finite_difference_uniform_grid(pricing_data pd) {
   return new_pricing_method_(option_price, option_prices, greek_delta,
     greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }

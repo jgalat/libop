@@ -21,7 +21,7 @@ typedef struct pricing_method_ * pricing_method;
  */
 typedef enum {
   EU_ANALYTIC,
-  AM_FD
+  AM_FD_UG
 } method_id;
 
 /**

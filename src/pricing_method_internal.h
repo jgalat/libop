@@ -2,7 +2,7 @@
 #define __PRICING_METHOD_INTERNAL_H__
 
 #include <pricing_methods/european/european_analytic.h>
-#include <pricing_methods/american/finite_difference/american_finite_difference.h>
+#include <pricing_methods/american/finite_difference/american_finite_difference_uniform_grid.h>
 
 #include <common.h>
 #include "pricing_method.h"
