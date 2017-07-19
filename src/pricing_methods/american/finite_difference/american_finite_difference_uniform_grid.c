@@ -67,12 +67,11 @@ static BSM_UG BSM_UG_(int grid_size, double Smax, double tol, double abstol,
     maturity, tol, abstol);
 }
 
-static void apply_div(dividend d, double *S) {
+static void apply_div(dividend d, int size, double *S) {
   if (div_get_type(d) == DIV_DISCRETE) {
     int ndivs = div_disc_get_n(d);
     double *ammounts = div_disc_get_ammounts(d);
 
-    int size = sizeof(S) / sizeof(double);
     int i, j;
     for (i = 0; i < size; i++)
       for (j = 0; j < ndivs; j++)
@@ -125,7 +124,7 @@ static void calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
   double *Ss_ = (double *) malloc(sizeof(double) * size);
   memcpy(Ss_, Ss, sizeof(double) * size);
 
-  apply_div(pd->d, Ss_);
+  apply_div(pd->d, size, Ss_);
 
   for(i = 0; i < size; i++)
     output[i] = query_value(bsm, bsmf, Ss_[i], N, Smax);
