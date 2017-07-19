@@ -20,8 +20,8 @@
 
 1. Install Git for Windows (Optional)
 2. Install GNU Make
-  + Add the `GnuWin32/bin` folder to PATH
+    * Add the `GnuWin32/bin` folder to PATH
 3. Install Mingw-w64 with options (7.1.0, x86_64, posix, seh, 0)
-  + Add the `mingw-w64/x86_64-7.1.0-posix-seh-rt_05-rev0/mingw64/bin` folder to PATH
+    * Add the `mingw-w64/x86_64-7.1.0-posix-seh-rt_05-rev0/mingw64/bin` folder to PATH
 4. Clone project using Git from Git Bash (or Windows CMD)
 5. `cd build && make OS=win32`
