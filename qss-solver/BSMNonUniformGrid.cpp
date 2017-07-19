@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <functional>
 
 #include <qss-solver/engine/common/utils.h>
@@ -48,18 +49,6 @@ BSMNonUniformGrid::BSMNonUniformGrid(int grid_size, BSM_OT ot, double S, double 
   _discdiv_n = discdiv_n;
   _discdiv_i = 0;
 
-  // _u0 = 0.0;
-  // switch(_op_type) {
-  //   case CALL:
-  //     _uN1 = MAX(_Smax - _K, 0);
-  //     break;
-  //   case PUT:
-  //     _uN1 = MAX(_K - _Smax, 0);
-  //     break;
-  // }
-
-  // _ds = _Smax/(_g_size + 1);
-
   _solution = new double[4];
 
   using namespace std::placeholders;
@@ -90,7 +79,7 @@ BSMNonUniformGrid::BSMNonUniformGrid(int grid_size, BSM_OT ot, double S, double 
   _gamma = _solution[2];
   _theta = _solution[3];
 
-  delete _solution;
+  delete [] _solution;
 }
 
 BSMNonUniformGrid::~BSMNonUniformGrid() {
@@ -279,7 +268,7 @@ void BSMNonUniformGrid::outputAll(int i, double *x, double *d, double *alg,
 
     alg[_g_size*3+mid] = d[mid] * alg[_g_size*2+mid];
     alg[_g_size*3+mid-1] = d[mid-1] * alg[_g_size*2+mid-1];
-    out[0] = -(alg[_g_size*3+mid] + alg[_g_size*3+mid-1]) / 2.0;
+    out[3] = -(alg[_g_size*3+mid] + alg[_g_size*3+mid-1]) / 2.0;
   }
 }
 
@@ -301,7 +290,7 @@ void BSMNonUniformGrid::initializeDataStructs(void *simulator_) {
   double mmf = exp(4.0 * pf * _sigma);
   double  sMin = _S / mmf,
           sMax = _S * mmf;
-  _gls = (log(sMax)-log(sMin))/ _g_size;
+  _gls = (log(sMax)-log(sMin)) / (_g_size + 1);
   double edx = exp(_gls);
 
   _u0 = MAX(_op_type == CALL ? sMin-_K : _K-sMin, 0.0);

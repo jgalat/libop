@@ -89,6 +89,7 @@ static void calculate_bsmf(BSM_NUG_F bsmf, option_data od, pricing_data pd,
   for (i = 0; i < size; i++) {
     delete_BSM_NUG(bsm[i]);
   }
+  free(bsm);
 }
 
 static double iv_f(double vol, impl_vol_mf_args ivmfa) {

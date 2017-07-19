@@ -38,7 +38,7 @@ gdb: $(TARGET)
 	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	gdb ./$(TARGET)
 
 valgrind: $(TARGET)
-	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	valgrind --track-origins=yes ./$(TARGET)
+	export LD_LIBRARY_PATH=$(shell pwd)/$(BUILDDIR):$(LD_LIBRARY_PATH) &&	valgrind --leak-check=full --track-origins=yes ./$(TARGET)
 
 .PHONY: clean
 

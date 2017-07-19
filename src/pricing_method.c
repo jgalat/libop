@@ -29,6 +29,8 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
       return new_european_analytic(pd);
     case AM_FD_UG:
       return new_american_finite_difference_uniform_grid(pd);
+    case AM_FD_NUG:
+      return new_american_finite_difference_non_uniform_grid(pd);
     default:
       break;
   }
