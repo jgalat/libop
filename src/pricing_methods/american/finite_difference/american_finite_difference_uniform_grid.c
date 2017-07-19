@@ -103,7 +103,9 @@ static double query_value(BSM_UG *bsm, BSM_UG_F bsmf, double S, int N, double Sm
 static void calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
   int size, double *Ss, pm_settings pms, double *output) {
 
-  int N = pm_settings_get_grid_size(pms);
+  int N_ = pm_settings_get_grid_size(pms);
+  int halfN = N_ / 2;
+  int N[2] = { halfN, halfN * 2 };
   double tol = pm_settings_get_tol(pms);
   double abstol = pm_settings_get_abstol(pms);
 
@@ -118,7 +120,7 @@ static void calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
 
   //#pragma omp parallel for
   for (i = 0; i < 2; i++) {
-    bsm[i] = BSM_UG_(N + (N * i), Smax, tol, abstol, od, pd);
+    bsm[i] = BSM_UG_(N[i], Smax, tol, abstol, od, pd);
   }
 
   double *Ss_ = (double *) malloc(sizeof(double) * size);
@@ -127,7 +129,7 @@ static void calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
   apply_div(pd->d, size, Ss_);
 
   for(i = 0; i < size; i++)
-    output[i] = query_value(bsm, bsmf, Ss_[i], N, Smax);
+    output[i] = query_value(bsm, bsmf, Ss_[i], halfN, Smax);
 
   free(Ss_);
   delete_BSM_UG(bsm[0]);

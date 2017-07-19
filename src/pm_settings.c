@@ -2,15 +2,15 @@
 
 #include "pm_settings.h"
 
-#define DEFAULT_GRID_SIZE (50)
-#define DEFAULT_S_MAX (-1)
-#define DEFAULT_TOL (1e-09)
-#define DEFAULT_ABS_TOL (1e-12)
-#define DEFAULT_IV_MAX_IT (5)
-#define DEFAULT_IV_EPS (1e-4)
-#define DEFAULT_IV_INIT0 (0.25)
-#define DEFAULT_IV_INIT1 (0.75)
-#define DEFAULT_EXTRA_DATA (NULL)
+#define DEFAULT_GRID_SIZE ((int) 100)
+#define DEFAULT_S_MAX ((double) -1)
+#define DEFAULT_TOL ((double) 1e-09)
+#define DEFAULT_ABS_TOL ((double) 1e-12)
+#define DEFAULT_IV_MAX_IT ((int) 5)
+#define DEFAULT_IV_EPS ((double) 1e-4)
+#define DEFAULT_IV_INIT0 ((double) 0.25)
+#define DEFAULT_IV_INIT1 ((double) 0.75)
+#define DEFAULT_EXTRA_DATA ((void *) NULL)
 
 struct pm_settings_ {
   int grid_size;
