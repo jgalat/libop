@@ -286,9 +286,6 @@ void BSMNonUniformGrid::outputAll(int i, double *x, double *d, double *alg,
 /*
   d[0 - 99] = w
   d[100 - 199] = S
-  d[200] = u0
-  d[201] = UN1
-
 */
 
 void BSMNonUniformGrid::initializeDataStructs(void *simulator_) {
@@ -381,4 +378,33 @@ void BSMNonUniformGrid::initializeDataStructs(void *simulator_) {
   simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,&bsmhn);
   // delete [] outputs;
   // delete [] states;
+}
+
+/* C */
+
+BSM_NUG new_BSM_NUG(int grid_size, BSM_OT ot, double S,
+  double vol, double rfr, double strike, double cont_div, int discdiv_n,
+  double *discdiv_date, double *discdiv_ammo, double period,
+  double end_time, double tol, double abs_tol) {
+  return reinterpret_cast<BSM_NUG>(new BSMNonUniformGrid(grid_size,ot,
+    S,vol,rfr,strike,cont_div,discdiv_n,discdiv_date,discdiv_ammo,
+    period,end_time,tol,abs_tol));
+}
+
+void delete_BSM_NUG(BSM_NUG bsm) {
+  delete reinterpret_cast<BSMNonUniformGrid*>(bsm);
+}
+
+double BSM_NUG_v(BSM_NUG bsm) {
+  return reinterpret_cast<BSMNonUniformGrid*>(bsm)->v();
+}
+
+double BSM_NUG_delta(BSM_NUG bsm) {
+  return reinterpret_cast<BSMNonUniformGrid*>(bsm)->delta();
+}
+double BSM_NUG_gamma(BSM_NUG bsm) {
+  return reinterpret_cast<BSMNonUniformGrid*>(bsm)->gamma();
+}
+double BSM_NUG_theta(BSM_NUG bsm) {
+  return reinterpret_cast<BSMNonUniformGrid*>(bsm)->theta();
 }

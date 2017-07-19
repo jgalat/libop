@@ -60,4 +60,31 @@ class BSMNonUniformGrid : public BlackScholesModel {
 
 #endif /* __cplusplus */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+  typedef struct BSM_NUG_ *BSM_NUG;
+
+  struct BSM_NUG_;
+
+  BSM_NUG new_BSM_NUG(int grid_size, BSM_OT ot, double S,
+    double vol, double rfr, double strike, double cont_div, int discdiv_n,
+    double *discdiv_date, double *discdiv_ammo, double period,
+    double end_time, double tol, double abs_tol);
+
+  void delete_BSM_NUG(BSM_NUG);
+
+  typedef double (*BSM_NUG_F) (BSM_NUG);
+
+  double BSM_NUG_v(BSM_NUG);
+  double BSM_NUG_delta(BSM_NUG);
+  double BSM_NUG_gamma(BSM_NUG);
+  double BSM_NUG_theta(BSM_NUG);
+
+#ifdef __cplusplus
+}
+#endif
+
+
 #endif /* __BSM_NON_UNIFORM_GRID__ */
