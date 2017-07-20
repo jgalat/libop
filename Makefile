@@ -1,4 +1,5 @@
 OS ?= unix
+VERBOSE ?= False
 
 #compiler
 CC := gcc
@@ -23,7 +24,7 @@ default: $(TARGET)
 SRC := example.c
 
 libop:
-	$(MAKE) -C $(BUILDDIR) OS=$(OS)
+	$(MAKE) -C $(BUILDDIR) OS=$(OS) VERBOSE=$(VERBOSE)
 
 $(TARGET): libop
 	$(CC) $(CFLAGS) $(INC) $(LIB) $(SRC) -o $(@) $(LDFLAGS)

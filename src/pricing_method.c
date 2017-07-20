@@ -3,6 +3,7 @@
 #include <common.h>
 #include "pricing_method.h"
 #include "pricing_method_internal.h"
+#include <debug.h>
 
 struct pricing_method_ {
   price_f       option_price;
@@ -32,6 +33,7 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
     case AM_FD_NUG:
       return new_american_finite_difference_non_uniform_grid(pd);
     default:
+      __DEBUG("Invalid method id");
       break;
   }
   return NULL;
@@ -68,75 +70,72 @@ void delete_pricing_method(pricing_method pm) {
 }
 
 int pm_set_settings(pricing_method pm, pm_settings pms) {
-  if (!pm)
+  if (!pm) {
+    __DEBUG("Pricing method is NULL");
     return -1;
+  }
   pm->pm_settings = pms;
   return 0;
 }
 
-int pm_option_price(pricing_method pm, option_data od, double S, result r) {
+static const char *__PM_NULL =
+  "Pricing method is NULL or method isn't implemented";
 
+int pm_option_price(pricing_method pm, option_data od, double S, result r) {
   if (pm && pm->option_price)
     return pm->option_price(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_option_prices(pricing_method pm, option_data od, int size,
   double *Ss, result r) {
-
   if (pm && pm->option_prices)
     return pm->option_prices(od, pm->pricing_data, size, Ss, r, pm->pm_settings,
       pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_delta(pricing_method pm, option_data od, double S, result r) {
-
   if (pm && pm->delta)
     return pm->delta(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_gamma(pricing_method pm, option_data od, double S, result r) {
-
   if (pm && pm->gamma)
     return pm->gamma(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_theta(pricing_method pm, option_data od, double S, result r) {
-
   if (pm && pm->theta)
     return pm->theta(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_rho(pricing_method pm, option_data od, double S, result r) {
-
   if (pm && pm->rho)
     return pm->rho(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_vega(pricing_method pm, option_data od, double S, result r) {
-
   if (pm && pm->vega)
     return pm->vega(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }
 
 int pm_ivf(pricing_method pm, option_data od, double V, double S, result r) {
-
   if (pm && pm->ivf)
     return pm->ivf(od, pm->pricing_data, V, S, r,
       pm->pm_settings, pm->pm_data);
-
+  __DEBUG(__PM_NULL);
   return -1;
 }

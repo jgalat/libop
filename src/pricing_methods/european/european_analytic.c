@@ -5,6 +5,7 @@
 #include <option_data_internal.h>
 #include <pricing_method_internal.h>
 #include <impl_vol_methods/impl_vol_methods.h>
+#include <debug.h>
 
 #include "european_analytic.h"
 
@@ -90,8 +91,15 @@ static double iv_f(double vol, impl_vol_mf_args ivmfa) {
   return option_price_(ivmfa->od, pd, ivmfa->S) - ivmfa->V;
 }
 
+static const char *__OPT_NOT_EU = "Option isn't European";
+
 static int impl_vol(option_data od, pricing_data pd, double V, double S,
   result ret, pm_settings pms, void *pm_data) {
+
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
+    return -1;
+  }
 
   pricing_data pd0 = new_pricing_data_(pd);
 
@@ -108,8 +116,10 @@ static int impl_vol(option_data od, pricing_data pd, double V, double S,
 static int option_price(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
+  }
 
   double result = option_price_(od, pd, S);
   return result_set_price(ret, result);
@@ -118,8 +128,10 @@ static int option_price(option_data od, pricing_data pd, double S,
 static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
+  }
 
   if (!Ss)
     return 0;
@@ -136,8 +148,10 @@ static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
 static int greek_delta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
+  }
 
   option_type type = od->opt_type;
   time_period tp = od->maturity;
@@ -173,8 +187,10 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 static int greek_gamma(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
+  }
 
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
@@ -201,8 +217,10 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 static int greek_theta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
+  }
 
   option_type type = od->opt_type;
   time_period tp = od->maturity;
@@ -240,8 +258,10 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 static int greek_rho(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
+  }
 
   option_type type = od->opt_type;
   time_period tp = od->maturity;
@@ -275,9 +295,11 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 static int greek_vega(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != EU_EXERCISE)
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
     return -1;
-
+  }
+  
   time_period tp = od->maturity;
   date ttl = tp_get_date(tp);
 

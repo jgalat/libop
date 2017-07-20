@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
-#include <dividend.h>
+#include "dividend.h"
+#include <debug.h>
 
 struct dividend_ {
   dividend_type div_type;
@@ -77,11 +78,15 @@ static int get_correct_size(struct disc_div *dd, int size) {
 }
 
 int div_disc_set_dates(dividend d, time_period tp, int size, ...) {
-  if (!d)
+  if (!d) {
+    __DEBUG("Dividend is NULL");
     return -1;
+  }
 
-  if (d->div_type != DIV_DISCRETE)
+  if (d->div_type != DIV_DISCRETE) {
+    __DEBUG("Dividend is continuous");
     return -1;
+  }
 
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
@@ -112,11 +117,15 @@ int div_disc_set_dates(dividend d, time_period tp, int size, ...) {
 }
 
 int div_disc_set_ammounts(dividend d, int size, ...) {
-  if (!d)
+  if (!d) {
+    __DEBUG("Dividend is NULL");
     return -1;
+  }
 
-  if (d->div_type != DIV_DISCRETE)
+  if (d->div_type != DIV_DISCRETE) {
+    __DEBUG("Dividend is continuous");
     return -1;
+  }
 
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
@@ -146,14 +155,20 @@ int div_disc_set_ammounts(dividend d, int size, ...) {
 }
 
 int div_disc_set_dates_(dividend d, time_period tp, int size, int *days) {
-  if (!d)
+  if (!d) {
+    __DEBUG("Dividend is NULL");
     return -1;
+  }
 
-  if (d->div_type != DIV_DISCRETE)
+  if (d->div_type != DIV_DISCRETE) {
+    __DEBUG("Dividend is continuous");
     return -1;
+  }
 
-  if (!days)
+  if (!days) {
+    __DEBUG("Days is NULL");
     return -1;
+  }
 
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
@@ -179,14 +194,20 @@ int div_disc_set_dates_(dividend d, time_period tp, int size, int *days) {
 }
 
 int div_disc_set_ammounts_(dividend d, int size, double *ammounts) {
-  if (!d)
+  if (!d) {
+    __DEBUG("Dividend is NULL");
     return -1;
+  }
 
-  if (d->div_type != DIV_DISCRETE)
+  if (d->div_type != DIV_DISCRETE) {
+    __DEBUG("Dividend is continuous");
     return -1;
+  }
 
-  if (!ammounts)
+  if (!ammounts){
+    __DEBUG("Ammounts is NULL");
     return -1;
+  }
 
   struct disc_div *dd = (struct disc_div *) d->actual_div;
 
@@ -212,29 +233,37 @@ int div_disc_set_ammounts_(dividend d, int size, double *ammounts) {
 }
 
 dividend_type div_get_type(dividend d) {
+  if (!d) {
+    __DEBUG("Dividend is NULL, returning continuous");
+    return DIV_CONTINUOUS;
+  }
   return d->div_type;
 }
 
 double div_cont_get_val(dividend d) {
   if (d && d->div_type == DIV_CONTINUOUS)
     return *((double *) d->actual_div);
-  return -1;
+  __DEBUG("Dividend is NULL or discrete, returning 0.0");
+  return 0.0;
 }
 
 int div_disc_get_n(dividend d) {
   if (d && d->div_type == DIV_DISCRETE)
     return ((struct disc_div *) d->actual_div)->size;
-  return -1;
+    __DEBUG("Dividend is NULL or continuous, returning 0");
+  return 0;
 }
 
 date *div_disc_get_dates(dividend d) {
   if (d && d->div_type == DIV_DISCRETE)
     return ((struct disc_div *) d->actual_div)->dates;
+  __DEBUG("Dividend is NULL or continuous, returning NULL");
   return NULL;
 }
 
 double *div_disc_get_ammounts(dividend d) {
   if (d && d->div_type == DIV_DISCRETE)
     return ((struct disc_div *) d->actual_div)->ammounts;
+  __DEBUG("Dividend is NULL or continuous, returning NULL");
   return NULL;
 }

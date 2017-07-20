@@ -1,4 +1,5 @@
 OS ?= unix
+VERBOSE ?= False
 
 #compiler and linker
 CC 	:= gcc
@@ -36,6 +37,9 @@ EXPORTDIR := ../export
 
 #Flags, Libraries and Includes
 CFLAGS 		:= -Wall -msse2 -mfpmath=sse -O2
+ifeq ($(VERBOSE), True)
+CFLAGS += -DVERBOSE
+endif
 ifeq ($(OS), unix)
 CFLAGS += -fPIC
 endif

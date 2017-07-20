@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "time_period.h"
+#include <debug.h>
 
 static const double _365 = 1 / 365.0;
 static const double _252 = 1 / 252.0;
@@ -36,32 +37,54 @@ void delete_time_period(time_period tp) {
   free(tp);
 }
 
+static const char *__TP_NULL = "Time period is NULL";
+
 date tp_int_to_date(time_period tp, int days) {
+  if (!tp){
+    __DEBUG(__TP_NULL);
+    return 0.0;
+  }
   return (date) ((double) days * tp->period);
 }
 
 int tp_date_to_int(time_period tp, date date) {
+  if (!tp){
+    __DEBUG(__TP_NULL);
+    return 0.0;
+  }
   return (int) (date / tp->period);
 }
 
 int tp_set_days(time_period tp, int d) {
-  if (!tp)
+  if (!tp) {
+    __DEBUG(__TP_NULL);
     return -1;
+  }
   tp->t = tp_int_to_date(tp, d);
   return 0;
 }
 
 int tp_set_years(time_period tp, int y) {
-  if (!tp)
+  if (!tp) {
+    __DEBUG(__TP_NULL);
     return -1;
+  }
   tp->t = (date) y;
   return 0;
 }
 
 date tp_get_date(time_period tp) {
+  if (!tp) {
+    __DEBUG(__TP_NULL);
+    return 0.0;
+  }
   return tp->t;
 }
 
 double tp_get_period(time_period tp) {
+  if (!tp) {
+    __DEBUG(__TP_NULL);
+    return 0.0;
+  }
   return tp->period;
 }

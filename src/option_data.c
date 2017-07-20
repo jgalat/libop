@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "option_data.h"
 #include "option_data_internal.h"
+#include <debug.h>
 
 static int valid_option_type(option_type ot) {
   switch (ot) {
@@ -23,11 +24,15 @@ static int valid_exercise_type(exercise_type et) {
 
 option_data new_option_data(option_type t, exercise_type e, time_period m,
   double strike) {
-  if (!valid_option_type(t) || !valid_exercise_type(e))
+  if (!valid_option_type(t) || !valid_exercise_type(e)) {
+    __DEBUG("Invalid option type or exercise type");
     return NULL;
+  }
 
-  if (!m)
+  if (!m) {
+    __DEBUG("Time period is NULL");
     return NULL;
+  }
 
   option_data od = (option_data) malloc(sizeof(struct option_data_));
   if (od) {

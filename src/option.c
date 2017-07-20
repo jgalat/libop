@@ -4,6 +4,7 @@
 #include <option_data_internal.h>
 #include <pricing_method_internal.h>
 #include "option.h"
+#include <debug.h>
 
 struct option_ {
   option_data     option_data;
@@ -29,9 +30,13 @@ void delete_option(option o) {
   free(o);
 }
 
+static const char *__OPTION_NULL = "Option is NULL";
+
 int option_set_pricing_method(option o, pricing_method pm) {
-  if (!o)
+  if (!o) {
+    __DEBUG(__OPTION_NULL);
     return -1;
+  }
   o->pm = pm;
   return 0;
 }
@@ -39,48 +44,56 @@ int option_set_pricing_method(option o, pricing_method pm) {
 int option_price(option o, double S, result r) {
   if (o)
     return pm_option_price(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_prices(option o, int size, double *Ss, result r) {
   if (o)
     return pm_option_prices(o->pm, o->option_data, size, Ss, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_delta(option o, double S, result r) {
   if (o)
     return pm_delta(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_gamma(option o, double S, result r) {
   if (o)
     return pm_gamma(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_theta(option o, double S, result r) {
   if (o)
     return pm_theta(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_rho(option o, double S, result r) {
   if (o)
     return pm_rho(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_vega(option o, double S, result r) {
   if (o)
     return pm_vega(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 
 int option_impl_vol(option o, double V, double S, result r) {
   if (o)
     return pm_ivf(o->pm, o->option_data, V, S, r);
+  __DEBUG(__OPTION_NULL);
   return -1;
 }
 

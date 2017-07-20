@@ -6,6 +6,8 @@
 #include <pricing_method_internal.h>
 #include <qss-solver/BSMUniformGrid.h>
 #include <impl_vol_methods/impl_vol_methods.h>
+#include <debug.h>
+
 #include "american_finite_difference_uniform_grid.h"
 
 static double lagrange_interpolation(double X, double *x, double *y, int N) {
@@ -144,8 +146,15 @@ static double iv_f(double vol, impl_vol_mf_args ivmfa) {
   return price - ivmfa->V;
 }
 
+static const char *__OPT_NOT_AM = "Option isn't American";
+
 static int impl_vol(option_data od, pricing_data pd, double V, double S,
   result ret, pm_settings pms, void *pm_data) {
+
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
+    return -1;
+  }
 
   pricing_data pd0 = new_pricing_data_(pd);
 
@@ -162,8 +171,10 @@ static int impl_vol(option_data od, pricing_data pd, double V, double S,
 static int option_price(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
 
   double price;
   calculate_bsmf(BSM_UG_v, od, pd, 1, &S, pms, &price);
@@ -174,8 +185,11 @@ static int option_price(option_data od, pricing_data pd, double S,
 static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
+
 
   if (!Ss)
     return 0;
@@ -190,8 +204,10 @@ static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
 static int greek_delta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
 
   double delta;
   calculate_bsmf(BSM_UG_delta, od, pd, 1, &S, pms, &delta);
@@ -202,8 +218,10 @@ static int greek_delta(option_data od, pricing_data pd, double S,
 static int greek_gamma(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
 
   double gamma;
   calculate_bsmf(BSM_UG_gamma, od, pd, 1, &S, pms, &gamma);
@@ -214,8 +232,10 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
 static int greek_theta(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
 
   double theta;
   calculate_bsmf(BSM_UG_theta, od, pd, 1, &S, pms, &theta);
@@ -226,8 +246,10 @@ static int greek_theta(option_data od, pricing_data pd, double S,
 static int greek_rho(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
 
   static const double delta = 0.0001;
 
@@ -252,8 +274,10 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 static int greek_vega(option_data od, pricing_data pd, double S,
   result ret, pm_settings pms, void *pm_data) {
 
-  if (od->exercise != AM_EXERCISE)
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
     return -1;
+  }
 
   static const double delta = 0.0001;
 

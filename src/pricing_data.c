@@ -1,10 +1,14 @@
 #include <stdlib.h>
 
 #include "pricing_data.h"
+#include <debug.h>
+
 
 pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
-  if (!d || !r)
+  if (!d || !r) {
+    __DEBUG("Dividend or risk free rate is NULL");
     return NULL;
+  }
   pricing_data pd = (pricing_data) malloc(sizeof(struct pricing_data_));
   if (pd) {
     if (!vol) {

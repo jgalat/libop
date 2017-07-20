@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "result.h"
 #include "result_internal.h"
+#include <debug.h>
 
 struct result_ {
   double price;
@@ -114,13 +115,12 @@ int result_set_impl_vol(result r, double v) {
   return 0;
 }
 
-static inline void _warning(const char *vname) {
-  printf("Warning: Accesing unstored value (%s) or NULL result structure\n", vname);
-}
+static const char *__WARN_MSG =
+  "Accesing unstored value or NULL result structure, returning 0.0 or NULL";
 
 double result_get_price(result r) {
   if (!(r && (r->flag & PRICE_FLAG))) {
-    _warning("price");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->price;
@@ -128,7 +128,7 @@ double result_get_price(result r) {
 
 double *result_get_prices(result r) {
   if (!(r && (r->flag & PRICES_FLAG))) {
-    _warning("prices");
+    __DEBUG(__WARN_MSG);
     return NULL;
   }
   return r->prices;
@@ -136,7 +136,7 @@ double *result_get_prices(result r) {
 
 double result_get_delta(result r) {
   if (!(r && (r->flag & DELTA_FLAG))) {
-    _warning("delta");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->delta;
@@ -144,7 +144,7 @@ double result_get_delta(result r) {
 
 double result_get_gamma(result r) {
   if (!(r && (r->flag & GAMMA_FLAG))) {
-    _warning("gamma");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->gamma;
@@ -152,7 +152,7 @@ double result_get_gamma(result r) {
 
 double result_get_theta(result r) {
   if (!(r && (r->flag & THETA_FLAG))) {
-    _warning("theta");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->theta;
@@ -160,7 +160,7 @@ double result_get_theta(result r) {
 
 double result_get_rho(result r) {
   if (!(r && (r->flag & RHO_FLAG))) {
-    _warning("rho");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->rho;
@@ -168,7 +168,7 @@ double result_get_rho(result r) {
 
 double result_get_vega(result r) {
   if (!(r && (r->flag & VEGA_FLAG))) {
-    _warning("vega");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->vega;
@@ -176,8 +176,10 @@ double result_get_vega(result r) {
 
 double result_get_impl_vol(result r) {
   if (!(r && (r->flag & IMPL_VOL_FLAG))) {
-    _warning("implied volatility");
+    __DEBUG(__WARN_MSG);
     return 0.0;
   }
   return r->impl_vol;
 }
+
+#undef __WARN_MSG
