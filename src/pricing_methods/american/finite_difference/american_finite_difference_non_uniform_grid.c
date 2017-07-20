@@ -71,16 +71,18 @@ static void calculate_bsmf(BSM_NUG_F bsmf, option_data od, pricing_data pd,
   double abstol = pm_settings_get_abstol(pms);
   int i;
 
-  BSM_NUG *bsm = (BSM_NUG *) malloc(sizeof(BSM_NUG) * size);
-  //#pragma omp parallel for
-  for (i = 0; i < size; i++) {
-    bsm[i] = BSM_NUG_(N, Ss[i], tol, abstol, od, pd);
-  }
+  /* FIXME Discrete dividends */
 
   double *Ss_ = (double *) malloc(sizeof(double) * size);
   memcpy(Ss_, Ss, sizeof(double) * size);
 
   apply_div(pd->d, size, Ss_);
+
+  BSM_NUG *bsm = (BSM_NUG *) malloc(sizeof(BSM_NUG) * size);
+  //#pragma omp parallel for
+  for (i = 0; i < size; i++) {
+    bsm[i] = BSM_NUG_(N, Ss_[i], tol, abstol, od, pd);
+  }
 
   for(i = 0; i < size; i++)
     output[i] = bsmf(bsm[i]);

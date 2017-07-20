@@ -41,10 +41,10 @@ BSMNonUniformGrid::BSMNonUniformGrid(int grid_size, BSM_OT ot, double S, double 
   _discdiv_ammo = new double[discdiv_n + 1];
   int i;
   for (i = 0; i < discdiv_n; i++) {
-    _discdiv_date[i] = _ft - discdiv_date[i];
-    _discdiv_ammo[i] = discdiv_ammo[i];
+    _discdiv_date[discdiv_n-1-i] = _ft - discdiv_date[i];
+    _discdiv_ammo[discdiv_n-1-i] = discdiv_ammo[i];
   }
-  _discdiv_date[discdiv_n] = _ft + 1;
+  _discdiv_date[discdiv_n] = 0.0;
   _discdiv_ammo[discdiv_n] = 0.0;
   _discdiv_n = discdiv_n;
   _discdiv_i = 0;
@@ -146,6 +146,7 @@ void BSMNonUniformGrid::zeroCrossing(int i, double *x, double *d, double *alg,
   switch(i) {
     case 0:
       zc[0] = t-(_discdiv_date[_discdiv_i]);
+      fprintf(stderr, "t = %lf, _discdiv_date[%d] = %lf\n",t, _discdiv_i,_discdiv_date[_discdiv_i]);
       return;
     default:
       if(i >= 1 && i <= _g_size) {
@@ -173,8 +174,13 @@ void BSMNonUniformGrid::handlerPos(int i, double *x, double *d,
   switch(i) {
     case 0:
       for(j = 0; j < _g_size; j++) {
-        d[_g_size+j] = d[_g_size+j]+_discdiv_ammo[_discdiv_i];
+        d[_g_size+j] +=_discdiv_ammo[_discdiv_i];
       }
+      _SMin += _discdiv_ammo[_discdiv_i];
+      _SMax += _discdiv_ammo[_discdiv_i];
+      _u0 = MAX(_op_type == CALL ? _SMin-_K : _K-_SMin, 0.0);
+      _uN1 = MAX(_op_type == CALL ? _SMax-_K : _K-_SMax, 0.0);
+      fprintf(stderr, "_disc_div_ammo[%d] = %lf\n", _discdiv_i, _discdiv_ammo[_discdiv_i]);
       _discdiv_i++;
       return;
     default:
@@ -288,17 +294,17 @@ void BSMNonUniformGrid::initializeDataStructs(void *simulator_) {
 
   double pf = 1.0 + 0.02 / _sigma;
   double mmf = exp(4.0 * pf * _sigma);
-  double  sMin = _S / mmf,
-          sMax = _S * mmf;
-  _gls = (log(sMax)-log(sMin)) / (_g_size + 1);
+  _SMin = _S / mmf;
+  _SMax = _S * mmf;
+  _gls = (log(_SMax)-log(_SMin)) / (_g_size + 1);
   double edx = exp(_gls);
 
-  _u0 = MAX(_op_type == CALL ? sMin-_K : _K-sMin, 0.0);
-  _uN1 = MAX(_op_type == CALL ? sMax-_K : _K-sMax, 0.0);
+  _u0 = MAX(_op_type == CALL ? _SMin-_K : _K-_SMin, 0.0);
+  _uN1 = MAX(_op_type == CALL ? _SMax-_K : _K-_SMax, 0.0);
 
 
   // Initialize model code.
-  double S = sMin * edx;
+  double S = _SMin * edx;
   modelData->d[_g_size] = S;
   modelData->x[0] = MAX(_op_type == CALL ? S-_K : _K-S, 0.0);
   for(i = 1; i < _g_size; i++) {

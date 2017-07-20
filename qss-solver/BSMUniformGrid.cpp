@@ -29,7 +29,11 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
 
   _op_type = ot;
 
-  _Smax = fabs(smax);
+  _SMin = 0.0;
+  _SMax = fabs(smax);
+
+  _u0 = MAX(_op_type == CALL ? _SMin - _K : _K - _SMin, 0.0);
+  _uN1 = MAX(_op_type == CALL ? _SMax - _K : _K - _SMax, 0.0);
   _sigma = vol;
   _r = rfr;
   _K = fabs(strike);
@@ -39,25 +43,17 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   _discdiv_ammo = new double[discdiv_n + 1];
   int i;
   for (i = 0; i < discdiv_n; i++) {
-    _discdiv_date[i] = _ft - discdiv_date[i];
-    _discdiv_ammo[i] = discdiv_ammo[i];
+    _discdiv_date[discdiv_n-1-i] = _ft - discdiv_date[i];
+    _discdiv_ammo[discdiv_n-1-i] = discdiv_ammo[i];
   }
-  _discdiv_date[discdiv_n] = _ft + 1;
+  _discdiv_date[discdiv_n] = 0.0;
   _discdiv_ammo[discdiv_n] = 0.0;
   _discdiv_n = discdiv_n;
   _discdiv_i = 0;
 
-  _u0 = 0.0;
-  switch(_op_type) {
-    case CALL:
-      _uN1 = MAX(_Smax - _K, 0);
-      break;
-    case PUT:
-      _uN1 = MAX(_K - _Smax, 0);
-      break;
-  }
 
-  _ds = _Smax/(_g_size + 1);
+
+  _ds = _SMax/(_g_size + 1);
 
   _solution = new double[_g_size*4];
 
@@ -163,6 +159,8 @@ void BSMUniformGrid::zeroCrossing(int i, double *x, double *d, double *alg, doub
   switch(i) {
     case 0:
       zc[0] = t-(_discdiv_date[_discdiv_i]);
+      fprintf(stderr, "t = %lf, _discdiv_date[%d] = %lf\n",t, _discdiv_i,_discdiv_date[_discdiv_i]);
+
       return;
     default:
       if(i >= 1 && i <= _g_size) {
@@ -189,8 +187,13 @@ void BSMUniformGrid::handlerPos(int i, double *x, double *d, double *alg, double
   switch(i) {
     case 0:
       for(j = 0; j < _g_size; j++) {
-        d[j+_g_size] = d[j+_g_size]+_discdiv_ammo[_discdiv_i];
+        d[_g_size+j] += _discdiv_ammo[_discdiv_i];
       }
+      _SMin += _discdiv_ammo[_discdiv_i];
+      _SMax += _discdiv_ammo[_discdiv_i];
+      _u0 = MAX(_op_type == CALL ? _SMin - _K : _K - _SMin, 0.0);
+      _uN1 = MAX(_op_type == CALL ? _SMax - _K : _K - _SMax, 0.0);
+      fprintf(stderr, "_disc_div_ammo[%d] = %lf\n", _discdiv_i, _discdiv_ammo[_discdiv_i]);
       _discdiv_i++;
       return;
     default:

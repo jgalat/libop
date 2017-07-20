@@ -37,6 +37,7 @@ class BSMNonUniformGrid : public BlackScholesModel {
     int _g_size;
     BSM_OT _op_type;
     double _S; //center
+    double _SMin, _SMax;
     double _u0, _uN1, _gls;
     double _sigma, _r, _K,
           _cd,   //continuous dividend
