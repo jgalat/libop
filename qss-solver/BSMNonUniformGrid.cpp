@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <functional>
 
 #include <qss-solver/engine/common/utils.h>
@@ -146,7 +145,6 @@ void BSMNonUniformGrid::zeroCrossing(int i, double *x, double *d, double *alg,
   switch(i) {
     case 0:
       zc[0] = t-(_discdiv_date[_discdiv_i]);
-      fprintf(stderr, "t = %lf, _discdiv_date[%d] = %lf\n",t, _discdiv_i,_discdiv_date[_discdiv_i]);
       return;
     default:
       if(i >= 1 && i <= _g_size) {
@@ -180,7 +178,6 @@ void BSMNonUniformGrid::handlerPos(int i, double *x, double *d,
       _SMax += _discdiv_ammo[_discdiv_i];
       _u0 = MAX(_op_type == CALL ? _SMin-_K : _K-_SMin, 0.0);
       _uN1 = MAX(_op_type == CALL ? _SMax-_K : _K-_SMax, 0.0);
-      fprintf(stderr, "_disc_div_ammo[%d] = %lf\n", _discdiv_i, _discdiv_ammo[_discdiv_i]);
       _discdiv_i++;
       return;
     default:
