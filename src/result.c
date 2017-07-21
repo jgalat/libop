@@ -49,17 +49,23 @@ void delete_result(result r) {
   free(r);
 }
 
+static const char *__RESULT_NULL = "Result is NULL";
+
 int result_set_price(result r, double val) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= PRICE_FLAG;
   r->price = val;
   return 0;
 }
 
 int result_set_prices(result r, double *values) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   if (r->flag & PRICES_FLAG)
     free(r->prices);
   r->flag |= PRICES_FLAG;
@@ -68,48 +74,60 @@ int result_set_prices(result r, double *values) {
 }
 
 int result_set_delta(result r, double val) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= DELTA_FLAG;
   r->delta = val;
   return 0;
 }
 
 int result_set_gamma(result r, double val) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= GAMMA_FLAG;
   r->gamma = val;
   return 0;
 }
 
 int result_set_theta(result r, double val) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= THETA_FLAG;
   r->theta = val;
   return 0;
 }
 
 int result_set_rho(result r, double val) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= RHO_FLAG;
   r->rho = val;
   return 0;
 }
 
 int result_set_vega(result r, double val) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= VEGA_FLAG;
   r->vega = val;
   return 0;
 }
 
 int result_set_impl_vol(result r, double v) {
-  if (!r)
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
     return -1;
+  }
   r->flag |= IMPL_VOL_FLAG;
   r->impl_vol = v;
   return 0;
