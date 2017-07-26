@@ -51,8 +51,6 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   _discdiv_n = discdiv_n;
   _discdiv_i = 0;
 
-
-
   _ds = _SMax/(_g_size + 1);
 
   _solution = new double[_g_size*4];
@@ -313,8 +311,6 @@ void BSMUniformGrid::outputAll(int i, double *x, double *d, double *alg,
 void BSMUniformGrid::initializeDataStructs(void *simulator_) {
   CLC_simulator simulator = (CLC_simulator) simulator_;
   int i;
-  // int *outputs = new int[_g_size*4];
-  // int *states = new int[_g_size];
   simulator->data = CLC_Data(_g_size,_g_size*2,_g_size+1,0,_g_size*4,_solver,_ft,_dqmin,_dqrel);
   CLC_data modelData = simulator->data;
   double S;
@@ -370,25 +366,7 @@ void BSMUniformGrid::initializeDataStructs(void *simulator_) {
       break;
   }
 
-	// SD_output modelOutput = simulator->output;
-  //
-  // for(i = 0; i < _g_size; i++) {
-  //   modelOutput->nOS[i] = 1;
-  //   modelOutput->nSO[i]++;
-  // }
-  //
-  // SD_allocOutputMatrix(modelOutput,_g_size,_g_size*2);
-  // cleanVector(states,0,_g_size);
-  // cleanVector(outputs,0,_g_size*4);
-  //
-  // for(i = 0; i < _g_size; i++) {
-  //   modelOutput->SO[i][states[i]++] = i;
-  //   modelOutput->OS[i][outputs[i]++] = i;
-  // }
-
 	simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,&bsmhn);
-  // delete [] outputs;
-  // delete [] states;
 }
 
 /* C */

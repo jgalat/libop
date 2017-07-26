@@ -283,8 +283,6 @@ void BSMNonUniformGrid::outputAll(int i, double *x, double *d, double *alg,
 void BSMNonUniformGrid::initializeDataStructs(void *simulator_) {
   CLC_simulator simulator = (CLC_simulator) simulator_;
   int i;
-  // int *outputs = new int[4];
-  // int *states = new int[_g_size];
   simulator->data = CLC_Data(_g_size,_g_size*2,_g_size+1,0,_g_size*4,_solver,_ft,_dqmin,_dqrel);
   CLC_data modelData = simulator->data;
 
@@ -355,21 +353,7 @@ void BSMNonUniformGrid::initializeDataStructs(void *simulator_) {
       break;
   }
 
-  // SD_output modelOutput = simulator->output;
-  //
-  // modelOutput->nOS[0] = 1;
-  // modelOutput->nSO[49]++;
-  // SD_allocOutputMatrix(modelOutput,_g_size,_g_size*2);
-  // cleanVector(states,0,_g_size);
-  // cleanVector(outputs,0,4);
-  //
-  //
-  // modelOutput->SO[49][states[49]++] = 0;
-  // modelOutput->OS[0][outputs[0]++] = 49;
-
   simulator->model = CLC_Model(&bsmf,&bsmzc,&bsmhp,&bsmhn);
-  // delete [] outputs;
-  // delete [] states;
 }
 
 /* C */
