@@ -4,9 +4,9 @@
 
 int main(int argc, char const *argv[]) {
 
-  double S = 21.0, strike = 20.0;
-  volatility sigma = new_volatility(0.4);
-  risk_free_rate r = new_risk_free_rate(0.09);
+  double S = 100, strike = 100;
+  volatility sigma = new_volatility(0.3);
+  risk_free_rate r = new_risk_free_rate(0.06);
   dividend d = new_continuous_dividend(0.1);
   double option_value = 3.447474;
 
@@ -15,8 +15,12 @@ int main(int argc, char const *argv[]) {
   int iv = 0 , eur = 0;
 
   // dividend d = new_discrete_dividend();
-  // div_disc_set_dates(d, tp, 1, 182);
-  // div_disc_set_ammounts(d, 1, 0.0);
+  // int size_dd = 1;
+  // int dates[2] = { 182 };
+  // double ammounts[2] = { 7 };
+
+  // div_disc_set_dates_(d, tp, size_dd, dates);
+  // div_disc_set_ammounts_(d, size_dd, ammounts);
 
   option opt;
   pricing_method pm;
@@ -26,11 +30,11 @@ int main(int argc, char const *argv[]) {
     pm = new_pricing_method(EU_ANALYTIC, sigma, r, d);
   } else {
     opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 365), strike);
-    pm = new_pricing_method(AM_FD_NUG, sigma, r, d);
+    pm = new_pricing_method(AM_FD_UG, sigma, r, d);
   }
 
   pm_settings pms = new_pm_settings();
-  pm_settings_set_grid_size(pms, 100);
+  // pm_settings_set_grid_size(pms, 100);
   pm_set_settings(pm, pms);
 
   option_set_pricing_method(opt, pm);

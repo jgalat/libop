@@ -28,6 +28,7 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   _g_size = grid_size < 1 ? 0 : grid_size - 1;
 
   _op_type = ot;
+  _K = fabs(strike);
 
   _SMin = 0.0;
   _SMax = fabs(smax);
@@ -36,7 +37,6 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   _uN1 = MAX(_op_type == CALL ? _SMax - _K : _K - _SMax, 0.0);
   _sigma = vol;
   _r = rfr;
-  _K = fabs(strike);
   _cd = cont_div;
 
   _discdiv_date = new double[discdiv_n + 1];
