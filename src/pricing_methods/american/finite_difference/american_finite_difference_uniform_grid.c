@@ -11,6 +11,7 @@
 
 #include "american_finite_difference_uniform_grid.h"
 
+#define SMAX_MULTIPLIER 5
 #define N_IP_POINTS 4
 #define N_SIM 2
 
@@ -116,7 +117,7 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
   date maturity = tp_get_date(od->maturity);
 
   if (Smax < 0)
-    Smax = 5 * K;
+    Smax = SMAX_MULTIPLIER * K;
 
   BSM_UG *bsm = NULL;
   int bsm_deletes = 0;
@@ -373,5 +374,6 @@ pricing_method new_american_finite_difference_uniform_grid(pricing_data pd) {
     greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }
 
+#undef SMAX_MULTIPLIER
 #undef N_IP_POINTS
 #undef N_SIM
