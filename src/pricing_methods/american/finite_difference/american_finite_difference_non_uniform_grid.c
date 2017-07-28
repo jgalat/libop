@@ -53,47 +53,34 @@ static BSM_NUG BSM_NUG_(int grid_size, double S, double tol, double abstol,
     maturity, tol, abstol);
 }
 
-static void apply_div(dividend d, int size, double *S) {
-  if (div_get_type(d) == DIV_DISCRETE) {
-    int ndivs = div_disc_get_n(d);
-    double *ammounts = div_disc_get_ammounts(d);
-
-    int i, j;
-    for (i = 0; i < size; i++)
-      for (j = 0; j < ndivs; j++)
-        S[i] -= ammounts[j];
-  }
-}
-
-static void calculate_bsmf(BSM_NUG_F bsmf, option_data od, pricing_data pd,
+static int calculate_bsmf(BSM_NUG_F bsmf, option_data od, pricing_data pd,
   int size, double *Ss, pm_settings pms, double *output) {
+
+  if (div_get_type(pd->d) == DIV_DISCRETE) {
+    __DEBUG("Discrete dividends is not supported by the American Finite Difference Non Uniform Grid pricing method.");
+    return -1;
+  }
 
   int N = pm_settings_get_grid_size(pms);
   double tol = pm_settings_get_tol(pms);
   double abstol = pm_settings_get_abstol(pms);
   int i;
 
-  /* FIXME Discrete dividends */
-
-  double *Ss_ = (double *) malloc(sizeof(double) * size);
-  memcpy(Ss_, Ss, sizeof(double) * size);
-
-  apply_div(pd->d, size, Ss_);
-
   BSM_NUG *bsm = (BSM_NUG *) malloc(sizeof(BSM_NUG) * size);
+  
   //#pragma omp parallel for
   for (i = 0; i < size; i++) {
-    bsm[i] = BSM_NUG_(N, Ss_[i], tol, abstol, od, pd);
+    bsm[i] = BSM_NUG_(N, Ss[i], tol, abstol, od, pd);
   }
 
   for(i = 0; i < size; i++)
     output[i] = bsmf(bsm[i]);
 
-  free(Ss_);
   for (i = 0; i < size; i++) {
     delete_BSM_NUG(bsm[i]);
   }
   free(bsm);
+  return 0;
 }
 
 static double iv_f(double vol, impl_vol_mf_args ivmfa) {
@@ -135,7 +122,10 @@ static int option_price(option_data od, pricing_data pd, double S,
   }
 
   double price;
-  calculate_bsmf(BSM_NUG_v, od, pd, 1, &S, pms, &price);
+  int err = calculate_bsmf(BSM_NUG_v, od, pd, 1, &S, pms, &price);
+
+  if (err)
+    return err;
 
   return result_set_price(ret, price);
 }
@@ -153,7 +143,10 @@ static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
 
   double *prices = (double *) malloc(sizeof(double) * size);
 
-  calculate_bsmf(BSM_NUG_v, od, pd, size, Ss, pms, prices);
+  int err = calculate_bsmf(BSM_NUG_v, od, pd, size, Ss, pms, prices);
+
+  if (err)
+    return err;
 
   return result_set_prices(ret, prices);
 }
@@ -167,7 +160,10 @@ static int greek_delta(option_data od, pricing_data pd, double S,
   }
 
   double delta;
-  calculate_bsmf(BSM_NUG_delta, od, pd, 1, &S, pms, &delta);
+  int err = calculate_bsmf(BSM_NUG_delta, od, pd, 1, &S, pms, &delta);
+
+  if (err)
+    return err;
 
   return result_set_delta(ret, delta);
 }
@@ -181,7 +177,10 @@ static int greek_gamma(option_data od, pricing_data pd, double S,
   }
 
   double gamma;
-  calculate_bsmf(BSM_NUG_gamma, od, pd, 1, &S, pms, &gamma);
+  int err = calculate_bsmf(BSM_NUG_gamma, od, pd, 1, &S, pms, &gamma);
+
+  if (err)
+    return err;
 
   return result_set_gamma(ret, gamma);
 }
@@ -195,7 +194,10 @@ static int greek_theta(option_data od, pricing_data pd, double S,
   }
 
   double theta;
-  calculate_bsmf(BSM_NUG_theta, od, pd, 1, &S, pms, &theta);
+  int err = calculate_bsmf(BSM_NUG_theta, od, pd, 1, &S, pms, &theta);
+
+  if (err)
+    return err;
 
   return result_set_theta(ret, theta);
 }
@@ -216,15 +218,19 @@ static int greek_rho(option_data od, pricing_data pd, double S,
 
   rfr_set_value(pd0->r, r - delta);
   double f1;
-  calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f1);
+  int err1 = calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f1);
 
   rfr_set_value(pd0->r, r + delta);
   double f2;
-  calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f2);
+  int err2 = calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f2);
 
   double rho =  (f2 - f1) / (2 * delta);
 
   delete_pricing_data_(pd0);
+
+  if (err1 || err2)
+    return err1;
+
   return result_set_rho(ret, rho);
 }
 
@@ -244,15 +250,19 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 
   vol_set_value(pd0->vol, vol - delta);
   double f1;
-  calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f1);
+  int err1 = calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f1);
 
   vol_set_value(pd0->vol, vol + delta);
   double f2;
-  calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f2);
+  int err2 = calculate_bsmf(BSM_NUG_v, od, pd0, 1, &S, pms, &f2);
 
   double vega =  (f2 - f1) / (2 * delta);
 
   delete_pricing_data_(pd0);
+
+  if (err1 || err2)
+    return err1;
+
   return result_set_vega(ret, vega);
 }
 

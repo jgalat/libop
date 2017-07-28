@@ -146,7 +146,7 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
         possible_output[i] = malloc(sizeof(double) * (discdiv_max + 1));
 
       bsm = malloc(sizeof(BSM_UG) * N_SIM * (discdiv_max + 1));
-      bsm_deletes = N_SIM * discdiv_max;
+      bsm_deletes = N_SIM * (discdiv_max + 1);
 
       /* Iteration over dividends, paying or not */
       for (discdiv_iter = 0; discdiv_iter < discdiv_max; discdiv_iter++) {
