@@ -13,7 +13,4 @@ int result_set_rho(result r, double val);
 int result_set_vega(result r, double val);
 int result_set_impl_vol(result r, double val);
 
-int result_set_underlying(result r, double val);
-double result_get_underlying(result r);
-
 #endif /* __RESULT_INTERNAL_H__ */
