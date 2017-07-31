@@ -24,4 +24,5 @@
 3. Install Mingw-w64 with options (7.1.0, x86_64, posix, seh, 0)
     * Add the `mingw-w64/x86_64-7.1.0-posix-seh-rt_05-rev0/mingw64/bin` folder to PATH
 4. Clone project using Git from Git Bash (or Windows CMD)
-5. `cd build && make OS=win32`
+5. `cd build && make OS=win32` \
+   (eventhough the flag is win32 the library is compiled for x86_64)
