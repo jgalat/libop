@@ -38,7 +38,6 @@ result new_result() {
     r->rho = 0;
     r->vega = 0;
     r->impl_vol = 0;
-    r->underlying = 0;
     r->flag = 0;
   }
   return r;
