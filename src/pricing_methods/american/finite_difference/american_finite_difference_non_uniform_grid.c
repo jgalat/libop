@@ -140,7 +140,7 @@ static int price_precision(option_data od, pricing_data pd, double V, double S,
     return -1;
   }
 
-  int f;
+  int f = 0;
   if (!pms) {
     pms = new_pm_settings();
     f = 1;
