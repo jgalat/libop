@@ -67,7 +67,7 @@ static int calculate_bsmf(BSM_NUG_F bsmf, option_data od, pricing_data pd,
   int i;
 
   BSM_NUG *bsm = (BSM_NUG *) malloc(sizeof(BSM_NUG) * size);
-  
+
   //#pragma omp parallel for
   for (i = 0; i < size; i++) {
     bsm[i] = BSM_NUG_(N, Ss[i], tol, abstol, od, pd);
@@ -267,6 +267,6 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_american_finite_difference_non_uniform_grid(pricing_data pd) {
-  return new_pricing_method_(option_price, option_prices, greek_delta,
+  return new_pricing_method_(option_price, NULL, option_prices, greek_delta,
     greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }

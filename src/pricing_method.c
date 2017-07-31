@@ -7,6 +7,7 @@
 
 struct pricing_method_ {
   price_f       option_price;
+  pp_f          option_price_precision;
   prices_f      option_prices;
   delta_f       delta;
   gamma_f       gamma;
@@ -39,12 +40,13 @@ pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,
   return NULL;
 }
 
-pricing_method new_pricing_method_(price_f pf, prices_f psf, delta_f df, gamma_f gf,
-  theta_f tf, rho_f rf, vega_f vf, impl_vol_f ivf,
+pricing_method new_pricing_method_(price_f pf, pp_f ppf, prices_f psf, delta_f df,
+  gamma_f gf, theta_f tf, rho_f rf, vega_f vf, impl_vol_f ivf,
   delete_f dlf, pricing_data pd, void *pm_d) {
   pricing_method pm = (pricing_method) malloc(sizeof(struct pricing_method_));
   if (pm) {
     pm->option_price = pf;
+    pm->option_price_precision = ppf;
     pm->option_prices = psf;
     pm->delta = df;
     pm->gamma = gf;
@@ -84,6 +86,15 @@ static const char *__PM_NULL =
 int pm_option_price(pricing_method pm, option_data od, double S, result r) {
   if (pm && pm->option_price)
     return pm->option_price(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
+  __DEBUG(__PM_NULL);
+  return -1;
+}
+
+int pm_option_price_precision(pricing_method pm, option_data od, double V,
+  double S, result r) {
+  if (pm && pm->option_price)
+    return pm->option_price_precision(od, pm->pricing_data, V, S, r, pm->pm_settings,
+      pm->pm_data);
   __DEBUG(__PM_NULL);
   return -1;
 }

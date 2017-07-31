@@ -42,6 +42,16 @@ int option_set_pricing_method(option, pricing_method);
 int option_price(option, double underlying, result);
 
 /**
+ * Calculates the precision of the last price returned
+ * It requires a result structure] (result.h) with the last calculation to
+ * store the result.
+ * The precision calculation method must be implemented in the already set
+ * pricing method.
+ * On error returns -1.
+ */
+int option_price_precision(option, double price, double underlying, result);
+
+/**
  * Calculates the prices of an option for each value of the underlying given.
  * Size of the underlying array must be specified.
  * It requires a result structure (result.h) to store the result.

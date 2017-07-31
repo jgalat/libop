@@ -26,10 +26,13 @@ typedef int (*common_f_) (option_data, pricing_data, int size, double *Ss,
 typedef common_f_ prices_f;
 
 /**
- * Type of implied volatility calculation function
+ * Type of implied volatility calculation and price precision functions
  */
-typedef int (*impl_vol_f) (option_data, pricing_data, double V, double S,
+typedef int (*common_v_f) (option_data, pricing_data, double V, double S,
   result, pm_settings, void*);
+
+typedef common_v_f impl_vol_f;
+typedef common_v_f pp_f;
 
 /**
  * Common type of a delete function

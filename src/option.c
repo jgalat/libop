@@ -3,6 +3,7 @@
 #include <common.h>
 #include <option_data_internal.h>
 #include <pricing_method_internal.h>
+#include <result_internal.h>
 #include "option.h"
 #include <debug.h>
 
@@ -44,6 +45,13 @@ int option_set_pricing_method(option o, pricing_method pm) {
 int option_price(option o, double S, result r) {
   if (o)
     return pm_option_price(o->pm, o->option_data, S, r);
+  __DEBUG(__OPTION_NULL);
+  return -1;
+}
+
+int option_price_precision(option o, double V, double S, result r) {
+  if (o)
+    return pm_option_price_precision(o->pm, o->option_data, V, S, r);
   __DEBUG(__OPTION_NULL);
   return -1;
 }
