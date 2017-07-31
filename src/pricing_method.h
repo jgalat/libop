@@ -22,7 +22,6 @@ typedef struct pricing_method_ * pricing_method;
 typedef enum {
   EU_ANALYTIC,
   AM_FD_UG,
-  /* FIXME Disc dividends */
   AM_FD_NUG
 } method_id;
 

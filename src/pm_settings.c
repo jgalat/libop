@@ -2,15 +2,15 @@
 
 #include "pm_settings.h"
 
-#define DEFAULT_GRID_SIZE ((int) 100)
-#define DEFAULT_S_MAX ((double) -1)
-#define DEFAULT_TOL ((double) 1e-09)
-#define DEFAULT_ABS_TOL ((double) 1e-12)
-#define DEFAULT_IV_MAX_IT ((int) 5)
-#define DEFAULT_IV_EPS ((double) 1e-4)
-#define DEFAULT_IV_INIT0 ((double) 0.25)
-#define DEFAULT_IV_INIT1 ((double) 0.75)
-#define DEFAULT_EXTRA_DATA ((void *) NULL)
+static const int DEFAULT_GRID_SIZE = 100;
+static const double DEFAULT_S_MAX = -1;
+static const double DEFAULT_TOL = 1e-09;
+static const double DEFAULT_ABS_TOL = 1e-12;
+static const int DEFAULT_IV_MAX_IT = 5;
+static const double DEFAULT_IV_EPS = 1e-4;
+static const double DEFAULT_IV_INIT0 = 0.25;
+static const double DEFAULT_IV_INIT1 = 0.75;
+static const void *DEFAULT_EXTRA_DATA = NULL;
 
 struct pm_settings_ {
   int grid_size;
@@ -154,13 +154,3 @@ void *pm_settings_get_extra_data(pm_settings pms) {
     return DEFAULT_EXTRA_DATA;
   return pms->extra_data;
 }
-
-#undef DEFAULT_GRID_SIZE
-#undef DEFAULT_S_MAX
-#undef DEFAULT_TOL
-#undef DEFAULT_ABS_TOL
-#undef DEFAULT_IV_MAX_IT
-#undef DEFAULT_IV_EPS
-#undef DEFAULT_IV_INIT0
-#undef DEFAULT_IV_INIT1
-#undef DEFAULT_EXTRA_DATA

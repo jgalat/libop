@@ -1,9 +1,11 @@
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include <result_internal.h>
 #include <option_data.h>
 #include <option_data_internal.h>
 #include <pricing_method_internal.h>
+#include <qss-solver/engine/common/utils.h>
 #include <qss-solver/BSMNonUniformGrid.h>
 #include <impl_vol_methods/impl_vol_methods.h>
 #include <debug.h>
@@ -128,6 +130,44 @@ static int option_price(option_data od, pricing_data pd, double S,
     return err;
 
   return result_set_price(ret, price);
+}
+
+static int price_precision(option_data od, pricing_data pd, double V, double S,
+  result ret, pm_settings pms, void *pm_data) {
+
+  if (od->exercise != AM_EXERCISE) {
+    __DEBUG(__OPT_NOT_AM);
+    return -1;
+  }
+
+  int f;
+  if (!pms) {
+    pms = new_pm_settings();
+    f = 1;
+  }
+
+  static const int MAX_REASONABLE_GRID = 500;
+
+  int curr_grid_size = pm_settings_get_grid_size(pms);
+  int bigger_grid_size = MIN(curr_grid_size * 3, MAX_REASONABLE_GRID);
+  pm_settings_set_grid_size(pms, bigger_grid_size);
+
+  double price;
+  int err = calculate_bsmf(BSM_NUG_v, od, pd, 1, &S, pms, &price);
+  pm_settings_set_grid_size(pms, curr_grid_size);
+
+  if (f) {
+    delete_pm_settings(pms);
+  }
+
+  if (err)
+    return err;
+
+  double precision = fabs(V - price);
+
+  /* replace with better price? */
+
+  return result_set_price_precision(ret, precision);
 }
 
 static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
@@ -267,6 +307,7 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_american_finite_difference_non_uniform_grid(pricing_data pd) {
-  return new_pricing_method_(option_price, NULL, option_prices, greek_delta,
-    greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
+  return new_pricing_method_(option_price, price_precision, option_prices,
+    greek_delta, greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol,
+    NULL, pd, NULL);
 }
