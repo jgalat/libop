@@ -177,7 +177,6 @@
 
 #define HIST 1e-12
 #define MAX_ITERATIONS 100
-#define MIN(x, y)((x) < (y) ? (x) : (y))
 
 typedef void
 (*FcnEqDiff) (unsigned n, double x, double *y, double *f, void *integrator_data);

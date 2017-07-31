@@ -7,6 +7,7 @@
 #include <memory.h>
 #include "dopri5.h"
 
+#define MIN(x, y)((x) < (y) ? (x) : (y))
 
 static double
 sign(double a, double b) {
