@@ -5,6 +5,7 @@
 #include "result.h"
 
 int result_set_price(result r, double val);
+int result_set_price_precision(result r, double val);
 int result_set_prices(result r, double *values);
 int result_set_delta(result r, double val);
 int result_set_gamma(result r, double val);

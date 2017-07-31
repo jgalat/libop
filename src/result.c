@@ -6,6 +6,7 @@
 
 struct result_ {
   double price;
+  double price_precision;
   double *prices;
   double delta;
   double gamma;
@@ -24,13 +25,15 @@ enum {
   THETA_FLAG = 16,
   RHO_FLAG = 32,
   VEGA_FLAG = 64,
-  IMPL_VOL_FLAG = 128
+  IMPL_VOL_FLAG = 128,
+  PP_FLAG = 256
 };
 
 result new_result() {
   result r = (result) malloc(sizeof(struct result_));
   if (r) {
     r->price = 0;
+    r->price_precision = 0;
     r->prices = NULL;
     r->delta = 0;
     r->gamma = 0;
@@ -57,6 +60,16 @@ int result_set_price(result r, double val) {
     return -1;
   }
   r->flag |= PRICE_FLAG;
+  r->price = val;
+  return 0;
+}
+
+int result_set_price_precision(result r, double val) {
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
+    return -1;
+  }
+  r->flag |= PP_FLAG;
   r->price = val;
   return 0;
 }
@@ -142,6 +155,14 @@ double result_get_price(result r) {
     return 0.0;
   }
   return r->price;
+}
+
+double result_get_price_precision(result r) {
+  if (!(r && (r->flag & PP_FLAG))) {
+    __DEBUG(__WARN_MSG);
+    return 0.0;
+  }
+  return r->price_precision;
 }
 
 double *result_get_prices(result r) {
