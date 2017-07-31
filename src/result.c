@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "result.h"
 #include "result_internal.h"
@@ -70,7 +69,7 @@ int result_set_price_precision(result r, double val) {
     return -1;
   }
   r->flag |= PP_FLAG;
-  r->price = val;
+  r->price_precision = val;
   return 0;
 }
 

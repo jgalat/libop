@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "time_period.h"
 #include <debug.h>
 
