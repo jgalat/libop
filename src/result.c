@@ -13,6 +13,7 @@ struct result_ {
   double rho;
   double vega;
   double impl_vol;
+  double underlying;
   int flag;
 };
 
@@ -24,7 +25,8 @@ enum {
   THETA_FLAG = 16,
   RHO_FLAG = 32,
   VEGA_FLAG = 64,
-  IMPL_VOL_FLAG = 128
+  IMPL_VOL_FLAG = 128,
+  UNDERLYING_FLAG = 256
 };
 
 result new_result() {
@@ -38,6 +40,7 @@ result new_result() {
     r->rho = 0;
     r->vega = 0;
     r->impl_vol = 0;
+    r->underlying = 0;
     r->flag = 0;
   }
   return r;
@@ -133,6 +136,16 @@ int result_set_impl_vol(result r, double v) {
   return 0;
 }
 
+int result_set_underlying(result r, double v) {
+  if (!r) {
+    __DEBUG(__RESULT_NULL);
+    return -1;
+  }
+  r->flag |= UNDERLYING_FLAG;
+  r->underlying = v;
+  return 0;
+}
+
 static const char *__WARN_MSG =
   "Accesing unstored value or NULL result structure, returning 0.0 or NULL";
 
@@ -198,6 +211,14 @@ double result_get_impl_vol(result r) {
     return 0.0;
   }
   return r->impl_vol;
+}
+
+double result_get_underlying(result r) {
+  if (!(r && (r->flag & UNDERLYING_FLAG))) {
+    // __DEBUG(__WARN_MSG);
+    return -1;
+  }
+  return r->underlying;
 }
 
 #undef __WARN_MSG
