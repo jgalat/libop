@@ -10,7 +10,7 @@ static const int DEFAULT_IV_MAX_IT = 5;
 static const double DEFAULT_IV_EPS = 1e-4;
 static const double DEFAULT_IV_INIT0 = 0.25;
 static const double DEFAULT_IV_INIT1 = 0.75;
-static const void *DEFAULT_EXTRA_DATA = NULL;
+static void *DEFAULT_EXTRA_DATA = NULL;
 
 struct pm_settings_ {
   int grid_size;
