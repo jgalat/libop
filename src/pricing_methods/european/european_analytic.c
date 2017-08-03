@@ -125,6 +125,18 @@ static int option_price(option_data od, pricing_data pd, double S,
   return result_set_price(ret, result);
 }
 
+static int price_precision(option_data od, pricing_data pd, double V, double S,
+  result ret, pm_settings pms, void *pm_data) {
+
+  if (od->exercise != EU_EXERCISE) {
+    __DEBUG(__OPT_NOT_EU);
+    return -1;
+  }
+
+  /* it's analytic */
+  return result_set_price_precision(ret, 0.0);
+}
+
 static int option_prices(option_data od, pricing_data pd, int size, double *Ss,
   result ret, pm_settings pms, void *pm_data) {
 
@@ -323,6 +335,6 @@ static int greek_vega(option_data od, pricing_data pd, double S,
 }
 
 pricing_method new_european_analytic(pricing_data pd) {
-  return new_pricing_method_(option_price, NULL, option_prices, greek_delta,
+  return new_pricing_method_(option_price, price_precision, option_prices, greek_delta,
     greek_gamma, greek_theta, greek_rho, greek_vega, impl_vol, NULL, pd, NULL);
 }
