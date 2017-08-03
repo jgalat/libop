@@ -87,7 +87,7 @@ int div_disc_set_dates(dividend, time_period, int size, ...);
  * A setting of data overrides the currently existing one.
  * i.e.:
  *  For a unique payment of $3
- *  div_disc_set_ammounts(d, tp, 1, 3);
+ *  div_disc_set_ammounts(d, 1, 3);
  * On error returns -1.
  */
 int div_disc_set_ammounts(dividend, int size, ...);
