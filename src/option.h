@@ -43,7 +43,7 @@ int option_price(option, double underlying, result);
 
 /**
  * Calculates the precision of the last price returned
- * It requires a result structure] (result.h) with the last calculation to
+ * It requires a result structure (result.h) with the last calculation to
  * store the result.
  * The precision calculation method must be implemented in the already set
  * pricing method.

@@ -13,6 +13,9 @@ pricing_data new_pricing_data(volatility vol, risk_free_rate r, dividend d) {
   if (pd) {
     if (!vol) {
       vol = new_volatility(0.0);
+      pd->vol_flag = 1;
+    } else {
+      pd->vol_flag = 0;
     }
     pd->vol = vol;
     pd->r = r;
@@ -30,6 +33,9 @@ pricing_data new_pricing_data_(pricing_data pd) {
 }
 
 void delete_pricing_data(pricing_data pd) {
+  if (pd->vol_flag) {
+    delete_volatility(pd->vol);
+  }
   free(pd);
 }
 
