@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]) {
 
   time_period tp = new_time_period_365d();
 
-  option opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 182), strike);
+  option opt = new_option(OPTION_PUT, AM_EXERCISE, DAYS(tp, 182), strike);
 
   /* Se usan diferencias finitas con una grilla no uniforme (AM_FD_NUG) */
   pricing_method pm = new_pricing_method(AM_FD_NUG, sigma, r, d);
