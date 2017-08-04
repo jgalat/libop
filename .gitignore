@@ -33,7 +33,7 @@
 *.su
 
 build/obj/
-example
 test*
 *.log
 export/
+examples/bin/*
