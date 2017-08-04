@@ -146,11 +146,11 @@ static int price_precision(option_data od, pricing_data pd, double V, double S,
     f = 1;
   }
 
-  static const int MAX_REASONABLE_GRID = 500;
+  static const int MIN_REASONABLE_GRID = 50;
 
   int curr_grid_size = pm_settings_get_grid_size(pms);
-  int bigger_grid_size = MIN(curr_grid_size * 3, MAX_REASONABLE_GRID);
-  pm_settings_set_grid_size(pms, bigger_grid_size);
+  int less_grid_size = MAX(curr_grid_size / 2, MIN_REASONABLE_GRID);
+  pm_settings_set_grid_size(pms, less_grid_size);
 
   double price;
   int err = calculate_bsmf(BSM_NUG_v, od, pd, 1, &S, pms, &price);
