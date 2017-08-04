@@ -5,13 +5,13 @@
  * Opción put americana con precio de strike $100 y tiempo a la expiración de 182 días.
  * Posee un dividendo continuo del 10%, volatilidad de 25% y una tasa libre de
  * riesgo de 10%.
- * Se calcula el precio de la opción para un precio de subyacente de $100.
- * Aumentamos el tamaño de la grilla para obtener mayor precisión.
+ * Se calcula el precio de la opción para un precio de subyacente de $95,
+ * $100 y $105.
  */
 
 int main(int argc, char const *argv[]) {
 
-  double  underlying = 100,
+  double  underlying[3] = { 95, 100, 105 },
           strike = 100;
   volatility sigma = new_volatility(0.25);
   risk_free_rate r = new_risk_free_rate(0.1);
@@ -21,31 +21,24 @@ int main(int argc, char const *argv[]) {
 
   option opt = new_option(OPTION_PUT, AM_EXERCISE, DAYS(tp, 182), strike);
 
-  /* Se usan diferencias finitas con una grilla no uniforme (AM_FD_NUG) */
-  pricing_method pm = new_pricing_method(AM_FD_NUG, sigma, r, d);
+  /* Se usan diferencias finitas con una grilla uniforme (AM_FD_UG) */
+  pricing_method pm = new_pricing_method(AM_FD_UG, sigma, r, d);
 
   option_set_pricing_method(opt, pm);
 
-  pm_settings pms = new_pm_settings();
-
-  /* Establecemos una grilla de 300 puntos */
-  pm_settings_set_grid_size(pms, 300);
-  /* Establecemos una tolerancia de 10^-12*/
-  pm_settings_set_tol(pms, 1e-12);
-  pm_set_settings(pm, pms);
-
   result result = new_result();
 
-  option_price(opt, underlying, result);
+  option_prices(opt, 3, underlying, result);
 
-  double price = result_get_price(result);
+  double *prices = result_get_prices(result);
 
-  printf("Option price = %lf\n", price);
+  int i;
+  for (i = 0; i < 3; i++)
+    printf("Option price (Underlying: %lf) = %lf\n", underlying[i], prices[i]);
 
   delete_result(result);
   delete_time_period(tp);
   delete_pricing_method(pm);
-  delete_pm_settings(pms);
   delete_risk_free_rate(r);
   delete_volatility(sigma);
   delete_dividend(d);

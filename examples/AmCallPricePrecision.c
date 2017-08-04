@@ -2,11 +2,11 @@
 #include <libop.h>
 
 /**
- * Opción put americana con precio de strike $100 y tiempo a la expiración de 182 días.
+ * Opción call americana con precio de strike $100 y tiempo a la expiración de 182 días.
  * Posee un dividendo continuo del 10%, volatilidad de 25% y una tasa libre de
  * riesgo de 10%.
  * Se calcula el precio de la opción para un precio de subyacente de $100.
- * Aumentamos el tamaño de la grilla para obtener mayor precisión.
+ * Se calcula la precisión de ese precio.
  */
 
 int main(int argc, char const *argv[]) {
@@ -19,20 +19,12 @@ int main(int argc, char const *argv[]) {
 
   time_period tp = new_time_period_365d();
 
-  option opt = new_option(OPTION_PUT, AM_EXERCISE, DAYS(tp, 182), strike);
+  option opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 182), strike);
 
   /* Se usan diferencias finitas con una grilla no uniforme (AM_FD_NUG) */
   pricing_method pm = new_pricing_method(AM_FD_NUG, sigma, r, d);
 
   option_set_pricing_method(opt, pm);
-
-  pm_settings pms = new_pm_settings();
-
-  /* Establecemos una grilla de 300 puntos */
-  pm_settings_set_grid_size(pms, 300);
-  /* Establecemos una tolerancia de 10^-12*/
-  pm_settings_set_tol(pms, 1e-12);
-  pm_set_settings(pm, pms);
 
   result result = new_result();
 
@@ -42,10 +34,15 @@ int main(int argc, char const *argv[]) {
 
   printf("Option price = %lf\n", price);
 
+  option_price_precision(opt, price, underlying, result);
+
+  double precision = result_get_price_precision(result);
+
+  printf("Price precision = %lf\n", precision);
+
   delete_result(result);
   delete_time_period(tp);
   delete_pricing_method(pm);
-  delete_pm_settings(pms);
   delete_risk_free_rate(r);
   delete_volatility(sigma);
   delete_dividend(d);
