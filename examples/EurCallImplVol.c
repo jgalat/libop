@@ -5,7 +5,7 @@
  * Opción call europea con precio de strike $20 y tiempo a la expiración de un año.
  * Posee un dividendo continuo del 10% y una tasa libre de riesgo de 9%.
  * Se calcula la volatilidad implícita para un precio de subyacente de $21 y
- * un precio de opción de $3.773 calculado previamente.
+ * un precio de opción de $3.3299 calculado previamente.
  * La volatilidad implícita debería ser de 40%.
  */
 
@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]) {
   risk_free_rate r = new_risk_free_rate(0.09);
   dividend d = new_continuous_dividend(0.1);
 
-  double price = 3.773466;
+  double price = 3.3299;
 
   time_period tp = new_time_period_365d();
 
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]) {
 
   result result = new_result();
 
-  option_impl_vol(opt,price, underlying, result);
+  option_impl_vol(opt, price, underlying, result);
 
   double implied_vol = result_get_impl_vol(result);
 
