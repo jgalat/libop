@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]) {
   div_disc_set_dates(d, tp, 2, 50, 200);
   div_disc_set_ammounts(d, 2, 10, 15);
 
-  option opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 182), strike);
+  option opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 252), strike);
 
   /* Se usan diferencias finitas con una grilla uniforme (AM_FD_UG) */
   pricing_method pm = new_pricing_method(AM_FD_UG, sigma, r, d);
