@@ -43,5 +43,5 @@ clean:
 	rm $(BINDIR)/*
 
 help:
-	@echo "Usage: \tmake SOURCE=source.c"
-	@echo "\tmake run SOURCE=source.c"
+	@echo "Usage: make SOURCE=source.c"
+	@echo "make run SOURCE=source.c"

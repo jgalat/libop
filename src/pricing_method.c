@@ -18,7 +18,7 @@ struct pricing_method_ {
   pricing_data  pricing_data;
   void          *pm_data;
   delete_f      delete;
-  pm_settings    pm_settings;
+  pm_settings   pm_settings;
 };
 
 pricing_method new_pricing_method(method_id id, volatility v, risk_free_rate r,

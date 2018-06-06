@@ -9,9 +9,9 @@ typedef struct pricing_data_ * pricing_data;
 
 struct pricing_data_ {
   volatility vol;
-  int vol_flag;
   risk_free_rate r;
   dividend d;
+  int flag;
 };
 
 pricing_data new_pricing_data(volatility, risk_free_rate, dividend);
