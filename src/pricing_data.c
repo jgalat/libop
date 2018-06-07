@@ -39,6 +39,10 @@ pricing_data new_pricing_data_(pricing_data pd) {
   return new_pricing_data(vol, rfr, pd->d);
 }
 
+int pd_null_volatility(pricing_data pd) {
+    return pd->flag & VOLATILITY_FLAG;
+}
+
 void delete_pricing_data(pricing_data pd) {
   if (pd->flag & VOLATILITY_FLAG) {
     delete_volatility(pd->vol);

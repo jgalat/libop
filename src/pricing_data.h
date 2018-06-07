@@ -17,6 +17,8 @@ struct pricing_data_ {
 pricing_data new_pricing_data(volatility, risk_free_rate, dividend);
 pricing_data new_pricing_data_(pricing_data);
 
+int pd_null_volatility(pricing_data);
+
 void delete_pricing_data(pricing_data);
 void delete_pricing_data_(pricing_data);
 

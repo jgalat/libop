@@ -71,82 +71,159 @@ void delete_pricing_method(pricing_method pm) {
   free(pm);
 }
 
+static const char *__PM_NULL =
+  "Pricing method is NULL";
+
+static const char *__PM_METHOD_NOT_IMPL =
+  "Method isn't implemented";
+
+static const char *__PM_VOLATILITY_REQUIRED =
+  "Volatility is required for this method";
+
 int pm_set_settings(pricing_method pm, pm_settings pms) {
   if (!pm) {
-    __DEBUG("Pricing method is NULL");
+    __DEBUG(__PM_NULL);
     return -1;
   }
   pm->pm_settings = pms;
   return 0;
 }
 
-static const char *__PM_NULL =
-  "Pricing method is NULL or method isn't implemented";
-
 int pm_option_price(pricing_method pm, option_data od, double S, result r) {
-  if (pm && pm->option_price)
-    return pm->option_price(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->option_price)
+    return pm->option_price(od, pm->pricing_data, S, r, pm->pm_settings,
+      pm->pm_data);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_option_price_precision(pricing_method pm, option_data od, double V,
   double S, result r) {
-  if (pm && pm->option_price)
-    return pm->option_price_precision(od, pm->pricing_data, V, S, r, pm->pm_settings,
-      pm->pm_data);
-  __DEBUG(__PM_NULL);
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->option_price_precision)
+    return pm->option_price_precision(od, pm->pricing_data, V, S, r,
+      pm->pm_settings, pm->pm_data);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_option_prices(pricing_method pm, option_data od, int size,
   double *Ss, result r) {
-  if (pm && pm->option_prices)
-    return pm->option_prices(od, pm->pricing_data, size, Ss, r, pm->pm_settings,
-      pm->pm_data);
-  __DEBUG(__PM_NULL);
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->option_prices)
+    return pm->option_prices(od, pm->pricing_data, size, Ss, r,
+      pm->pm_settings, pm->pm_data);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_delta(pricing_method pm, option_data od, double S, result r) {
-  if (pm && pm->delta)
-    return pm->delta(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->delta)
+    return pm->delta(od, pm->pricing_data, S, r, pm->pm_settings,
+      pm->pm_data);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_gamma(pricing_method pm, option_data od, double S, result r) {
-  if (pm && pm->gamma)
-    return pm->gamma(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->gamma)
+    return pm->gamma(od, pm->pricing_data, S, r, pm->pm_settings,
+      pm->pm_data);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_theta(pricing_method pm, option_data od, double S, result r) {
-  if (pm && pm->theta)
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->theta)
     return pm->theta(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_rho(pricing_method pm, option_data od, double S, result r) {
-  if (pm && pm->rho)
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->rho)
     return pm->rho(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_vega(pricing_method pm, option_data od, double S, result r) {
-  if (pm && pm->vega)
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pd_null_volatility(pm->pricing_data)) {
+    __DEBUG(__PM_VOLATILITY_REQUIRED);
+    return -1;
+  }
+  if (pm->vega)
     return pm->vega(od, pm->pricing_data, S, r, pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
 
 int pm_ivf(pricing_method pm, option_data od, double V, double S, result r) {
-  if (pm && pm->ivf)
+  if (!pm) {
+    __DEBUG(__PM_NULL);
+    return -1;
+  }
+  if (pm->ivf)
     return pm->ivf(od, pm->pricing_data, V, S, r,
       pm->pm_settings, pm->pm_data);
-  __DEBUG(__PM_NULL);
+  __DEBUG(__PM_METHOD_NOT_IMPL);
   return -1;
 }
