@@ -188,9 +188,6 @@ static int greek_delta(option_data od, pricing_data pd, double S,
     case OPTION_PUT:
       result = exp(-d * ttl) * (cdf(d1) - 1);
       break;
-    default:
-      return -1;
-      break;
   }
 
   return result_set_delta(ret, result);
