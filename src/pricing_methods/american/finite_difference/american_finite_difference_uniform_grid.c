@@ -66,7 +66,7 @@ static BSM_UG BSM_UG_(int grid_size, int discdiv_iter, date maturity,
     d = 0.0;
     dd_n = MIN(discdiv_iter, div_disc_get_n(divi));
     dd_d = div_disc_get_dates(divi);
-    dd_a = div_disc_get_ammounts(divi);
+    dd_a = div_disc_get_amounts(divi);
   }
 
   return new_BSM_UG(grid_size, ot, Smax, sigma, r, K, d, dd_n, dd_d, dd_a, period,
@@ -110,11 +110,11 @@ static double query_prec(BSM_UG *bsm, BSM_UG_F bsmf, double S, int N, double Sma
   return lagrange_interpolation(S, s, y100, N_IP_POINTS);
 }
 
-static void __apply_div(int discdiv_iter, double *ammounts, int size, double *S) {
+static void __apply_div(int discdiv_iter, double *amounts, int size, double *S) {
   int i, j;
   for (i = 0; i < size; i++)
     for (j = 0; j < discdiv_iter; j++)
-      S[i] -= ammounts[j];
+      S[i] -= amounts[j];
 }
 
 static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
@@ -157,7 +157,7 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
       i = 0;
       int discdiv_max = div_disc_get_n(pd->d), discdiv_iter;
       date *discdiv_dates = div_disc_get_dates(pd->d);
-      double *ammounts = div_disc_get_ammounts(pd->d);
+      double *amounts = div_disc_get_amounts(pd->d);
 
       double *Ss_ = (double *) malloc(sizeof(double) * size);
 
@@ -186,7 +186,7 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
 
       for (discdiv_iter = 0; discdiv_iter < discdiv_max + 1; discdiv_iter++) {
         memcpy(Ss_, Ss, sizeof(double) * size);
-        __apply_div(discdiv_iter, ammounts, size, Ss_);
+        __apply_div(discdiv_iter, amounts, size, Ss_);
         for (i = 0; i < size; i++) {
           possible_output[i][discdiv_iter] =
             query_value(&bsm[N_SIM * discdiv_iter], BSM_UG_v, Ss_[i], halfN, Smax);
@@ -208,14 +208,14 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
 
         /* free prec */
         memcpy(Ss_, Ss, sizeof(double) * size);
-        __apply_div(max_v[i], ammounts, size, Ss_);
+        __apply_div(max_v[i], amounts, size, Ss_);
         if ((size == 1) && output100) {
           output100[0] = query_prec(&bsm[N_SIM * max_v[0]], bsmf, Ss_[0], halfN, Smax);
         }
       } else {
         for (i = 0; i < size; i++) {
           memcpy(Ss_, Ss, sizeof(double) * size);
-          __apply_div(max_v[i], ammounts, size, Ss_);
+          __apply_div(max_v[i], amounts, size, Ss_);
           output[i] =
             query_value(&bsm[N_SIM * max_v[i]], bsmf, Ss_[i], halfN, Smax);
         }

@@ -32,14 +32,14 @@ static double cdf(double x) {
 }
 
 static double calculate_dividend(risk_free_rate rfr, int size, double *dates,
-  double *ammounts) {
+  double *amounts) {
 
   int i;
   double dividend = 0.0;
   double r = rfr_get_value(rfr);
 
   for (i = 0; i < size; i++)
-    dividend += ammounts[i] * exp(-r * dates[i]);
+    dividend += amounts[i] * exp(-r * dates[i]);
 
   return dividend;
 }
@@ -50,7 +50,7 @@ static void apply_div(risk_free_rate rfr, dividend divi, double *cd, double *S) 
   } else {
     *cd = 0.0;
     *S -= calculate_dividend(rfr, div_disc_get_n(divi),
-            div_disc_get_dates(divi), div_disc_get_ammounts(divi));
+            div_disc_get_dates(divi), div_disc_get_amounts(divi));
   }
 }
 

@@ -11,7 +11,7 @@ struct dividend_ {
 struct disc_div {
   int size;
   date *dates;
-  double *ammounts;
+  double *amounts;
 };
 
 dividend new_continuous_dividend(double val) {
@@ -37,7 +37,7 @@ dividend new_discrete_dividend() {
     d->actual_div = (void *) dd;
     dd->size = 0;
     dd->dates = NULL;
-    dd->ammounts = NULL;
+    dd->amounts = NULL;
   }
   return d;
 }
@@ -50,7 +50,7 @@ void delete_dividend(dividend d) {
         dd = (struct disc_div *) d->actual_div;
         if (dd) {
           free(dd->dates);
-          free(dd->ammounts);
+          free(dd->amounts);
         }
       default:
         free(d->actual_div);
@@ -116,7 +116,7 @@ int div_disc_set_dates(dividend d, time_period tp, int size, ...) {
   return 0;
 }
 
-int div_disc_set_ammounts(dividend d, int size, ...) {
+int div_disc_set_amounts(dividend d, int size, ...) {
   if (!d) {
     __DEBUG("Dividend is NULL");
     return -1;
@@ -134,12 +134,12 @@ int div_disc_set_ammounts(dividend d, int size, ...) {
   if (n < 0)
     return -1;
 
-  if (dd->ammounts)
-    free(dd->ammounts);
+  if (dd->amounts)
+    free(dd->amounts);
 
-  dd->ammounts = (double *) malloc(sizeof(double) * n);
+  dd->amounts = (double *) malloc(sizeof(double) * n);
 
-  if (!dd->ammounts)
+  if (!dd->amounts)
     return -1;
 
   va_list vl;
@@ -147,7 +147,7 @@ int div_disc_set_ammounts(dividend d, int size, ...) {
 
   int i;
   for (i = 0; i < n; i++) {
-    dd->ammounts[i] = va_arg(vl, double);
+    dd->amounts[i] = va_arg(vl, double);
   }
 
   va_end(vl);
@@ -193,7 +193,7 @@ int div_disc_set_dates_(dividend d, time_period tp, int size, int *days) {
   return 0;
 }
 
-int div_disc_set_ammounts_(dividend d, int size, double *ammounts) {
+int div_disc_set_amounts_(dividend d, int size, double *amounts) {
   if (!d) {
     __DEBUG("Dividend is NULL");
     return -1;
@@ -204,8 +204,8 @@ int div_disc_set_ammounts_(dividend d, int size, double *ammounts) {
     return -1;
   }
 
-  if (!ammounts){
-    __DEBUG("Ammounts is NULL");
+  if (!amounts){
+    __DEBUG("amounts is NULL");
     return -1;
   }
 
@@ -216,17 +216,17 @@ int div_disc_set_ammounts_(dividend d, int size, double *ammounts) {
   if (n < 0)
     return -1;
 
-  if (dd->ammounts)
-    free(dd->ammounts);
+  if (dd->amounts)
+    free(dd->amounts);
 
-  dd->ammounts = (double *) malloc(sizeof(double) * n);
+  dd->amounts = (double *) malloc(sizeof(double) * n);
 
-  if (!dd->ammounts)
+  if (!dd->amounts)
     return -1;
 
   int i;
   for (i = 0; i < n; i++) {
-    dd->ammounts[i] = ammounts[i];
+    dd->amounts[i] = amounts[i];
   }
 
   return 0;
@@ -261,9 +261,9 @@ date *div_disc_get_dates(dividend d) {
   return NULL;
 }
 
-double *div_disc_get_ammounts(dividend d) {
+double *div_disc_get_amounts(dividend d) {
   if (d && d->div_type == DIV_DISCRETE)
-    return ((struct disc_div *) d->actual_div)->ammounts;
+    return ((struct disc_div *) d->actual_div)->amounts;
   __DEBUG("Dividend is NULL or continuous, returning NULL");
   return NULL;
 }

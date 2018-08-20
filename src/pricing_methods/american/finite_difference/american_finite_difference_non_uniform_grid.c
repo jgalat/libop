@@ -48,7 +48,7 @@ static BSM_NUG BSM_NUG_(int grid_size, double S, double tol, double abstol,
     d = 0.0;
     dd_n = div_disc_get_n(divi);
     dd_d = div_disc_get_dates(divi);
-    dd_a = div_disc_get_ammounts(divi);
+    dd_a = div_disc_get_amounts(divi);
   }
 
   return new_BSM_NUG(grid_size, ot, S, sigma, r, K, d, dd_n, dd_d, dd_a, period,

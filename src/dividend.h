@@ -64,10 +64,10 @@ int div_disc_get_n(dividend);
 date *div_disc_get_dates(dividend);
 
 /**
- * Gets the array of ammounts in the dividend structure.
+ * Gets the array of amounts in the dividend structure.
  * Returns NULL if a continuous dividend is given, or if it is empty.
  */
-double *div_disc_get_ammounts(dividend);
+double *div_disc_get_amounts(dividend);
 
 /**
  * Sets the number of trading days from now for every dividend payment.
@@ -81,16 +81,16 @@ double *div_disc_get_ammounts(dividend);
 int div_disc_set_dates(dividend, time_period, int size, ...);
 
 /**
- * Sets the ammounts for every dividend payments. The order must be the same used
+ * Sets the amounts for every dividend payments. The order must be the same used
  * for the dates.
- * Variadic function version, the number ammounts must be specified (size)
+ * Variadic function version, the number amounts must be specified (size)
  * A setting of data overrides the currently existing one.
  * i.e.:
  *  For a unique payment of $3
- *  div_disc_set_ammounts(d, 1, 3);
+ *  div_disc_set_amounts(d, 1, 3);
  * On error returns -1.
  */
-int div_disc_set_ammounts(dividend, int size, ...);
+int div_disc_set_amounts(dividend, int size, ...);
 
 /**
  * Non-variadic versions of the functions described above.
@@ -99,7 +99,7 @@ int div_disc_set_ammounts(dividend, int size, ...);
  * A setting of data overrides the currently existing one.
  */
 int div_disc_set_dates_(dividend, time_period, int size, int*);
-int div_disc_set_ammounts_(dividend, int size, double*);
+int div_disc_set_amounts_(dividend, int size, double*);
 
 #ifdef __cplusplus
 }

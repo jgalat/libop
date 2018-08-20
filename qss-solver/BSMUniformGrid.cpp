@@ -12,7 +12,7 @@ static inline double _square(double a) {
 
 BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   double vol, double rfr, double strike, double cont_div, int discdiv_n,
-  double *discdiv_date, double *discdiv_ammo, double period,
+  double *discdiv_date, double *discdiv_amo, double period,
   double end_time, double tol, double abs_tol) {
 
   _solver = SD_DOPRI;
@@ -40,14 +40,14 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
   _cd = cont_div;
 
   _discdiv_date = new double[discdiv_n + 1];
-  _discdiv_ammo = new double[discdiv_n + 1];
+  _discdiv_amo = new double[discdiv_n + 1];
   int i;
   for (i = 0; i < discdiv_n; i++) {
     _discdiv_date[discdiv_n-1-i] = _ft - discdiv_date[i];
-    _discdiv_ammo[discdiv_n-1-i] = discdiv_ammo[i];
+    _discdiv_amo[discdiv_n-1-i] = discdiv_amo[i];
   }
   _discdiv_date[discdiv_n] = 0.0;
-  _discdiv_ammo[discdiv_n] = 0.0;
+  _discdiv_amo[discdiv_n] = 0.0;
   _discdiv_n = discdiv_n;
   _discdiv_i = 0;
 
@@ -87,7 +87,7 @@ BSMUniformGrid::BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
 BSMUniformGrid::~BSMUniformGrid() {
   delete [] _solution;
   delete [] _discdiv_date;
-  delete [] _discdiv_ammo;
+  delete [] _discdiv_amo;
 }
 
 double BSMUniformGrid::get_value(double *vals, int i) {
@@ -183,10 +183,10 @@ void BSMUniformGrid::handlerPos(int i, double *x, double *d, double *alg, double
   switch(i) {
     case 0:
       for(j = 0; j < _g_size; j++) {
-        d[_g_size+j] += _discdiv_ammo[_discdiv_i];
+        d[_g_size+j] += _discdiv_amo[_discdiv_i];
       }
-      _SMin += _discdiv_ammo[_discdiv_i];
-      _SMax += _discdiv_ammo[_discdiv_i];
+      _SMin += _discdiv_amo[_discdiv_i];
+      _SMax += _discdiv_amo[_discdiv_i];
       _u0 = MAX(_op_type == CALL ? _SMin - _K : _K - _SMin, 0.0);
       _uN1 = MAX(_op_type == CALL ? _SMax - _K : _K - _SMax, 0.0);
       _discdiv_i++;
@@ -373,10 +373,10 @@ void BSMUniformGrid::initializeDataStructs(void *simulator_) {
 
 BSM_UG new_BSM_UG(int grid_size, BSM_OT ot, double smax,
   double vol, double rfr, double strike, double cont_div, int discdiv_n,
-  double *discdiv_date, double *discdiv_ammo, double period,
+  double *discdiv_date, double *discdiv_amo, double period,
   double end_time, double tol, double abs_tol) {
   return reinterpret_cast<BSM_UG>(new BSMUniformGrid(grid_size,ot,
-    smax,vol,rfr,strike,cont_div,discdiv_n,discdiv_date,discdiv_ammo,
+    smax,vol,rfr,strike,cont_div,discdiv_n,discdiv_date,discdiv_amo,
     period,end_time,tol,abs_tol));
 }
 

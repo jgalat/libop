@@ -23,7 +23,7 @@ int main(int argc, char const *argv[]) {
   time_period tp = new_time_period_252d();
 
   div_disc_set_dates(d, tp, 2, 50, 200);
-  div_disc_set_ammounts(d, 2, 10, 15);
+  div_disc_set_amounts(d, 2, 10, 15);
 
   option opt = new_option(OPTION_CALL, AM_EXERCISE, DAYS(tp, 252), strike);
 

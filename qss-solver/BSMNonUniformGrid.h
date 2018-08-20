@@ -9,7 +9,7 @@ class BSMNonUniformGrid : public BlackScholesModel {
   public:
     BSMNonUniformGrid(int grid_size, BSM_OT ot, double S, double vol, double rfr,
       double strike, double cont_div, int discdiv_n,
-      double *discdiv_date, double *discdiv_ammo, double period,
+      double *discdiv_date, double *discdiv_amo, double period,
       double end_time, double tol, double abs_tol);
     ~BSMNonUniformGrid();
 
@@ -42,7 +42,7 @@ class BSMNonUniformGrid : public BlackScholesModel {
     double _sigma, _r, _K,
           _cd,   //continuous dividend
           *_discdiv_date, //discrete dividend date
-          *_discdiv_ammo; //discrete dividend ammount
+          *_discdiv_amo; //discrete dividend amount
     int   _discdiv_n, //number of discrete dividends
           _discdiv_i; //discrete dividend index
 
@@ -71,7 +71,7 @@ extern "C" {
 
   BSM_NUG new_BSM_NUG(int grid_size, BSM_OT ot, double S,
     double vol, double rfr, double strike, double cont_div, int discdiv_n,
-    double *discdiv_date, double *discdiv_ammo, double period,
+    double *discdiv_date, double *discdiv_amo, double period,
     double end_time, double tol, double abs_tol);
 
   void delete_BSM_NUG(BSM_NUG);

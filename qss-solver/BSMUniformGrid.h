@@ -9,7 +9,7 @@ class BSMUniformGrid : public BlackScholesModel {
   public:
     BSMUniformGrid(int grid_size, BSM_OT ot, double smax,
       double vol, double rfr, double strike, double cont_div, int discdiv_n,
-      double *discdiv_date, double *discdiv_ammo, double period,
+      double *discdiv_date, double *discdiv_amo, double period,
       double end_time, double tol, double abs_tol);
     ~BSMUniformGrid();
 
@@ -44,7 +44,7 @@ class BSMUniformGrid : public BlackScholesModel {
           _u0, _uN1, _ds,
           _cd,   //continuous dividend
           *_discdiv_date, //discrete dividend date
-          *_discdiv_ammo; //discrete dividend ammount
+          *_discdiv_amo; //discrete dividend amount
     int   _discdiv_n, //number of discrete dividends
           _discdiv_i; //discrete dividend index
 
@@ -72,7 +72,7 @@ extern "C" {
 
   BSM_UG new_BSM_UG(int grid_size, BSM_OT ot, double smax,
     double vol, double rfr, double strike, double cont_div, int discdiv_n,
-    double *discdiv_date, double *discdiv_ammo, double period,
+    double *discdiv_date, double *discdiv_amo, double period,
     double end_time, double tol, double abs_tol);
 
   void delete_BSM_UG(BSM_UG);
