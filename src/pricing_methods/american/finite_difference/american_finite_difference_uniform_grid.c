@@ -173,7 +173,7 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
       for (discdiv_iter = 0; discdiv_iter < discdiv_max; discdiv_iter++) {
         for (i = 0; i < N_SIM; i++){
           bsm[N_SIM * discdiv_iter + i] =
-            BSM_UG_(N[i], discdiv_iter, discdiv_dates[discdiv_iter],
+            BSM_UG_(N[i], discdiv_iter, MIN(maturity, discdiv_dates[discdiv_iter]),
               Smax, tol, abstol, od, pd);
         }
       }
