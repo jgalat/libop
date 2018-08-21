@@ -161,7 +161,8 @@ static int calculate_bsmf(BSM_UG_F bsmf, option_data od, pricing_data pd,
 
       double *Ss_ = (double *) malloc(sizeof(double) * size);
 
-      int *max_v = malloc(sizeof(int) * (discdiv_max + 1));
+      int *max_v = (int *) malloc(sizeof(int) * (discdiv_max + 1));
+      memset(max_v, 0, sizeof(int) * (discdiv_max + 1));
       double **possible_output = malloc(sizeof(double*) * size);
       for (i = 0; i < size; i++)
         possible_output[i] = malloc(sizeof(double) * (discdiv_max + 1));
